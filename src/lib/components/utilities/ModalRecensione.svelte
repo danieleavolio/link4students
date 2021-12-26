@@ -1,8 +1,19 @@
 <script>
 	import { db } from '$lib/firebaseConfig';
 	import { authStore } from '$lib/stores/authStore';
+	import { esamiRecensiti } from '$lib/stores/recensioniStore';
 
-	import { addDoc, collection, doc, getDoc, serverTimestamp } from '@firebase/firestore';
+	import {
+		addDoc,
+		collection,
+		doc,
+		getDoc,
+		getDocs,
+		query,
+		serverTimestamp,
+		setDoc,
+		where
+	} from 'firebase/firestore';
 
 	import SelectionForm from './SelectionForm.svelte';
 	export let idCorso;
@@ -21,6 +32,37 @@
 		isOpen = false;
 	};
 
+	const calcolaMedia = (esame, difficolta, utilita) => {
+		let numRecensioni;
+		let mediaDifficolta;
+		let mediaUtilita;
+		if (esame.numRecensioni) {
+			numRecensioni = esame.numRecensioni + 1;
+		} else numRecensioni = 1;
+
+		// Se esiste la media, allora salvo la vecchia e poi calcolo la nuova
+		if (esame.mediaDifficolta) {
+			let vecchiaMediaTot = esame.mediaDifficolta * esame.numRecensioni;
+			mediaDifficolta = Math.floor((vecchiaMediaTot + difficolta) / numRecensioni);
+			console.log(mediaDifficolta, 'media difficolta');
+		} else mediaDifficolta = difficolta;
+		// Se esiste la media, allora salvo la vecchia e poi calcolo la nuova
+		if (esame.mediaUtilita) {
+			let vecchiaMediaTot = esame.mediaUtilita * esame.numRecensioni;
+			mediaUtilita = Math.floor((vecchiaMediaTot + utilita) / numRecensioni);
+			console.log(mediaUtilita, 'media utilita');
+		} else mediaUtilita = utilita;
+
+		let datiMedia = {
+			numRecensioni,
+			mediaDifficolta,
+			mediaUtilita
+		};
+		return datiMedia;
+	};
+
+	
+
 	const mandaRecensione = () => {
 		// Quando si invia una recensione, viene mandata su firebase
 		getDoc(doc(db, 'users', $authStore.user.uid)).then((ref) => {
@@ -33,16 +75,27 @@
 				contenuto: contenuto,
 				votoDifficolta: difficolta,
 				votoUtilita: utilita,
-				anonimo:anonimo
+				anonimo: anonimo,
+				likes: 0,
+				dislikes: 0
 			};
-			addDoc(collection(db, 'recensioni'), data)
-				.then(() => {
-					alert('Recensione caricata!');
-					close();
-				})
-				.catch((error) => {
-					alert(error);
+			// Prendo l'esame e aggiungo la nuova media calcolandola sul posto
+			const q = query(collection(db, 'corsidelcdl'), where('codiceCorso', '==', idCorso));
+			getDocs(q).then((snapshot) => {
+				let datiMedia = calcolaMedia(snapshot.docs[0].data(), difficolta, utilita);
+				// Ho il nuovo oggetto con la media nuova
+				setDoc(snapshot.docs[0].ref, datiMedia, { merge: true }).then(() => {
+					addDoc(collection(db, 'recensioni'), data)
+						.then(async (esame) => {
+							alert('Recensione caricata!');
+							esamiRecensiti.update((oldEsami) => (oldEsami = [...oldEsami, idCorso]));
+							close();
+						})
+						.catch((error) => {
+							alert(error);
+						});
 				});
+			});
 		});
 	};
 </script>
@@ -84,8 +137,10 @@
 								id="area-recensione"
 								cols="30"
 								rows="4"
+								maxlength="200"
 								required
 								wrap="hard"
+								placeholder="Dai un tuo parere, fai un commento o suggerimento per l'esame! (Massimo 200 caratteri)"
 							/>
 						</div>
 						<div class="submit-box">
@@ -122,6 +177,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		z-index: 10;
 	}
 
 	.backdrop {
@@ -157,7 +213,6 @@
 		text-align: center;
 	}
 	.contenuto {
-		max-height: 50vh;
 		overflow: auto;
 	}
 

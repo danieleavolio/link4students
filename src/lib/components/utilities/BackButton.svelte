@@ -1,7 +1,7 @@
 <script>
 </script>
 
-<button class="back" on:click={() => history.back()}>⬅ Torna ai CDL</button>
+<button class="back" on:click={() => history.back()}>⬅ Indietro</button>
 <style>
     .back {
 		margin: 1rem;

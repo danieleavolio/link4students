@@ -1,6 +1,6 @@
 <script context="module">
 	import { db } from '$lib/firebaseConfig';
-	import { doc, getDoc } from 'firebase/firestore';
+	import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 
 	export async function load({ page }) {
 		// Il codice del corso per caricare le
@@ -14,8 +14,15 @@
 			corso = res;
 		});
 
+		// Prova per realtime updates
+		const cambiamenti = onSnapshot(doc(db, 'corsidelcdl', idcorso), (documento) => {
+			corso = documento;
+		});
+
 		return {
-			props: { corso }
+			props: {
+				corso
+			}
 		};
 	}
 </script>
@@ -23,12 +30,18 @@
 <script>
 	import BoxCorsoTotale from '$lib/components/corso/BoxCorsoTotale.svelte';
 	import BackButton from '$lib/components/utilities/BackButton.svelte';
+	import { esamiRecensiti } from '$lib/stores/recensioniStore';
 	export let corso;
+	export let recensito;
+
+	// Quando nello store viene caricato il voto, la pagina viene aggiornata
+	$: if ($esamiRecensiti.find((el) => el == corso.data().codiceCorso)) {
+		recensito = true;
+	} else recensito = false;
 </script>
 
 <svelte:head>
 	<title>{corso.data().nome}</title>
 </svelte:head>
 <BackButton />
-<BoxCorsoTotale {corso} />
-
+<BoxCorsoTotale {corso} {recensito} />

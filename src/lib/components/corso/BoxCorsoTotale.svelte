@@ -1,4 +1,8 @@
 <script lang="ts">
+	import { db } from '$lib/firebaseConfig';
+
+	import { doc, onSnapshot } from 'firebase/firestore';
+
 	import ModalRecensione from '../utilities/ModalRecensione.svelte';
 
 	import BoxAppunti from './BoxAppunti.svelte';
@@ -7,12 +11,32 @@
 	import InfoCorso from './InfoCorso.svelte';
 
 	export let corso;
+	export let recensito: boolean;
 
 	let recensioni;
 	let domande;
 	let appunti;
 
 	let scelta;
+
+	// Variabili dinamiche
+	$: difficoltaMancante = 5 - corso.data().mediaDifficolta;
+	$: utilitaMancante = 5 - corso.data().mediaUtilita;
+
+	// Real-time updates per le info date dagli studenti
+	onSnapshot(doc(db, 'corsidelcdl', corso.id), (documento) => {
+		corso = documento;
+	});
+
+	const stampaEmoji = (quantita, emoji) => {
+		let stringaEmoji = '';
+		for (let i = 1; i <= quantita; i++) {
+			stringaEmoji += emoji;
+		}
+
+		return stringaEmoji;
+	};
+
 	const handleClickBottoni = (value) => {
 		switch (value.target.firstChild.data) {
 			case 'Recensioni':
@@ -40,7 +64,6 @@
 				appunti.style = 'opacity: 0.5;';
 				break;
 		}
-		console.log(scelta);
 	};
 </script>
 
@@ -53,13 +76,33 @@
 			</div>
 			<InfoCorso {corso} />
 		</div>
-		<div class="right" />
+		<div class="right">
+			<p>Valutazione degli studenti</p>
+			{#if corso.data().numRecensioni}
+				<div class="difficolta">
+					<p>
+						Difficolta: <span> {stampaEmoji(corso.data().mediaDifficolta, '🧠')} </span>
+						<span class="mancanti"> {stampaEmoji(difficoltaMancante, '🧠')} </span>
+					</p>
+					<p>
+						Utilita: <span>{stampaEmoji(corso.data().mediaUtilita, '🎓')}</span>
+						<span class="mancanti"> {stampaEmoji(utilitaMancante, '🎓')} </span>
+					</p>
+				</div>
+			{:else}
+				<p>Ancora nessuna valutazione!</p>
+			{/if}
+		</div>
 	</div>
-	<div class="recensione-box">
+</div>
+<div class="recensione-box">
+	{#if !recensito}
 		<p>Hai superato l'esame?</p>
 		<p>Lascia una recensione!</p>
 		<ModalRecensione idCorso={corso.data().codiceCorso} />
-	</div>
+	{:else}
+		<p>Hai recensito questo esame! ☑️</p>
+	{/if}
 </div>
 <!-- container per le recensioni e altro -->
 <div class="second-container">
@@ -71,7 +114,7 @@
 
 	<!-- Mostrare in base alla scelta fatta -->
 	{#if scelta == 'Recensioni'}
-		<BoxRecensioni />
+		<BoxRecensioni idCorso={corso.data().codiceCorso} />
 	{:else if scelta == 'Domande'}
 		<BoxDomande />
 	{:else if scelta == 'Appunti'}
@@ -92,6 +135,8 @@
 
 	.corso-container {
 		width: 80%;
+		display: flex;
+		gap: 1rem;
 	}
 
 	.left {
@@ -101,6 +146,18 @@
 		align-items: center;
 		background: blueviolet;
 		color: white;
+	}
+
+	.right {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		background-color: brown;
+		padding: 0.5rem;
+	}
+
+	.mancanti {
+		font-weight: 600;
 	}
 
 	.media {

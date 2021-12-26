@@ -25,7 +25,7 @@
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { avatars } from '$lib/stores/defaultPictures';
-	import { collection, doc, getDocs, query, setDoc } from 'firebase/firestore';
+	import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 	import { authStore } from '$lib/stores/authStore';
 	import { auth, db } from '$lib/firebaseConfig';
 
@@ -99,11 +99,12 @@
 	const handleLogin = async () => {
 		await signInWithEmailAndPassword(auth, email, password)
 			.then(() => {
-				// if ($authStore.user.emailVerified == false) {
-				// 	signOut(auth);
-				// 	message = 'Email non verificata';
-				// } else
-				goto('/');
+				if ($authStore.user.emailVerified == false) {
+					signOut(auth);
+					message = 'Email non verificata';
+				} else {
+					goto('/');
+				}
 			})
 			.catch((error) => {
 				message = error.message;

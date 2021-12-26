@@ -22,8 +22,9 @@
 <script lang="ts">
 	export let profilo;
 	import { authStore } from '$lib/stores/authStore';
+import { esamiRecensiti } from '$lib/stores/recensioniStore';
 	import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-	import {fade} from "svelte/transition"
+	import { fade } from 'svelte/transition';
 	let profilePicture;
 	let file;
 	const onChange = () => {
@@ -38,7 +39,6 @@
 			uploadBytes(picturesRef, file).then(() => {
 				// Prendo l'url dell'immagine appena caricata
 				getDownloadURL(picturesRef).then((url) => {
-					console.log(url);
 					// Aggiorno l'immagine del profilo dell'utente con il link di quello caricato
 					setDoc(
 						doc(db, 'users', $authStore.user.uid),
@@ -122,9 +122,10 @@
 
 	.image-div > img {
 		width: 100%;
-		height: auto;
+		height: 100%;
 		border-radius: 100%;
 		border: black solid;
+		object-fit: cover;
 	}
 	.avatar {
 		display: flex;

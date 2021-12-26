@@ -6,124 +6,127 @@
 
 	const cambiaDifficolta = (num) => {
 		difficolta = num;
-        console.log("difficolta")
+		console.log('difficolta');
 	};
 
 	const cambiaUtilita = (num) => {
 		utilita = num;
-        console.log("utilita")
-
+		console.log('utilita');
 	};
 </script>
 
 {#if icon == '🧠'}
-	<ul class="rating">
-		<li>
-			<input
-				checked={difficolta == 1}
-				type="radio"
-				id="num1"
-				value="1"
-				on:change={() => cambiaDifficolta(1)}
-			/>
-			<label for="num1">1{icon}</label>
-		</li>
-		<li>
-			<input
-				checked={difficolta == 2}
-				type="radio"
-				id="num2"
-				value="2"
-				on:change={() => cambiaDifficolta(2)}
-			/>
-			<label for="num2">2 {icon}</label>
-		</li>
-		<li>
-			<input
-				checked={difficolta == 3}
-				type="radio"
-				id="num3"
-				value="3"
-				on:change={() => cambiaDifficolta(3)}
-			/>
-			<label for="num3">3 {icon}</label>
-		</li>
+	<div class="elementi">
+		<ul class="rating">
+			<li>
+				<input
+					checked={difficolta == 1}
+					type="radio"
+					id="num1"
+					value="1"
+					on:change={() => cambiaDifficolta(1)}
+				/>
+				<label for="num1">1{icon}</label>
+			</li>
+			<li>
+				<input
+					checked={difficolta == 2}
+					type="radio"
+					id="num2"
+					value="2"
+					on:change={() => cambiaDifficolta(2)}
+				/>
+				<label for="num2">2 {icon}</label>
+			</li>
+			<li>
+				<input
+					checked={difficolta == 3}
+					type="radio"
+					id="num3"
+					value="3"
+					on:change={() => cambiaDifficolta(3)}
+				/>
+				<label for="num3">3 {icon}</label>
+			</li>
 
-		<li>
-			<input
-				checked={difficolta == 4}
-				type="radio"
-				id="num4"
-				value="4"
-				on:change={() => cambiaDifficolta(4)}
-			/>
-			<label for="num4">4 {icon}</label>
-		</li>
-		<li>
-			<input
-				checked={difficolta == 5}
-				type="radio"
-				id="num5"
-				value="5"
-				on:change={() => cambiaDifficolta(5)}
-			/>
-			<label for="num5">5 {icon}</label>
-		</li>
-	</ul>
-    {:else if icon=='🎓'}
-    <ul class="rating">
-		<li>
-			<input
-				checked={utilita == 1}
-				type="radio"
-				id="num6"
-				value="1"
-				on:change={() => cambiaUtilita(1)}
-			/>
-			<label for="num6">1{icon}</label>
-		</li>
-		<li>
-			<input
-				checked={utilita == 2}
-				type="radio"
-				id="num7"
-				value="2"
-				on:change={() => cambiaUtilita(2)}
-			/>
-			<label for="num7">2 {icon}</label>
-		</li>
-		<li>
-			<input
-				checked={utilita == 3}
-				type="radio"
-				id="num8"
-				value="3"
-				on:change={() => cambiaUtilita(3)}
-			/>
-			<label for="num8">3 {icon}</label>
-		</li>
+			<li>
+				<input
+					checked={difficolta == 4}
+					type="radio"
+					id="num4"
+					value="4"
+					on:change={() => cambiaDifficolta(4)}
+				/>
+				<label for="num4">4 {icon}</label>
+			</li>
+			<li>
+				<input
+					checked={difficolta == 5}
+					type="radio"
+					id="num5"
+					value="5"
+					on:change={() => cambiaDifficolta(5)}
+				/>
+				<label for="num5">5 {icon}</label>
+			</li>
+		</ul>
+	</div>
+{:else if icon == '🎓'}
+	<div class="elementi">
+		<ul class="rating">
+			<li>
+				<input
+					checked={utilita == 1}
+					type="radio"
+					id="num6"
+					value="1"
+					on:change={() => cambiaUtilita(1)}
+				/>
+				<label for="num6">1{icon}</label>
+			</li>
+			<li>
+				<input
+					checked={utilita == 2}
+					type="radio"
+					id="num7"
+					value="2"
+					on:change={() => cambiaUtilita(2)}
+				/>
+				<label for="num7">2 {icon}</label>
+			</li>
+			<li>
+				<input
+					checked={utilita == 3}
+					type="radio"
+					id="num8"
+					value="3"
+					on:change={() => cambiaUtilita(3)}
+				/>
+				<label for="num8">3 {icon}</label>
+			</li>
 
-		<li>
-			<input
-				checked={utilita == 4}
-				type="radio"
-				id="num9"
-				value="4"
-				on:change={() => cambiaUtilita(4)}
-			/>
-			<label for="num9">4 {icon}</label>
-		</li>
-		<li>
-			<input
-				checked={utilita == 5}
-				type="radio"
-				id="num10"
-				value="5"
-				on:change={() => cambiaUtilita(5)}
-			/>
-			<label for="num10">5 {icon}</label>
-		</li>
-	</ul>
+			<li>
+				<input
+					checked={utilita == 4}
+					type="radio"
+					id="num9"
+					value="4"
+					on:change={() => cambiaUtilita(4)}
+				/>
+				<label for="num9">4 {icon}</label>
+			</li>
+			<li>
+				<input
+					checked={utilita == 5}
+					type="radio"
+					id="num10"
+					value="5"
+					on:change={() => cambiaUtilita(5)}
+				/>
+				<label for="num10">5 {icon}</label>
+			</li>
+		</ul>
+	</div>
 {/if}
 
 <style>
@@ -134,6 +137,7 @@
 		margin: 10px;
 		list-style: none;
 		gap: 1rem;
+		padding: 0;
 	}
 
 	li {

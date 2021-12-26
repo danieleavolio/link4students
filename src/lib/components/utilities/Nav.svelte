@@ -1,12 +1,13 @@
 <script lang="ts">
-	import { authStore, } from '$lib/stores/authStore';
+	import { authStore } from '$lib/stores/authStore';
 	import { fly } from 'svelte/transition';
 	import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '$lib/firebaseConfig';
+	import { auth, db } from '$lib/firebaseConfig';
+	import { collection, getDocs, query, where } from '@firebase/firestore';
+	import { esamiRecensiti } from '$lib/stores/recensioniStore';
 	const logout = async () => {
 		await auth.signOut();
 	};
-
 
 	onAuthStateChanged(auth, (fbUser) => {
 		if (fbUser) {
@@ -15,6 +16,18 @@ import { auth } from '$lib/firebaseConfig';
 				user: fbUser
 			};
 			authStore.update((oldStore) => data);
+			// Quando loggo prendo l'id degli esami e li passo allo store apposito
+			let idEsami = [];
+			let queryIdEsami = query(
+				collection(db, 'recensioni'),
+				where('idAutore', '==', auth.currentUser.uid)
+			);
+			getDocs(queryIdEsami).then((res) => {
+				res.docs.forEach((doc) => {
+					idEsami = [...idEsami, doc.data().idCorso];
+				});
+				esamiRecensiti.update((old) => idEsami);
+			});
 		} else {
 			let data = {
 				isLoggedIn: false,
@@ -23,7 +36,6 @@ import { auth } from '$lib/firebaseConfig';
 			authStore.update((oldStore) => data);
 		}
 	});
-
 </script>
 
 <nav>
@@ -31,12 +43,12 @@ import { auth } from '$lib/firebaseConfig';
 	<a href="/corsi">Corsi</a>
 	<a href="/info">Info</a>
 	<div class="div">
-		{#if $authStore.isLoggedIn==true}
+		{#if $authStore.isLoggedIn == true}
 			<a transition:fly={{ y: 200, duration: 1000 }} href="/profilo/{auth.currentUser.uid}"
 				>{$authStore.user.email}</a
 			>
 			<button class="logout" on:click={logout}>Logout</button>
-		{:else if !$authStore.isLoggedIn && $authStore.isLoggedIn!=undefined}
+		{:else if !$authStore.isLoggedIn && $authStore.isLoggedIn != undefined}
 			<a transition:fly={{ y: -200, duration: 500 }} href="/joinus">Unisciti</a>
 		{/if}
 	</div>

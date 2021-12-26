@@ -1,5 +1,11 @@
-<script>
+<script lang="ts">
+	import { db } from '$lib/firebaseConfig';
+
+	import { doc, onSnapshot } from 'firebase/firestore';
+
 	export let corso;
+	
+	
 </script>
 
 <div class="container">

@@ -3,7 +3,7 @@
 	import { fly } from 'svelte/transition';
 	import { onAuthStateChanged } from 'firebase/auth';
 	import { auth, db } from '$lib/firebaseConfig';
-	import { collection, getDocs, query, where } from '@firebase/firestore';
+	import { collection, getDocs, query, where } from 'firebase/firestore';
 	import { esamiRecensiti } from '$lib/stores/recensioniStore';
 	const logout = async () => {
 		await auth.signOut();

@@ -9,6 +9,7 @@
 		doc,
 		getDoc,
 		getDocs,
+		increment,
 		query,
 		serverTimestamp,
 		setDoc,
@@ -91,6 +92,14 @@
 						.then(async (esame) => {
 							alert('Recensione caricata');
 							esamiRecensiti.update((oldEsami) => (oldEsami = [...oldEsami, idCorso]));
+							// Aumento il numero di recensioni totali del sito
+							setDoc(
+								doc(db, 'statistiche', 'infoSito'),
+								{
+									numRecensioni: increment(1)
+								},
+								{ merge: true }
+							);
 						})
 						.catch((error) => {
 							alert(error.message);

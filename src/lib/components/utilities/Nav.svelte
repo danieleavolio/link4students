@@ -6,7 +6,9 @@
 	import { collection, getDocs, query, where } from 'firebase/firestore';
 	import { esamiReagiti, esamiRecensiti } from '$lib/stores/recensioniStore';
 	const logout = async () => {
-		await auth.signOut();
+		await auth.signOut().then(() => {
+			location.reload();
+		});
 	};
 
 	onAuthStateChanged(auth, (fbUser) => {

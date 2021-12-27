@@ -25,7 +25,7 @@
 	import { fade } from 'svelte/transition';
 	import { goto } from '$app/navigation';
 	import { avatars } from '$lib/stores/defaultPictures';
-	import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
+	import { collection, doc, getDocs, increment, query, setDoc, where } from 'firebase/firestore';
 	import { authStore } from '$lib/stores/authStore';
 	import { auth, db } from '$lib/firebaseConfig';
 
@@ -79,7 +79,15 @@
 							// Sopra viene generato un numero da 0 a 6 che equivale al link di un immagine su storage
 						},
 						{ merge: true }
-					);
+					).then(() => {
+						setDoc(
+							doc(db, 'statistiche', 'infoSito'),
+							{
+								numUtenti: increment(1)
+							},
+							{ merge: true }
+						);
+					});
 					// Manda la mail di verifica per evitare account non istituzionali
 					sendEmailVerification(auth.currentUser);
 					// Fai uscire perchè firebase fa subito il login
@@ -172,7 +180,6 @@
 					placeholder="Inserisci la tua email istituzionale.."
 					required
 					autocomplete="on"
-					
 				/>
 				<p>Password</p>
 				<input

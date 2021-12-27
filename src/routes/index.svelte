@@ -1,25 +1,50 @@
+<script context="module">
+	export async function load({}) {
+		console.log('ciao');
+		let statistiche;
+		// Temporaneo
+
+		await getDoc(doc(db, 'statistiche', 'infoSito')).then((doc) => {
+			statistiche = doc.data();
+		});
+
+		await onSnapshot(doc(db, 'statistiche', 'infoSito'), (doc) => {
+			statistiche = doc.data();
+		});
+
+		return {
+			props: {
+				statistiche
+			}
+		};
+	}
+</script>
+
 <script lang="ts">
 	const imagesRef = ref(storage, 'images');
-	import { getDownloadURL, listAll, ref } from 'firebase/storage';
-	import { onMount } from 'svelte';
-	import BoxLink from '$lib/components/utilities/BoxLink.svelte';
+	import { ref } from 'firebase/storage';
+	import BoxLink from '$lib/components/index/BoxLink.svelte';
 	import { authStore } from '$lib/stores/authStore';
-	import { storage } from '$lib/firebaseConfig';
+	import { db, storage } from '$lib/firebaseConfig';
+	import BoxStatistiche from '$lib/components/index/BoxStatistiche.svelte';
+	import { doc, getDoc, onSnapshot } from 'firebase/firestore';
 	let imagesLinks = [];
 
-	onMount(() => {
-		listAll(imagesRef)
-			.then((res) => {
-				res.items.forEach((itemRef) => {
-					getDownloadURL(itemRef).then((url) => {
-						imagesLinks = [...imagesLinks, url];
-					});
-				});
-			})
-			.catch((error) => {
-				imagesLinks = [];
-			});
-	});
+	// onMount(() => {
+	// 	listAll(imagesRef)
+	// 		.then((res) => {
+	// 			res.items.forEach((itemRef) => {
+	// 				getDownloadURL(itemRef).then((url) => {
+	// 					imagesLinks = [...imagesLinks, url];
+	// 				});
+	// 			});
+	// 		})
+	// 		.catch((error) => {
+	// 			imagesLinks = [];
+	// 		});
+	// });
+
+	export let statistiche;
 </script>
 
 <svelte:head>
@@ -38,6 +63,8 @@
 	<BoxLink nome="Corsi" image="corsi" linkto="corsi" />
 	<BoxLink nome="Portale" image="unical" linkto="www.unical.it" />
 </div>
+
+<BoxStatistiche {statistiche} />
 
 <style>
 	h1 {

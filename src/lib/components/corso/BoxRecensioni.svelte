@@ -1,5 +1,7 @@
 <script>
 	import { db } from '$lib/firebaseConfig';
+import { authStore } from '$lib/stores/authStore';
+import { recensioniSegnalate } from '$lib/stores/recensioniStore';
 	import { collection, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 	import { onMount } from 'svelte';
 	import Recensione from '../utilities/Recensione.svelte';
@@ -14,9 +16,18 @@
 		const realTimeRecensioni = onSnapshot(queryRecensioni, (querySnapshot)=>{
 			recensioni = querySnapshot.docs;
 		})
-		// getDocs(queryRecensioni).then((res) => {
-		// 	recensioni = res.docs;
-		// });
+		
+		// Prendo le recensioni segnalate per mostrare un testo alternativo all'utente che ha segnalato
+		if ($authStore.isLoggedIn){
+			const querySegnalazioni = query(collection(db,'segnalazioniRecensioni'), where('idSegnalatore','==',$authStore.user.uid));
+			getDocs(querySegnalazioni).then((res)=>{
+				let listaSegnalazioni = [];
+				res.docs.forEach((elem)=>{
+					listaSegnalazioni = [...listaSegnalazioni, elem.data()];
+				})
+				recensioniSegnalate.update((oldReports) => listaSegnalazioni);
+			})
+		}
 	});
 </script>
 

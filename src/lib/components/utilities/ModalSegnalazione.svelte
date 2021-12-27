@@ -1,11 +1,13 @@
 <script>
-	import { db } from '$lib/firebaseConfig';
+	import { auth, db } from '$lib/firebaseConfig';
 	import { authStore } from '$lib/stores/authStore';
+	import { recensioniSegnalate } from '$lib/stores/recensioniStore';
 
 	import { addDoc, collection } from 'firebase/firestore';
 
 	// ID recensione da segnalare
 	export let idRecensione;
+	export let segnalato;
 
 	let isOpen = false;
 	let contenuto;
@@ -26,22 +28,35 @@
         -contenutoSegnalazione
         */
 
-		let dati = {
-			idRecensione: idRecensione,
-			idSegnalatore: $authStore.user.uid,
-			contenutoSegnalazione: contenuto
-		};
+		// Check per evitare problemi
+		if ($authStore.isLoggedIn) {
+			let dati = {
+				idRecensione: idRecensione,
+				idSegnalatore: $authStore.user.uid,
+				contenutoSegnalazione: contenuto
+			};
 
-		addDoc(collection(db, 'segnalazioni'), dati).then(() => {
-			alert('Segnalazione inviata! 👌');
-			close();
-		});
+			addDoc(collection(db, 'segnalazioniRecensioni'), dati).then(() => {
+				alert('Segnalazione inviata! 👌');
+				// Aggiungo la segnalazione allo store
+				recensioniSegnalate.update((oldReports) => [...oldReports, dati]);
+				close();
+			});
+		}
 	};
 </script>
 
-<slot name="trigger" {open}>
-	<button class="segnalazione" on:click={open}>Segnalazione</button>
-</slot>
+{#if $authStore.isLoggedIn}
+	{#if !segnalato}
+		<slot name="trigger" {open}>
+			<button class="segnalazione" on:click={open}>Segnalazione</button>
+		</slot>
+	{:else}
+		<slot name="trigger" {open}>
+			<button class="segnalato">Segnalata</button>
+		</slot>
+	{/if}
+{/if}
 
 {#if isOpen}
 	<div class="modal">
@@ -91,9 +106,21 @@
 		padding: 0.5rem;
 		border-radius: 6px;
 		cursor: pointer;
-        background-color: darkred;
-        color: white;
-    }
+		background-color: darkred;
+		color: white;
+	}
+
+	.segnalato {
+		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2), 5px 5px 5px rgba(255, 255, 255, 0.5);
+		border: none;
+		text-transform: uppercase;
+		outline: none;
+		padding: 0.5rem;
+		border-radius: 6px;
+		cursor: pointer;
+		background-color: blue;
+		color: white;
+	}
 	.modal {
 		position: fixed;
 		top: 0;
@@ -168,8 +195,6 @@
 		width: 80%;
 		font-size: 1rem;
 	}
-
-	
 
 	.submit-box {
 		display: flex;

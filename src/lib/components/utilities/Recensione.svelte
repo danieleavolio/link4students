@@ -2,7 +2,8 @@
 	import { goto } from '$app/navigation';
 	import { auth, db } from '$lib/firebaseConfig';
 	import { authStore } from '$lib/stores/authStore';
-	import { esamiReagiti, esamiRecensiti } from '$lib/stores/recensioniStore';
+	import { fly } from "svelte/transition";
+	import { esamiReagiti, esamiRecensiti, recensioniSegnalate } from '$lib/stores/recensioniStore';
 	import {
 		collection,
 		deleteDoc,
@@ -277,23 +278,26 @@
 	};
 
 	onMount(() => {
-		// Faccio il fetch dei dati per sincronizzare UI e Firebase dei tuoi singoli like
-		// aggiorno lo store per i likes alle recensioni
-		let reazioniRecensioni = [];
-		// Prendo le recensioni con il mio id utente
-		let queryReazioni = query(
-			collection(db, 'votiRecensioni'),
-			where('idUtente', '==', auth.currentUser.uid)
-		);
-		getDocs(queryReazioni).then((res) => {
-			res.docs.forEach((doc) => {
-				reazioniRecensioni = [...reazioniRecensioni, doc];
+		// Se sono loggato
+		if ($authStore.isLoggedIn) {
+			// Faccio il fetch dei dati per sincronizzare UI e Firebase dei tuoi singoli like
+			// aggiorno lo store per i likes alle recensioni
+			let reazioniRecensioni = [];
+			// Prendo le recensioni con il mio id utente
+			let queryReazioni = query(
+				collection(db, 'votiRecensioni'),
+				where('idUtente', '==', auth.currentUser.uid)
+			);
+			getDocs(queryReazioni).then((res) => {
+				res.docs.forEach((doc) => {
+					reazioniRecensioni = [...reazioniRecensioni, doc];
+				});
+				// Aggiorno lo store delle reazioni
+				esamiReagiti.update((oldReaction) => reazioniRecensioni);
+				messoLike();
+				messoDislike();
 			});
-			// Aggiorno lo store delle reazioni
-			esamiReagiti.update((oldReaction) => reazioniRecensioni);
-			messoLike();
-			messoDislike();
-		});
+		}
 	});
 
 	// Funzioni per controllare se ho messo like o dislike
@@ -329,7 +333,7 @@
 	};
 </script>
 
-<div class="recensione">
+<div transition:fly class="recensione">
 	<div class="up-part">
 		<!-- Se non sei loggato, allora vedi la recensione -->
 		{#if !$authStore.isLoggedIn}
@@ -401,7 +405,12 @@
 				</div>
 			</div>
 			<div class="report">
-				<ModalSegnalazione idRecensione={recensione.id} />
+				{#if $recensioniSegnalate.find((elem) => elem.idRecensione == recensione.id)}
+				<ModalSegnalazione idRecensione={recensione.id} segnalato={true} />
+				{:else}
+				<ModalSegnalazione idRecensione={recensione.id} segnalato={false	} />
+
+				{/if}
 			</div>
 		</div>
 	</div>

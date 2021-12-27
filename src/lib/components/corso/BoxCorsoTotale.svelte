@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { db } from '$lib/firebaseConfig';
+	import { authStore } from '$lib/stores/authStore';
 
 	import { doc, onSnapshot } from 'firebase/firestore';
 
@@ -96,12 +97,14 @@
 	</div>
 </div>
 <div class="recensione-box">
-	{#if !recensito}
-		<p>Hai superato l'esame?</p>
-		<p>Lascia una recensione!</p>
-		<ModalRecensione idCorso={corso.data().codiceCorso} nome={corso.data().nome} />
-	{:else}
-		<p>Hai recensito questo esame! ☑️</p>
+	{#if $authStore.isLoggedIn}
+		{#if !recensito}
+			<p>Hai superato l'esame?</p>
+			<p>Lascia una recensione!</p>
+			<ModalRecensione idCorso={corso.data().codiceCorso} nome={corso.data().nome} />
+		{:else}
+			<p>Hai recensito questo esame! ☑️</p>
+		{/if}
 	{/if}
 </div>
 <!-- container per le recensioni e altro -->

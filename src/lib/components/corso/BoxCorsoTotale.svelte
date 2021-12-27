@@ -99,7 +99,7 @@
 	{#if !recensito}
 		<p>Hai superato l'esame?</p>
 		<p>Lascia una recensione!</p>
-		<ModalRecensione idCorso={corso.data().codiceCorso} />
+		<ModalRecensione idCorso={corso.data().codiceCorso} nome={corso.data().nome} />
 	{:else}
 		<p>Hai recensito questo esame! ☑️</p>
 	{/if}

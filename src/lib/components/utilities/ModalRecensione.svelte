@@ -17,6 +17,7 @@
 
 	import SelectionForm from './SelectionForm.svelte';
 	export let idCorso;
+	export let nome;
 
 	let isOpen = false;
 
@@ -64,8 +65,6 @@
 		return datiMedia;
 	};
 
-	
-
 	const mandaRecensione = () => {
 		// Quando si invia una recensione, viene mandata su firebase
 		getDoc(doc(db, 'users', $authStore.user.uid)).then((ref) => {
@@ -90,11 +89,11 @@
 				setDoc(snapshot.docs[0].ref, datiMedia, { merge: true }).then(() => {
 					addDoc(collection(db, 'recensioni'), data)
 						.then(async (esame) => {
-							alert('Recensione caricata')
+							alert('Recensione caricata');
 							esamiRecensiti.update((oldEsami) => (oldEsami = [...oldEsami, idCorso]));
 						})
 						.catch((error) => {
-							alert(error.message)
+							alert(error.message);
 						});
 				});
 			});
@@ -113,7 +112,7 @@
 			<button class="close-button" on:click={close}> ❌ </button>
 			<slot name="header">
 				<div class="titolo">
-					<p>Recensione per:</p>
+					<p>Recensione per: {nome}</p>
 				</div>
 			</slot>
 
@@ -199,7 +198,6 @@
 	}
 
 	.close-button {
-		border: none;
 		outline: none;
 		font-size: 1.2rem;
 		border: black solid;
@@ -207,7 +205,9 @@
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
-		position: fixed;
+		position: absolute;
+		margin-left: -3rem;
+		margin-top: -3rem;
 	}
 	.titolo {
 		font-size: 1.3rem;

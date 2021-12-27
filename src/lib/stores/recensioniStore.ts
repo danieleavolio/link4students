@@ -12,3 +12,5 @@ export const esamiRecensiti = writable([]);
 
 
 export const esamiReagiti = writable([]);
+
+export const recensioniSegnalate = writable([]);

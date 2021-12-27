@@ -171,6 +171,8 @@
 					type="email"
 					placeholder="Inserisci la tua email istituzionale.."
 					required
+					autocomplete="on"
+					
 				/>
 				<p>Password</p>
 				<input

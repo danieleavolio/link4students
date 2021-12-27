@@ -3,7 +3,6 @@
 	import { auth, db } from '$lib/firebaseConfig';
 	import { authStore } from '$lib/stores/authStore';
 	import { esamiReagiti, esamiRecensiti } from '$lib/stores/recensioniStore';
-	import { ref } from '@firebase/storage';
 	import {
 		collection,
 		deleteDoc,
@@ -16,6 +15,7 @@
 		where
 	} from 'firebase/firestore';
 	import { onMount } from 'svelte';
+	import ModalSegnalazione from './ModalSegnalazione.svelte';
 
 	export let recensione;
 
@@ -116,6 +116,7 @@
 	let uiLocaleLike;
 	let uiLocaleDislike;
 
+	// TO-DO --> FIX LOCAL UI QUANDO CAMBI PAGINA
 	const likeFunction = async () => {
 		// Controllo se ho messo qualcosa, come like o dislike
 		if (statoVoto == 0 && $authStore.isLoggedIn) {
@@ -152,7 +153,7 @@
 								operazione: 'like'
 							},
 							{ merge: true }
-						).then(() => {
+						).then((res) => {
 							// decremento i dislike e aumento i likes
 							setDoc(
 								doc(db, 'recensioni', recensione.id),
@@ -164,7 +165,6 @@
 							).then(() => {
 								statoVoto = 0;
 								// Cambio la UI locale, rendendo bianco un voto e l'altro colorato
-
 								uiLocaleLike = 'liked';
 								uiLocaleDislike = '';
 							});
@@ -246,6 +246,7 @@
 								// Cambio la UI locale, rendendo bianco un voto e l'altro colorato
 								uiLocaleLike = '';
 								uiLocaleDislike = 'disliked';
+								// Tolgo la reazione dallo store
 							});
 						});
 					}
@@ -276,8 +277,23 @@
 	};
 
 	onMount(() => {
-		messoLike();
-		messoDislike();
+		// Faccio il fetch dei dati per sincronizzare UI e Firebase dei tuoi singoli like
+		// aggiorno lo store per i likes alle recensioni
+		let reazioniRecensioni = [];
+		// Prendo le recensioni con il mio id utente
+		let queryReazioni = query(
+			collection(db, 'votiRecensioni'),
+			where('idUtente', '==', auth.currentUser.uid)
+		);
+		getDocs(queryReazioni).then((res) => {
+			res.docs.forEach((doc) => {
+				reazioniRecensioni = [...reazioniRecensioni, doc];
+			});
+			// Aggiorno lo store delle reazioni
+			esamiReagiti.update((oldReaction) => reazioniRecensioni);
+			messoLike();
+			messoDislike();
+		});
 	});
 
 	// Funzioni per controllare se ho messo like o dislike
@@ -288,8 +304,11 @@
 					(element) =>
 						element.data().idRecensione == recensione.id && element.data().operazione == 'like'
 				)
-			)
+			) {
+				console.log('entrato 1');
 				uiLocaleLike = 'liked';
+				uiLocaleDislike = '';
+			}
 		}
 	};
 
@@ -300,8 +319,12 @@
 					(element) =>
 						element.data().idRecensione == recensione.id && element.data().operazione == 'dislike'
 				)
-			)
+			) {
+				console.log('entrato 2');
+
 				uiLocaleDislike = 'disliked';
+				uiLocaleLike = '';
+			}
 		}
 	};
 </script>
@@ -378,7 +401,7 @@
 				</div>
 			</div>
 			<div class="report">
-				<button>Segnala</button>
+				<ModalSegnalazione idRecensione={recensione.id} />
 			</div>
 		</div>
 	</div>
@@ -509,15 +532,5 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
-	}
-
-	.report > button {
-		border: none;
-		font-size: 1rem;
-		background-color: brown;
-		padding: 0.3rem;
-		border-radius: 10px;
-		color: white;
-		cursor: pointer;
 	}
 </style>

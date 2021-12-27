@@ -4,7 +4,7 @@
 	import { onAuthStateChanged } from 'firebase/auth';
 	import { auth, db } from '$lib/firebaseConfig';
 	import { collection, getDocs, query, where } from 'firebase/firestore';
-	import { esamiRecensiti } from '$lib/stores/recensioniStore';
+	import { esamiReagiti, esamiRecensiti } from '$lib/stores/recensioniStore';
 	const logout = async () => {
 		await auth.signOut();
 	};
@@ -27,6 +27,20 @@
 					idEsami = [...idEsami, doc.data().idCorso];
 				});
 				esamiRecensiti.update((old) => idEsami);
+			});
+			// aggiorno lo store per i likes alle recensioni
+			let reazioniRecensioni = [];
+			// Prendo le recensioni con il mio id utente
+			let queryReazioni = query(
+				collection(db, 'votiRecensioni'),
+				where('idUtente', '==', auth.currentUser.uid)
+			);
+			getDocs(queryReazioni).then((res) => {
+				res.docs.forEach((doc) => {
+					reazioniRecensioni = [...reazioniRecensioni, doc];
+				});
+				// Aggiorno lo store delle reazioni
+				esamiReagiti.update((oldReaction) => reazioniRecensioni);
 			});
 		} else {
 			let data = {

@@ -2,10 +2,29 @@
 	import { goto } from '$app/navigation';
 	import { auth, db } from '$lib/firebaseConfig';
 	import { authStore } from '$lib/stores/authStore';
-import { esamiRecensiti } from '$lib/stores/recensioniStore';
-	import { collection, deleteDoc, doc, getDocs, query, setDoc, where } from '@firebase/firestore';
+	import { esamiReagiti, esamiRecensiti } from '$lib/stores/recensioniStore';
+	import { ref } from '@firebase/storage';
+	import {
+		collection,
+		deleteDoc,
+		doc,
+		getDoc,
+		getDocs,
+		increment,
+		query,
+		setDoc,
+		where
+	} from 'firebase/firestore';
+	import { onMount } from 'svelte';
 
 	export let recensione;
+
+	let statoVoto = 0;
+
+	// Stati voto:
+	// 2 PENDING
+	// 1 MANDATO
+	// 0 INATTESA
 
 	const redirectProfilo = (id) => {
 		goto(`/profilo/${id}`);
@@ -47,6 +66,19 @@ import { esamiRecensiti } from '$lib/stores/recensioniStore';
 	};
 
 	const eliminaRecensione = () => {
+		// Eliminare tutte le interazioni con la recnesione ( like e dislike)
+
+		const queryInterazioni = query(
+			collection(db, 'votiRecensioni'),
+			where('idRecensione', '==', recensione.id)
+		);
+
+		getDocs(queryInterazioni).then((data) => {
+			data.docs.forEach((toDelete) => {
+				let docRef = toDelete.ref;
+				deleteDoc(docRef);
+			});
+		});
 		// Modifica la media dell'esame di cui la recensione fa parte
 		const q = query(
 			collection(db, 'corsidelcdl'),
@@ -58,18 +90,219 @@ import { esamiRecensiti } from '$lib/stores/recensioniStore';
 				recensione.data().votoDifficolta,
 				recensione.data().votoUtilita
 			);
-			setDoc(snapshot.docs[0].ref, dati, { merge: true }).then(() => {
-				deleteDoc(doc(db,'recensioni',recensione.id)).then(()=>{
-					esamiRecensiti.update((oldEsami)=> oldEsami = oldEsami.filter(item => item != recensione.data().idCorso));
-					alert('Recensione eliminata!')
-				}).catch((error)=>{
-					alert(error)
+			setDoc(snapshot.docs[0].ref, dati, { merge: true })
+				.then(() => {
+					deleteDoc(doc(db, 'recensioni', recensione.id))
+						.then(() => {
+							esamiRecensiti.update(
+								(oldEsami) =>
+									(oldEsami = oldEsami.filter((item) => item != recensione.data().idCorso))
+							);
+							alert('Recensione eliminata!');
+						})
+						.catch((error) => {
+							alert(error);
+						});
+				})
+				.catch((error) => {
+					alert(error);
 				});
-			}).catch((error)=>{
-				alert(error)
-			});
 			// Elimina la recensione dalla collection recensioni
 		});
+	};
+
+	// Variabile locale per gestirmi i cambiamenti di UI per i like senza dover fare troppi giri inutili
+	// al ricaricamento, tutto è sincronizzato, ma nel momento del like, viene gestito localmente
+	let uiLocaleLike;
+	let uiLocaleDislike;
+
+	const likeFunction = async () => {
+		// Controllo se ho messo qualcosa, come like o dislike
+		if (statoVoto == 0 && $authStore.isLoggedIn) {
+			statoVoto = 2;
+			let idDocumentoCreato = recensione.id + $authStore.user.uid;
+			await getDoc(doc(db, 'votiRecensioni', idDocumentoCreato)).then((docRef) => {
+				if (docRef.exists()) {
+					// Se ho messo like
+					if (docRef.data().operazione == 'like') {
+						// Elimino il voto della recensione da parte mia
+						deleteDoc(doc(db, 'votiRecensioni', idDocumentoCreato)).then(() => {
+							// Una volta eliminata il voto recensione, decremento il counter dei likes
+							// della recesione
+							setDoc(
+								doc(db, 'recensioni', recensione.id),
+								{
+									likes: increment(-1)
+								},
+								{
+									merge: true
+								}
+							).then(() => {
+								statoVoto = 0;
+								uiLocaleLike = '';
+							});
+						});
+					}
+					// Se ho messo dislike
+					else if (docRef.data().operazione == 'dislike') {
+						// cambio l'operazione da dislike a like
+						setDoc(
+							doc(db, 'votiRecensioni', idDocumentoCreato),
+							{
+								operazione: 'like'
+							},
+							{ merge: true }
+						).then(() => {
+							// decremento i dislike e aumento i likes
+							setDoc(
+								doc(db, 'recensioni', recensione.id),
+								{
+									likes: increment(1),
+									dislikes: increment(-1)
+								},
+								{ merge: true }
+							).then(() => {
+								statoVoto = 0;
+								// Cambio la UI locale, rendendo bianco un voto e l'altro colorato
+
+								uiLocaleLike = 'liked';
+								uiLocaleDislike = '';
+							});
+						});
+					}
+				}
+				// Se il voto non è stato mai messo da me
+				else {
+					setDoc(doc(db, 'votiRecensioni', recensione.id + $authStore.user.uid), {
+						idRecensione: recensione.id,
+						idUtente: $authStore.user.uid,
+						operazione: 'like'
+					}).then(() => {
+						// Aumento il numero di likes nel post
+						setDoc(
+							doc(db, 'recensioni', recensione.id),
+							{
+								likes: increment(1)
+							},
+							{ merge: true }
+						).then(() => {
+							statoVoto = 0;
+						});
+						// Aumento il contatore dei likes
+						uiLocaleLike = 'liked';
+					});
+				}
+			});
+		}
+	};
+
+	const dislikeFunction = async () => {
+		// Controllo se ho messo qualcosa, come like o dislike
+		if (statoVoto == 0 && $authStore.isLoggedIn) {
+			statoVoto = 2;
+			let idDocumentoCreato = recensione.id + $authStore.user.uid;
+			await getDoc(doc(db, 'votiRecensioni', idDocumentoCreato)).then((docRef) => {
+				if (docRef.exists()) {
+					// Se ho messo dislike
+					if (docRef.data().operazione == 'dislike') {
+						// Elimino il voto della recensione da parte mia
+						deleteDoc(doc(db, 'votiRecensioni', idDocumentoCreato)).then(() => {
+							// Una volta eliminata il voto recensione, decremento il counter dei dislikes
+							// della recesione
+							setDoc(
+								doc(db, 'recensioni', recensione.id),
+								{
+									dislikes: increment(-1)
+								},
+								{
+									merge: true
+								}
+							).then(() => {
+								statoVoto = 0;
+								uiLocaleDislike = '';
+							});
+						});
+					}
+					// Se ho messo like
+					else if (docRef.data().operazione == 'like') {
+						// cambio l'operazione da like a dislike
+						setDoc(
+							doc(db, 'votiRecensioni', idDocumentoCreato),
+							{
+								operazione: 'dislike'
+							},
+							{ merge: true }
+						).then(() => {
+							// decremento i likes e aumento i dislikes
+							setDoc(
+								doc(db, 'recensioni', recensione.id),
+								{
+									likes: increment(-1),
+									dislikes: increment(1)
+								},
+								{ merge: true }
+							).then(() => {
+								statoVoto = 0;
+								// Cambio la UI locale, rendendo bianco un voto e l'altro colorato
+								uiLocaleLike = '';
+								uiLocaleDislike = 'disliked';
+							});
+						});
+					}
+				}
+				// Se il voto non è stato mai messo da me
+				else {
+					setDoc(doc(db, 'votiRecensioni', recensione.id + $authStore.user.uid), {
+						idRecensione: recensione.id,
+						idUtente: $authStore.user.uid,
+						operazione: 'dislike'
+					}).then(() => {
+						// Aumento il numero di dislikes nel post
+						setDoc(
+							doc(db, 'recensioni', recensione.id),
+							{
+								dislikes: increment(1)
+							},
+							{ merge: true }
+						).then(() => {
+							statoVoto = 0;
+						});
+						// Aumento il contatore dei likes
+						uiLocaleDislike = 'disliked';
+					});
+				}
+			});
+		}
+	};
+
+	onMount(() => {
+		messoLike();
+		messoDislike();
+	});
+
+	// Funzioni per controllare se ho messo like o dislike
+	const messoLike = () => {
+		if ($authStore.isLoggedIn) {
+			if (
+				$esamiReagiti.find(
+					(element) =>
+						element.data().idRecensione == recensione.id && element.data().operazione == 'like'
+				)
+			)
+				uiLocaleLike = 'liked';
+		}
+	};
+
+	const messoDislike = () => {
+		if ($authStore.isLoggedIn) {
+			if (
+				$esamiReagiti.find(
+					(element) =>
+						element.data().idRecensione == recensione.id && element.data().operazione == 'dislike'
+				)
+			)
+				uiLocaleDislike = 'disliked';
+		}
 	};
 </script>
 
@@ -130,8 +363,19 @@ import { esamiRecensiti } from '$lib/stores/recensioniStore';
 		</div>
 		<div class="box-bottoni">
 			<div class="like-dislike">
-				<p># <button class="like bottone-ld">👍</button></p>
-				<p># <button class="dislike bottone-ld">👎</button></p>
+				<div class="singolo-bottone">
+					<p>
+						{recensione.data().likes}
+					</p>
+					<button on:click={likeFunction} class="like bottone-ld {uiLocaleLike}">👍</button>
+				</div>
+				<div class="singolo-bottone">
+					<p>
+						{recensione.data().dislikes}
+					</p>
+					<button on:click={dislikeFunction} class="dislike bottone-ld {uiLocaleDislike}">👎</button
+					>
+				</div>
 			</div>
 			<div class="report">
 				<button>Segnala</button>
@@ -142,7 +386,7 @@ import { esamiRecensiti } from '$lib/stores/recensioniStore';
 
 <style>
 	.recensione {
-		background-color: mediumseagreen;
+		background-color: rgb(199, 199, 199);
 		padding: 0.2rem 0;
 		border-radius: 20px;
 		max-width: 400px;
@@ -226,15 +470,36 @@ import { esamiRecensiti } from '$lib/stores/recensioniStore';
 	.like-dislike {
 		display: flex;
 		justify-content: left;
+		gap: 1rem;
 	}
 
 	.bottone-ld {
-		background: none;
 		border: none;
 		outline: none;
 		cursor: pointer;
 		font-size: 1.2rem;
+		width: 2rem;
+		height: 2rem;
+		display: flex;
+		justify-content: center;
+		border-radius: 20px;
 	}
+
+	.singolo-bottone {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.liked {
+		background-color: rgba(0, 255, 100, 0.5);
+	}
+
+	.disliked {
+		background-color: rgba(255, 50, 50, 0.5);
+	}
+
 	.box-bottoni {
 		display: flex;
 		justify-content: space-between;

@@ -4,7 +4,7 @@
 	import { onMount } from 'svelte';
 	import BoxLink from '$lib/components/utilities/BoxLink.svelte';
 	import { authStore } from '$lib/stores/authStore';
-import { storage } from '$lib/firebaseConfig';
+	import { storage } from '$lib/firebaseConfig';
 	let imagesLinks = [];
 
 	onMount(() => {
@@ -30,14 +30,13 @@ import { storage } from '$lib/firebaseConfig';
 
 <div class="main-links">
 	{#if !$authStore.isLoggedIn}
-		<BoxLink  nome="Unisciti a noi!" image="highfive" linkto="joinus" />
+		<BoxLink nome="Unisciti a noi!" image="highfive" linkto="joinus" />
 	{:else}
 		<BoxLink nome="Profilo" image="userPic" linkto="profilo/{$authStore.user.uid}" />
 	{/if}
 
-	<BoxLink nome="Corsi" image="corsi" linkto="corsi"></BoxLink>
-	<BoxLink nome="Portale" image="unical" linkto="www.unical.it"></BoxLink>
-
+	<BoxLink nome="Corsi" image="corsi" linkto="corsi" />
+	<BoxLink nome="Portale" image="unical" linkto="www.unical.it" />
 </div>
 
 <style>

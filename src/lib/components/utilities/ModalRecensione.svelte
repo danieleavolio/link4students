@@ -24,6 +24,9 @@
 	let utilita = 3;
 	let contenuto;
 	let anonimo = false;
+
+	let notifica = false;
+
 	const open = () => {
 		isOpen = true;
 	};
@@ -87,12 +90,11 @@
 				setDoc(snapshot.docs[0].ref, datiMedia, { merge: true }).then(() => {
 					addDoc(collection(db, 'recensioni'), data)
 						.then(async (esame) => {
-							alert('Recensione caricata!');
+							alert('Recensione caricata')
 							esamiRecensiti.update((oldEsami) => (oldEsami = [...oldEsami, idCorso]));
-							close();
 						})
 						.catch((error) => {
-							alert(error);
+							alert(error.message)
 						});
 				});
 			});

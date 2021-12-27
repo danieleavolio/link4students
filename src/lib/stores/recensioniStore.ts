@@ -9,3 +9,6 @@ import { writable } from "svelte/store";
 
 
 export const esamiRecensiti = writable([]);
+
+
+export const esamiReagiti = writable([]);

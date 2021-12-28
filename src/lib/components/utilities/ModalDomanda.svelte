@@ -22,8 +22,11 @@
 		// Quando si invia una recensione, viene mandata su firebase
 		getDoc(doc(db, 'users', $authStore.user.uid)).then((ref) => {
 			let nome = ref.data().nome;
+			let avatar = ref.data().avatar;
 			const data = {
 				nome: nome,
+				// salvo l'avatar per non fare le query successivamente
+				avatar: avatar,
 				idCorso: idCorso,
 				idAutore: $authStore.user.uid,
 				data: serverTimestamp(),

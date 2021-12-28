@@ -347,7 +347,7 @@
 		{#if !$authStore.isLoggedIn}
 			{#if !recensione.data().anonimo}
 				<div class="avatar" on:click={() => redirectProfilo(recensione.data().idAutore)}>
-					<img src="/images/userPic.png" alt="" />
+					<img src={recensione.data().avatar} alt="" />
 				</div>
 				<div class="nome">
 					<p>{recensione.data().nome}</p>
@@ -362,7 +362,7 @@
 			{/if}
 		{:else if !recensione.data().anonimo}
 			<div class="avatar" on:click={() => redirectProfilo(recensione.data().idAutore)}>
-				<img src="/images/userPic.png" alt="" />
+				<img src={recensione.data().avatar} alt="" />
 			</div>
 			<div class="nome">
 				<p>{recensione.data().nome}</p>
@@ -435,7 +435,6 @@
 	.up-part {
 		display: flex;
 		gap: 1rem;
-		justify-content: space-between;
 	}
 
 	.delete-review {
@@ -465,16 +464,16 @@
 	.avatar {
 		max-width: 75px;
 		max-height: 75px;
-		background-color: brown;
 		border-radius: 100%;
-		border: black solid;
 		cursor: pointer;
+		border:  black solid;
 	}
 
 	.avatar > img {
 		width: 100%;
-		height: 100%;
+		height: 75px;
 		object-fit: cover;
+		border-radius: 100%;
 	}
 
 	.anonimo {

@@ -10,7 +10,7 @@
 	export let idCorso;
 
 	let recensioni = [];
-
+	let immaginiRecensori;
 	onMount(() => {
 		// Realtime updates
 		const queryRecensioni = query(collection(db, 'recensioni'), where('idCorso', '==', idCorso));
@@ -55,12 +55,13 @@
 	}
 	.container {
 		margin-bottom: 2rem;
-		width: 100%;
+		width: 100vw;
 	}
 
 	.lista-recensioni {
 		display: flex;
-		gap: 1rem;
-		margin: 1rem;
+		gap: 4rem;
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 </style>

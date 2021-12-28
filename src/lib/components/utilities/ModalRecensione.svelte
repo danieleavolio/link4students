@@ -69,6 +69,7 @@
 		// Quando si invia una recensione, viene mandata su firebase
 		getDoc(doc(db, 'users', $authStore.user.uid)).then((ref) => {
 			let nome = ref.data().nome;
+			let profilePic = ref.data().avatar;
 			const data = {
 				nome: nome,
 				idCorso: idCorso,
@@ -78,6 +79,8 @@
 				votoDifficolta: difficolta,
 				votoUtilita: utilita,
 				anonimo: anonimo,
+				// Mi salvo l'immagine per evitare di farmi moltissime query
+				avatar: profilePic,
 				likes: 0,
 				dislikes: 0
 			};

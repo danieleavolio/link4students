@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { auth, db } from '$lib/firebaseConfig';
+	import { db } from '$lib/firebaseConfig';
 	import { authStore } from '$lib/stores/authStore';
 	import {
 		addDoc,
@@ -9,10 +9,12 @@
 		doc,
 		getDoc,
 		getDocs,
+		onSnapshot,
 		query,
-		setDoc,
+		serverTimestamp,
 		where
 	} from 'firebase/firestore';
+	import Risposta from './Risposta.svelte';
 
 	export let domanda;
 
@@ -22,14 +24,48 @@
 	let mostraRisposte = false;
 	let listaRisposte = [];
 
+	let tipoSort;
+
+	// Per ordinare in real time
+
+	const ordinaRisposte = () => {
+		if (tipoSort == 'recenti') {
+			listaRisposte = listaRisposte.sort(
+				(a, b) => a.data().data.nanoseconds - b.data().data.nanoseconds
+			);
+		} else {
+			listaRisposte = listaRisposte.sort(
+				(a, b) => b.data().data.nanoseconds - a.data().data.nanoseconds
+			);
+		}
+	};
+
 	const redirectProfilo = (id) => {
 		goto(`/profilo/${id}`);
 	};
 
 	const eliminaDomanda = () => {
-		deleteDoc(doc(db, 'domande', domanda.id))
+		// Prendo tutte le risposte alla domanda e le elimino
+		const queryRisposteDaEl = query(
+			collection(db, 'risposte'),
+			where('idDomanda', '==', domanda.id)
+		);
+		// Elimino tutte le risposte di quella domanda
+		getDocs(queryRisposteDaEl)
+			.then((docs) => {
+				docs.docs.forEach((element) => {
+					deleteDoc(element.ref);
+				});
+			})
 			.then(() => {
-				alert('Domanda eliminata');
+				// Elimino la domanda stessa
+				deleteDoc(doc(db, 'domande', domanda.id))
+					.then(() => {
+						alert('Domanda eliminata');
+					})
+					.catch((error) => {
+						alert(error.message);
+					});
 			})
 			.catch((error) => {
 				alert(error.message);
@@ -42,13 +78,17 @@
 				contenuto: risposta,
 				idDomanda: domanda.id,
 				idRispondente: $authStore.user.uid,
-				nomeRispondente: ref.data().nome
+				nomeRispondente: ref.data().nome,
+				// Salvo l'avatar per non fare molte query dopo
+				avatarRispondente: ref.data().avatar,
+				data: serverTimestamp()
 			};
 
 			addDoc(collection(db, 'risposte'), dati)
 				.then(() => {
 					alert('Risposta inviata');
 					rispondendo = false;
+					risposta = '';
 				})
 				.catch((error) => {
 					alert(error.message);
@@ -58,9 +98,23 @@
 
 	const getListaRisposte = () => {
 		const queryRisposte = query(collection(db, 'risposte'), where('idDomanda', '==', domanda.id));
-		getDocs(queryRisposte).then((res) => {
-			listaRisposte = res.docs;
-		});
+		getDocs(queryRisposte)
+			.then((res) => {
+				listaRisposte = res.docs;
+				mostraRisposte = true;
+			})
+			.then(() => {
+				onSnapshot(queryRisposte, (risposte) => {
+					listaRisposte = risposte.docs;
+				});
+			});
+	};
+
+	const handleMostraRisposte = () => {
+		if (listaRisposte.length == 0) {
+			getListaRisposte();
+		}
+		mostraRisposte = !mostraRisposte;
 	};
 </script>
 
@@ -70,7 +124,7 @@
 		{#if !$authStore.isLoggedIn}
 			{#if !domanda.data().anonimo}
 				<div class="avatar" on:click={() => redirectProfilo(domanda.data().idAutore)}>
-					<img src="/images/userPic.png" alt="" />
+					<img src={domanda.data().avatar} alt="" />
 				</div>
 				<div class="titolo-nome">
 					<p class="titolo-domanda">{domanda.data().titolo}</p>
@@ -87,7 +141,7 @@
 			{/if}
 		{:else if !domanda.data().anonimo}
 			<div class="avatar" on:click={() => redirectProfilo(domanda.data().idAutore)}>
-				<img src="/images/userPic.png" alt="" />
+				<img src={domanda.data().avatar} alt="" />
 			</div>
 			<div class="titolo-nome">
 				<p class="titolo-domanda">{domanda.data().titolo}</p>
@@ -121,9 +175,9 @@
 			<p>{domanda.data().contenuto}</p>
 		</div>
 		<div class="box-bottoni">
-			<button>Risposte</button>
+			<button on:click={handleMostraRisposte}>Risposte</button>
 			{#if $authStore.isLoggedIn}
-				<button on:click={() => (rispondendo = !rispondendo)}>Rispondi</button>
+				<button class="rispondi" on:click={() => (rispondendo = !rispondendo)}>Rispondi</button>
 			{/if}
 		</div>
 		{#if rispondendo}
@@ -142,9 +196,25 @@
 				</form>
 			</div>
 		{/if}
-
-		{#if mostraRisposte}
-			{#each listaRisposte as risposta (risposta.id)}{/each}
+	</div>
+	<div class="risposte">
+		{#if mostraRisposte && listaRisposte.length != 0}
+			<div class="sorting">
+				<label for="sorting:">Ordina:</label>
+				<select
+					on:change={ordinaRisposte}
+					bind:value={tipoSort}
+					class="sorting"
+					name="sorting"
+					id="sorting"
+				>
+					<option value="recenti">Dalla più recente</option>
+					<option value="vecchio">Dalla più vecchio</option>
+				</select>
+			</div>
+			{#each listaRisposte as risposta (risposta.id)}
+				<Risposta {risposta} />
+			{/each}
 		{/if}
 	</div>
 </div>
@@ -205,7 +275,8 @@
 
 	.avatar > img {
 		width: 100%;
-		height: 100%;
+		height: 75px;
+		border-radius: 100%;
 		object-fit: cover;
 	}
 
@@ -220,6 +291,45 @@
 		justify-content: center;
 	}
 
+	.sorting {
+		align-self: end;
+		border: none;
+		outline: none;
+		font-size: 1rem;
+		border-radius: 0.4rem;
+	}
+	form {
+		width: 100%;
+		display: flex;
+		gap: 1rem;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.rispondi {
+		background-color: red;
+	}
+	textarea {
+		resize: none;
+		width: 80%;
+		border-radius: 0.3rem;
+		font-size: 1rem;
+	}
+
+	button {
+		padding: 0.3rem;
+		font-size: 1rem;
+		border: none;
+		border-radius: 0.3rem;
+		cursor: pointer;
+		color: white;
+		background-color: black;
+	}
+
+	form > button {
+		background-color: blueviolet;
+	}
+
 	.contenuto {
 		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
 		border-radius: 10px;
@@ -230,5 +340,16 @@
 	.box-bottoni {
 		display: flex;
 		justify-content: space-between;
+	}
+
+	.risposte {
+		width: 90%;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		justify-content: center;
+		align-content: center;
+		align-items: flex-start;
+		padding: 1rem;
 	}
 </style>

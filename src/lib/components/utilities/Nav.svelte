@@ -63,6 +63,7 @@
 			<a transition:fly={{ y: 200, duration: 1000 }} href="/profilo/{auth.currentUser.uid}"
 				>{$authStore.user.email}</a
 			>
+			<a href="/dashboard/adminpage?uid={$authStore.user.uid}">Admin</a>
 			<button class="logout" on:click={logout}>Logout</button>
 		{:else if !$authStore.isLoggedIn && $authStore.isLoggedIn != undefined}
 			<a transition:fly={{ y: -200, duration: 500 }} href="/joinus">Unisciti</a>

@@ -1,12 +1,124 @@
 <script>
-    export let risposte;
+import { goto } from '$app/navigation';
+
+	import { db } from '$lib/firebaseConfig';
+
+	import { authStore } from '$lib/stores/authStore';
+	import { deleteDoc, doc } from '@firebase/firestore';
+
+	export let risposta;
+
+	export let eliminaRisposta = () => {
+		deleteDoc(doc(db, 'risposte', risposta.id))
+			.then(() => {
+				alert('Risposta eliminata!');
+			})
+			.catch((err) => {
+				alert(err.message);
+			});
+	};
+
+	const redirectProfilo = (id) => {
+		goto(`/profilo/${id}`);
+	};
 </script>
 
-
 <div class="container-risposta">
-    
+	<div class="up-part">
+		<div class="avatar">
+			<img on:click={() => redirectProfilo(risposta.data().idRispondente)} src={risposta.data().avatarRispondente} alt="" />
+		</div>
+		<div class="nome">
+			<p >{risposta.data().nomeRispondente}</p>
+		</div>
+	</div>
+	{#if $authStore.isLoggedIn}
+		{#if $authStore.user.uid == risposta.data().idRispondente}
+			<button on:click={eliminaRisposta} class="delete-risposta">🗑️</button>
+		{/if}
+	{/if}
+
+	<div class="down-part">
+		<div class="contenuto">
+			<p>{risposta.data().contenuto}</p>
+		</div>
+		<div class="box-bottoni" />
+	</div>
 </div>
 
 <style>
+	.container-risposta {
+		background-color: rgb(94, 84, 84);
+		border-radius: 15px;
+		width: 80%;
+		padding: 0.5rem;
+		align-self: end;
+		margin: 1rem 0;
+	}
 
+	.up-part {
+		display: flex;
+		gap: 1rem;
+		justify-content: left;
+		align-items: center;
+	}
+
+	.delete-risposta {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		align-self: center;
+		border: none;
+		background-color: rgba(41, 41, 41, 0.5);
+		border-radius: 100%;
+		font-weight: 600;
+		font-size: 1.3rem;
+		color: darkred;
+		height: 50px;
+		width: 50px;
+		cursor: pointer;
+		transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+		position: absolute;
+		margin-left: -2rem;
+		margin-top: -6rem;
+	}
+
+	.delete-risposta:hover {
+		background-color: rgb(41, 41, 41);
+	}
+
+	.avatar {
+		max-width: 50px;
+		max-height: 50px;
+		background-color: brown;
+		border-radius: 100%;
+		border: black solid;
+		cursor: pointer;
+	}
+
+	.avatar > img {
+		width: 100%;
+		height: 50px;
+        border-radius: 100%;
+		object-fit: cover;
+	}
+
+	.down-part {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		justify-content: center;
+	}
+
+	.contenuto {
+		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+		border-radius: 10px;
+		padding: 0.5rem;
+		overflow-wrap: break-word;
+	}
+
+	.box-bottoni {
+		display: flex;
+		justify-content: space-between;
+	}
 </style>

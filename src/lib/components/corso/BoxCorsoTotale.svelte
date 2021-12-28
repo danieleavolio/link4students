@@ -119,7 +119,7 @@
 	{#if scelta == 'Recensioni'}
 		<BoxRecensioni idCorso={corso.data().codiceCorso} />
 	{:else if scelta == 'Domande'}
-		<BoxDomande />
+		<BoxDomande idCorso={corso.data().codiceCorso} />
 	{:else if scelta == 'Appunti'}
 		<BoxAppunti />
 	{/if}

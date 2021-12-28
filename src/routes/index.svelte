@@ -1,6 +1,5 @@
 <script context="module">
 	export async function load({}) {
-		console.log('ciao');
 		let statistiche;
 		// Temporaneo
 

@@ -138,7 +138,10 @@
 						required
 						minlength="10"
 					/>
-					<button class="button-salva" on:click={cambiaBio}>Salva</button>
+					<div class="bottoni">
+						<button class="button-annulla" on:click={() => (modificaBio = false)}>Annulla</button>
+						<button class="button-salva" on:click={cambiaBio}>Salva</button>
+					</div>
 				</div>
 			{/if}
 		</div>
@@ -186,6 +189,14 @@
 		gap: 1rem;
 	}
 
+	.bottoni {
+		display: flex;
+		width: 100%;
+		gap: 1rem;
+		justify-content: center;
+		align-items: center;
+	}
+
 	.button-modifica {
 		border: none;
 		outline: none;
@@ -199,12 +210,23 @@
 	}
 
 	.button-salva {
-		width: 60%;
+		width: 50%;
 		border: none;
 		outline: none;
 		padding: 0.4rem 0;
 		border-radius: 6px;
 		background-color: rgb(173, 135, 235);
+		text-transform: uppercase;
+		cursor: pointer;
+	}
+
+	.button-annulla {
+		width: 50%;
+		border: none;
+		outline: none;
+		padding: 0.4rem 0;
+		border-radius: 6px;
+		background-color: rgb(218, 218, 218);
 		text-transform: uppercase;
 		cursor: pointer;
 	}
@@ -224,6 +246,8 @@
 		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5), -5px -5px 5px rgba(176, 191, 255, 0.5);
 		resize: none;
 		padding: 0.3rem;
+		width: 100%;
+		height: 100px;
 	}
 
 	form {
@@ -276,10 +300,15 @@
 
 	.container-bio {
 		width: 80%;
+		height: 100px;
 		font-style: italic;
 		box-shadow: 0 5px 5px rgba(176, 191, 255, 0.5);
 		border-radius: 10px;
 		align-self: center;
 		margin: 0.5rem;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		overflow-wrap: anywhere;
 	}
 </style>

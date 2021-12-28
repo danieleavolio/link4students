@@ -27,7 +27,6 @@
 	let contenuto;
 	let anonimo = false;
 
-	let notifica = false;
 
 	const open = () => {
 		isOpen = true;

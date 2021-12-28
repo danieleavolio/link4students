@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { auth, db } from '$lib/firebaseConfig';
 	import { authStore } from '$lib/stores/authStore';
-	import { fly } from "svelte/transition";
+	import { fly } from 'svelte/transition';
 	import { esamiReagiti, esamiRecensiti, recensioniSegnalate } from '$lib/stores/recensioniStore';
 	import {
 		collection,
@@ -414,10 +414,9 @@
 			</div>
 			<div class="report">
 				{#if $recensioniSegnalate.find((elem) => elem.idRecensione == recensione.id)}
-				<ModalSegnalazione idRecensione={recensione.id} segnalato={true} />
+					<ModalSegnalazione idRecensione={recensione.id} segnalato={true} />
 				{:else}
-				<ModalSegnalazione idRecensione={recensione.id} segnalato={false	} />
-
+					<ModalSegnalazione idRecensione={recensione.id} segnalato={false} />
 				{/if}
 			</div>
 		</div>
@@ -454,6 +453,9 @@
 		width: 50px;
 		cursor: pointer;
 		transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+		position: absolute;
+		margin-left: -2rem;
+		margin-top: -6rem;
 	}
 
 	.delete-review:hover {

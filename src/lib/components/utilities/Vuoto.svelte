@@ -1,0 +1,33 @@
+<script>
+    export let oggetti;
+</script>
+
+<div class="box">
+    <p class="emoji">
+        📦
+    </p>
+    <p class="contenuto">Non ci sono {oggetti}</p>
+</div>
+
+<style>
+    .box{
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 5px 5px rgba(0,0,0,0.4);
+        padding: 2rem;
+        border-radius: 10px;
+    }
+
+    .emoji{
+        font-size: 4rem;
+        margin: 0;
+    }
+
+    .contenuto{
+        font-size: 2.2rem;
+        margin: 0;
+    }
+
+</style>

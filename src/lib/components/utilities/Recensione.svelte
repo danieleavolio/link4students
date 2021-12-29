@@ -16,7 +16,7 @@
 		where
 	} from 'firebase/firestore';
 	import { onMount } from 'svelte';
-	import ModalSegnalazione from './ModalSegnalazione.svelte';
+	import SegnalazioneRecensione from './SegnalazioneRecensione.svelte';
 
 	export let recensione;
 
@@ -68,18 +68,31 @@
 
 	const eliminaRecensione = () => {
 		// Eliminare tutte le interazioni con la recnesione ( like e dislike)
-
 		const queryInterazioni = query(
 			collection(db, 'votiRecensioni'),
 			where('idRecensione', '==', recensione.id)
 		);
-
 		getDocs(queryInterazioni).then((data) => {
 			data.docs.forEach((toDelete) => {
 				let docRef = toDelete.ref;
 				deleteDoc(docRef);
 			});
 		});
+		// Elimino le segnalazioni alla recensione quando eliminata
+
+		const querySegnalazioni = query(
+			collection(db, 'segnalazioniRecensioni'),
+			where('idRecensione', '==', recensione.id)
+		);
+
+		// Elimino le segnalazioni 1 alla volta
+		getDocs(querySegnalazioni).then((data) => {
+			data.docs.forEach((toDelete) => {
+				let docRef = toDelete.ref;
+				deleteDoc(docRef);
+			});
+		});
+
 		// Modifica la media dell'esame di cui la recensione fa parte
 		const q = query(
 			collection(db, 'corsidelcdl'),
@@ -414,9 +427,9 @@
 			</div>
 			<div class="report">
 				{#if $recensioniSegnalate.find((elem) => elem.idRecensione == recensione.id)}
-					<ModalSegnalazione idRecensione={recensione.id} segnalato={true} />
+					<SegnalazioneRecensione idRecensione={recensione.id} segnalato={true} />
 				{:else}
-					<ModalSegnalazione idRecensione={recensione.id} segnalato={false} />
+					<SegnalazioneRecensione idRecensione={recensione.id} segnalato={false} />
 				{/if}
 			</div>
 		</div>
@@ -466,7 +479,7 @@
 		max-height: 75px;
 		border-radius: 100%;
 		cursor: pointer;
-		border:  black solid;
+		border: black solid;
 	}
 
 	.avatar > img {

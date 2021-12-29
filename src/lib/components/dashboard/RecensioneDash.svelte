@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { db } from '$lib/firebaseConfig';
 	import { fly } from 'svelte/transition';
-	import { esamiRecensiti } from '$lib/stores/recensioniStore';
+	import { esamiRecensiti, recensioniSegnalate } from '$lib/stores/recensioniStore';
 	import {
 		collection,
 		deleteDoc,
@@ -10,18 +10,22 @@
 		getDocs,
 		increment,
 		query,
+		serverTimestamp,
 		setDoc,
+		Timestamp,
 		where
 	} from 'firebase/firestore';
+	import Segnalazione from './Segnalazione.svelte';
 
-	export let recensione;
+	export let oggettoSegnalazione;
+	export let cambiaListaLocale;
 
-	let statoVoto = 0;
+	let giorniSospensione;
+	let segnalazioneMostrata = false;
 
-	// Stati voto:
-	// 2 PENDING
-	// 1 MANDATO
-	// 0 INATTESA
+	const displayReport = () => {
+		segnalazioneMostrata = !segnalazioneMostrata;
+	};
 
 	const redirectProfilo = (id) => {
 		goto(`/profilo/${id}`);
@@ -67,7 +71,7 @@
 
 		const queryInterazioni = query(
 			collection(db, 'votiRecensioni'),
-			where('idRecensione', '==', recensione.id)
+			where('idRecensione', '==', oggettoSegnalazione.recensione.id)
 		);
 
 		getDocs(queryInterazioni).then((data) => {
@@ -76,26 +80,44 @@
 				deleteDoc(docRef);
 			});
 		});
+
+		// Elimino le segnalazioni alla recensione quando eliminata
+
+		const querySegnalazioni = query(
+			collection(db, 'segnalazioniRecensioni'),
+			where('idRecensione', '==', oggettoSegnalazione.recensione.id)
+		);
+
+		// Elimino le segnalazioni 1 alla volta
+		getDocs(querySegnalazioni).then((data) => {
+			data.docs.forEach((toDelete) => {
+				let docRef = toDelete.ref;
+				deleteDoc(docRef);
+			});
+		});
 		// Modifica la media dell'esame di cui la recensione fa parte
 		const q = query(
 			collection(db, 'corsidelcdl'),
-			where('codiceCorso', '==', recensione.data().idCorso)
+			where('codiceCorso', '==', oggettoSegnalazione.recensione.data().idCorso)
 		);
 		getDocs(q).then((snapshot) => {
 			const dati = calcolaNuovaMedia(
 				snapshot.docs[0].data(),
-				recensione.data().votoDifficolta,
-				recensione.data().votoUtilita
+				oggettoSegnalazione.recensione.data().votoDifficolta,
+				oggettoSegnalazione.recensione.data().votoUtilita
 			);
 			setDoc(snapshot.docs[0].ref, dati, { merge: true })
 				.then(() => {
-					deleteDoc(doc(db, 'recensioni', recensione.id))
+					deleteDoc(doc(db, 'recensioni', oggettoSegnalazione.recensione.id))
 						.then(() => {
 							esamiRecensiti.update(
 								(oldEsami) =>
-									(oldEsami = oldEsami.filter((item) => item != recensione.data().idCorso))
+									(oldEsami = oldEsami.filter(
+										(item) => item != oggettoSegnalazione.recensione.data().idCorso
+									))
 							);
 							alert('Recensione eliminata!');
+							cambiaListaLocale(oggettoSegnalazione.segnalazione.id);
 							// Decremento il contatore del numero di recensioni
 							setDoc(
 								doc(db, 'statistiche', 'infoSito'),
@@ -115,34 +137,83 @@
 			// Elimina la recensione dalla collection recensioni
 		});
 	};
+
+	// Mette un banTime nell'account dell'utente della recensione
+	const setBanTime = (uid) => {
+		// 86400 è il numero di secondi in un giorni
+		let giorniInSecondi = giorniSospensione * 86400;
+		let tempo = Timestamp.now().seconds + giorniInSecondi;
+		setDoc(
+			doc(db, 'users', uid),
+			{
+				banTime: tempo
+			},
+			{ merge: true }
+		).then(() => {
+			// Quando un utente viene flaggato con questo, la recensione incriminata viene eliminata
+			eliminaRecensione();
+			console.log('Utente sospeso per: ', giorniSospensione);
+		});
+	};
 </script>
 
 <div transition:fly class="recensione">
 	<div class="up-part">
 		<!-- Se non sei loggato, allora vedi la recensione -->
-		<div class="avatar" on:click={() => redirectProfilo(recensione.data().idAutore)}>
-			<img src={recensione.data().avatar} alt="" />
+		<div
+			class="avatar"
+			on:click={() => redirectProfilo(oggettoSegnalazione.recensione.data().idAutore)}
+		>
+			<img src={oggettoSegnalazione.recensione.data().avatar} alt="" />
 		</div>
 		<div class="nome">
-			<p>{recensione.data().nome}</p>
+			<p>{oggettoSegnalazione.recensione.data().nome}</p>
 		</div>
 		<button on:click={eliminaRecensione} class="delete-review">🗑️</button>
 	</div>
 
 	<div class="down-part">
 		<div class="contenuto">
-			<p>{recensione.data().contenuto}</p>
+			<p>{oggettoSegnalazione.recensione.data().contenuto}</p>
 			<div class="voti">
-				<p>{tornaDato(recensione.data().votoDifficolta, '🧠')}</p>
-				<p>{tornaDato(recensione.data().votoUtilita, '🎓')}</p>
+				<p>{tornaDato(oggettoSegnalazione.recensione.data().votoDifficolta, '🧠')}</p>
+				<p>{tornaDato(oggettoSegnalazione.recensione.data().votoUtilita, '🎓')}</p>
 			</div>
+		</div>
+		<div class="segnalazione">
+			<div class="bottoni">
+				<button class="show-report" on:click={displayReport}>Mostra report 🛑</button>
+				<div class="div-sospensione">
+					<!-- Form per la sospensione -->
+					<form
+						action=""
+						on:submit|preventDefault={() =>
+							setBanTime(oggettoSegnalazione.recensione.data().idAutore)}
+					>
+						<input
+							class="input-giorni"
+							required
+							bind:value={giorniSospensione}
+							min="1"
+							type="number"
+							name="giorni"
+							id="giorni-sospensione"
+							placeholder="Giorni di sospensione"
+						/>
+						<button class="sospendi">Sospendi</button>
+					</form>
+				</div>
+			</div>
+			{#if segnalazioneMostrata}
+				<Segnalazione segnalazione={oggettoSegnalazione.segnalazione} />
+			{/if}
 		</div>
 	</div>
 </div>
 
 <style>
 	.recensione {
-        display: inline-block;
+		display: inline-block;
 		background-color: rgb(199, 199, 199);
 		padding: 0.2rem 0;
 		border-radius: 20px;
@@ -219,5 +290,38 @@
 	.voti {
 		display: flex;
 		justify-content: space-around;
+	}
+
+	.show-report {
+		border: black solid;
+		outline: none;
+		background: white;
+		padding: 0.5rem 0.2rem;
+		border-radius: 8px;
+		cursor: pointer;
+	}
+
+	.bottoni {
+		display: flex;
+		justify-content: space-between;
+		gap: 1rem;
+	}
+	.div-sospensione {
+		margin: 0.5rem 0;
+	}
+
+	.input-giorni {
+		text-align: end;
+		border-radius: 0.3rem;
+		outline: none;
+		border: none;
+	}
+	.sospendi {
+		border: none;
+		background-color: rgb(22, 22, 22);
+		color: white;
+		padding: 0.2rem;
+		border-radius: 0.3rem;
+		cursor: pointer;
 	}
 </style>

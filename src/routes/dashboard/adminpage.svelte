@@ -17,34 +17,37 @@
 </script>
 
 <script>
-	import Domanda from '$lib/components/utilities/Domanda.svelte';
 	import RecensioneDash from '$lib/components/dashboard/RecensioneDash.svelte';
 
 	export let user;
 
 	let schermata = 'utenti';
 	// Tutto quello che va mostrato qui
+	let idDomandeSegnalate = [];
 	let listaDomande = [];
+	let idUtentiSegnalati = [];
 	let listaUtenti = [];
+	let idRecensioniSegnalate = [];
 	let listaRecensioni = [];
+	let idAppuntiDaVisionare = [];
 	let listaAppunti = [];
 
 	const clickDomande = () => {
 		schermata = 'domande';
-		if (listaDomande.length == 0) {
+		if (idDomandeSegnalate.length == 0) {
 			const queryDomande = query(collection(db, 'domande'));
 			const realTimeDomande = onSnapshot(queryDomande, (querySnapshot) => {
-				listaDomande = querySnapshot.docs;
+				idDomandeSegnalate = querySnapshot.docs;
 			});
 		}
 	};
 
 	const clickUtenti = () => {
 		schermata = 'utenti';
-		if (listaUtenti.length == 0) {
+		if (idUtentiSegnalati.length == 0) {
 			const queryUtenti = query(collection(db, 'users'));
 			const realTimeUtenti = onSnapshot(queryUtenti, (querySnapshot) => {
-				listaUtenti = querySnapshot.docs;
+				idUtentiSegnalati = querySnapshot.docs;
 			});
 		}
 	};
@@ -53,20 +56,34 @@
 		schermata = 'recensioni';
 
 		if (listaRecensioni.length == 0) {
-			const queryRecensioni = query(collection(db, 'recensioni'));
+			const queryRecensioni = query(collection(db, 'segnalazioniRecensioni'));
 			const realTimeRecensioni = onSnapshot(queryRecensioni, (querySnapshot) => {
-				listaRecensioni = querySnapshot.docs;
+				let tempList = [];
+				querySnapshot.docs.forEach((elem) => {
+					getDoc(doc(db, 'recensioni', elem.data().idRecensione)).then((docum) => {
+						tempList.push({
+							segnalazione: elem,
+							recensione: docum
+						});
+						listaRecensioni = tempList;
+					});
+				});
 			});
 		}
 	};
 
+	const cambiaListaLocale = (idSegnalazione) =>{
+		// Quando elimino una recensione, tolgo dalla lista locale tutte le segnalazioni di quella recensione
+		listaRecensioni = listaRecensioni.filter(elem => elem.segnalazione.id == idSegnalazione)
+	}
+
 	const clickAppunti = () => {
 		schermata = 'appunti';
 
-		if (listaAppunti.length == 0) {
+		if (idAppuntiDaVisionare.length == 0) {
 			const queryAppunti = query(collection(db, 'appunti'));
 			const realTimeAppunti = onSnapshot(queryAppunti, (querySnapshot) => {
-				listaAppunti = querySnapshot.docs;
+				idAppuntiDaVisionare = querySnapshot.docs;
 			});
 		}
 	};
@@ -88,25 +105,27 @@
 				</div>
 				<div class="prima-destra">
 					<div class="schermata-selezionata">
-						<p>Selezione per: <span class="selezionato">{schermata}</span></p>
-						<div class="lista-generica">
-							{#if schermata == 'utenti'}
-								{#each listaUtenti as utente (utente.id)}
+						{#if schermata == 'utenti'}
+							<p class="selezionato">Segnalazioni {schermata}</p>
+							<div class="lista-generica">
+								{#each idUtentiSegnalati as utente (utente.id)}
 									<p>{utente.data().nome}</p>
 								{/each}
-							{:else if schermata == 'recensioni'}
-								{#each listaRecensioni as recensione (recensione.id)}
-									<RecensioneDash {recensione} />{/each}
-							{:else if schermata == 'domande'}
-								{#each listaDomande as domanda (domanda.id)}
-									<Domanda {domanda} />
-								{/each}
-							{:else if schermata == 'appunti'}
-								{#each listaAppunti as appunto (appunto.id)}
+							</div>
+						{:else if schermata == 'recensioni'}
+							<p class="selezionato">Segnalazioni {schermata}</p>
+							<div class="lista-generica">
+								{#each listaRecensioni as oggettoSegnalazione (oggettoSegnalazione.segnalazione.id)}
+									<RecensioneDash {oggettoSegnalazione} {cambiaListaLocale} />{/each}
+							</div>
+						{:else if schermata == 'appunti'}
+							<p class="selezionato">{schermata} da visionare</p>
+							<div class="lista-generica">
+								{#each idAppuntiDaVisionare as appunto (appunto.id)}
 									<p>Appunto {appunto.data()}</p>
 								{/each}
-							{/if}
-						</div>
+							</div>
+						{/if}
 					</div>
 				</div>
 			</div>
@@ -124,8 +143,8 @@
 
 	.prima-sezione {
 		display: grid;
-        grid-template-columns: 1fr 2fr;
-        align-items: center;
+		grid-template-columns: 1fr 2fr;
+		align-items: center;
 		gap: 1rem;
 		flex-wrap: wrap;
 	}
@@ -142,13 +161,15 @@
 		justify-content: center;
 	}
 
-
 	.selezionato {
 		background-color: blue;
 		font-size: 2rem;
 		text-transform: uppercase;
 		font-weight: 800;
 		color: white;
+		width: fit-content;
+		padding: 0.2rem;
+		border-radius: 4px;
 	}
 
 	.bottone {
@@ -159,12 +180,12 @@
 		cursor: pointer;
 	}
 
-    .lista-generica{
-        display: flex;
-        overflow-x: scroll;
-        scroll-behavior: smooth;
-        width: 70vw;
-        gap: 1rem;
-        white-space: nowrap;
-    }
+	.lista-generica {
+		display: flex;
+		overflow-x: scroll;
+		scroll-behavior: smooth;
+		width: 70vw;
+		gap: 1rem;
+		white-space: nowrap;
+	}
 </style>

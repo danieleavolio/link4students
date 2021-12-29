@@ -3,7 +3,7 @@
 	import { fly } from 'svelte/transition';
 	import { onAuthStateChanged } from 'firebase/auth';
 	import { auth, db } from '$lib/firebaseConfig';
-	import { collection, getDocs, query, where } from 'firebase/firestore';
+	import { collection, doc, getDoc, getDocs, query, Timestamp, where } from 'firebase/firestore';
 	import { esamiReagiti, esamiRecensiti } from '$lib/stores/recensioniStore';
 	const logout = async () => {
 		await auth.signOut().then(() => {
@@ -17,6 +17,18 @@
 				isLoggedIn: true,
 				user: fbUser
 			};
+
+			// Se per qualche motivo tu fossi bannato
+			getDoc(doc(db,'users',fbUser.uid)).then((user)=>{
+				if (user.data().banTime){
+					// Se il tempo di ban è ancora maggiore rispetto a ora
+					// Ancora non è passato abbastanza tempo dal ban (in giorni)
+					if (user.data().banTime < Timestamp.now()){
+						alert("Sei ancora bannato")
+						logout();
+					}
+				}
+			})
 			authStore.update((oldStore) => data);
 			// Quando loggo prendo l'id degli esami e li passo allo store apposito
 			let idEsami = [];

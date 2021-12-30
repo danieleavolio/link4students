@@ -15,6 +15,7 @@
 		where
 	} from 'firebase/firestore';
 	import Risposta from './Risposta.svelte';
+	import { fade,fly } from "svelte/transition";
 
 	export let domanda;
 
@@ -27,16 +28,12 @@
 	let tipoSort;
 
 	// Per ordinare in real time
-
-	const ordinaRisposte = () => {
+	//  da qualche problema
+	$: ordinaRisposte = () => {
 		if (tipoSort == 'recenti') {
-			listaRisposte = listaRisposte.sort(
-				(a, b) => a.data().data.nanoseconds - b.data().data.nanoseconds
-			);
+			listaRisposte = listaRisposte.sort((a, b) => a.data().data.seconds - b.data().data.seconds);
 		} else {
-			listaRisposte = listaRisposte.sort(
-				(a, b) => b.data().data.nanoseconds - a.data().data.nanoseconds
-			);
+			listaRisposte = listaRisposte.sort((a, b) => b.data().data.seconds - a.data().data.seconds);
 		}
 	};
 
@@ -118,7 +115,7 @@
 	};
 </script>
 
-<div class="domanda">
+<div in:fly={{ y: 100, duration: 1000 }} out:fade class="domanda">
 	<div class="up-part">
 		<!-- Se non sei loggato, allora vedi la domanda -->
 		{#if !$authStore.isLoggedIn}
@@ -208,8 +205,8 @@
 					name="sorting"
 					id="sorting"
 				>
+					<option value="vecchio">Dalla più vecchia</option>
 					<option value="recenti">Dalla più recente</option>
-					<option value="vecchio">Dalla più vecchio</option>
 				</select>
 			</div>
 			{#each listaRisposte as risposta (risposta.id)}

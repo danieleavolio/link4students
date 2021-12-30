@@ -5,7 +5,7 @@ import { goto } from '$app/navigation';
 
 	import { authStore } from '$lib/stores/authStore';
 	import { deleteDoc, doc } from '@firebase/firestore';
-
+	import { fly,fade } from "svelte/transition";
 	export let risposta;
 
 	export let eliminaRisposta = () => {
@@ -23,7 +23,7 @@ import { goto } from '$app/navigation';
 	};
 </script>
 
-<div class="container-risposta">
+<div in:fly out:fade class="container-risposta">
 	<div class="up-part">
 		<div class="avatar">
 			<img on:click={() => redirectProfilo(risposta.data().idRispondente)} src={risposta.data().avatarRispondente} alt="" />

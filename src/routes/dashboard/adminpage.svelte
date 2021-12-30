@@ -18,14 +18,14 @@
 
 <script>
 	import RecensioneDash from '$lib/components/dashboard/RecensioneDash.svelte';
+	import UtenteDash from '$lib/components/dashboard/UtenteDash.svelte';
 
 	export let user;
 
-	let schermata = 'utenti';
+	let schermata;
 	// Tutto quello che va mostrato qui
 	let idDomandeSegnalate = [];
 	let listaDomande = [];
-	let idUtentiSegnalati = [];
 	let listaUtenti = [];
 	let idRecensioniSegnalate = [];
 	let listaRecensioni = [];
@@ -44,10 +44,19 @@
 
 	const clickUtenti = () => {
 		schermata = 'utenti';
-		if (idUtentiSegnalati.length == 0) {
-			const queryUtenti = query(collection(db, 'users'));
+		if (listaUtenti.length == 0) {
+			const queryUtenti = query(collection(db, 'segnalazioniUtenti'));
 			const realTimeUtenti = onSnapshot(queryUtenti, (querySnapshot) => {
-				idUtentiSegnalati = querySnapshot.docs;
+				let tempList = [];
+				querySnapshot.docs.forEach((elem) => {
+					getDoc(doc(db, 'users', elem.data().idSegnalato)).then((docum) => {
+						tempList.push({
+							segnalazione: elem,
+							utente: docum
+						});
+						listaUtenti = tempList;
+					});
+				});
 			});
 		}
 	};
@@ -56,8 +65,8 @@
 		schermata = 'recensioni';
 
 		if (listaRecensioni.length == 0) {
-			const queryRecensioni = query(collection(db, 'segnalazioniRecensioni'));
-			const realTimeRecensioni = onSnapshot(queryRecensioni, (querySnapshot) => {
+			const querySegnalazioni = query(collection(db, 'segnalazioniRecensioni'));
+			const realTimeSegnalazioni = onSnapshot(querySegnalazioni, (querySnapshot) => {
 				let tempList = [];
 				querySnapshot.docs.forEach((elem) => {
 					getDoc(doc(db, 'recensioni', elem.data().idRecensione)).then((docum) => {
@@ -71,10 +80,14 @@
 			});
 		}
 	};
-
-	const cambiaListaLocale = (idSegnalazione) =>{
+	// Insicuro sul funzionamento
+	const cambiaRecensioniSegnalate = (idRecensione) => {
 		// Quando elimino una recensione, tolgo dalla lista locale tutte le segnalazioni di quella recensione
-		listaRecensioni = listaRecensioni.filter(elem => elem.segnalazione.id == idSegnalazione)
+		listaRecensioni = listaRecensioni.filter(elem => elem.recensione.id != idRecensione);
+	};
+
+	const cambiaUtentiSegnalati = (idSegnalazione)=>{
+		listaUtenti = listaUtenti.filter(elem => elem.segnalazione.id != idSegnalazione);
 	}
 
 	const clickAppunti = () => {
@@ -108,15 +121,15 @@
 						{#if schermata == 'utenti'}
 							<p class="selezionato">Segnalazioni {schermata}</p>
 							<div class="lista-generica">
-								{#each idUtentiSegnalati as utente (utente.id)}
-									<p>{utente.data().nome}</p>
+								{#each listaUtenti as oggettoSegnalazione (oggettoSegnalazione.segnalazione.id)}
+									<UtenteDash {oggettoSegnalazione} {cambiaUtentiSegnalati} />
 								{/each}
 							</div>
 						{:else if schermata == 'recensioni'}
 							<p class="selezionato">Segnalazioni {schermata}</p>
 							<div class="lista-generica">
 								{#each listaRecensioni as oggettoSegnalazione (oggettoSegnalazione.segnalazione.id)}
-									<RecensioneDash {oggettoSegnalazione} {cambiaListaLocale} />{/each}
+									<RecensioneDash {oggettoSegnalazione} cambiaRecensioniSegnalate={cambiaRecensioniSegnalate} />{/each}
 							</div>
 						{:else if schermata == 'appunti'}
 							<p class="selezionato">{schermata} da visionare</p>

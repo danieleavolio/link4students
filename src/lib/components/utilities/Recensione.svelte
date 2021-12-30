@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { auth, db } from '$lib/firebaseConfig';
 	import { authStore } from '$lib/stores/authStore';
-	import { fly } from 'svelte/transition';
+	import { fade, fly } from 'svelte/transition';
 	import { esamiReagiti, esamiRecensiti, recensioniSegnalate } from '$lib/stores/recensioniStore';
 	import {
 		collection,
@@ -354,7 +354,7 @@
 	};
 </script>
 
-<div transition:fly class="recensione">
+<div in:fly={{ y: 100, duration: 1000 }} out:fade class="recensione">
 	<div class="up-part">
 		<!-- Se non sei loggato, allora vedi la recensione -->
 		{#if !$authStore.isLoggedIn}

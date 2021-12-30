@@ -5,6 +5,7 @@
 	import { auth, db } from '$lib/firebaseConfig';
 	import { collection, doc, getDoc, getDocs, query, Timestamp, where } from 'firebase/firestore';
 	import { esamiReagiti, esamiRecensiti } from '$lib/stores/recensioniStore';
+	import { utentiSegnalati } from '$lib/stores/utentiStores';
 	const logout = async () => {
 		await auth.signOut().then(() => {
 			location.reload();
@@ -19,16 +20,16 @@
 			};
 
 			// Se per qualche motivo tu fossi bannato
-			getDoc(doc(db,'users',fbUser.uid)).then((user)=>{
-				if (user.data().banTime){
+			getDoc(doc(db, 'users', fbUser.uid)).then((user) => {
+				if (user.data().banTime) {
 					// Se il tempo di ban è ancora maggiore rispetto a ora
 					// Ancora non è passato abbastanza tempo dal ban (in giorni)
-					if (user.data().banTime < Timestamp.now()){
-						alert("Sei ancora bannato")
+					if (user.data().banTime < Timestamp.now()) {
+						alert('Sei ancora bannato');
 						logout();
 					}
 				}
-			})
+			});
 			authStore.update((oldStore) => data);
 			// Quando loggo prendo l'id degli esami e li passo allo store apposito
 			let idEsami = [];
@@ -56,6 +57,22 @@
 				// Aggiorno lo store delle reazioni
 				esamiReagiti.update((oldReaction) => reazioniRecensioni);
 			});
+
+			// Appunti reagiti
+
+			// Lista degli utenti segnalati per la UI
+			const querySegnalazioni = query(
+				collection(db, 'segnalazioniUtenti'),
+				where('idSegnalatore', '==', auth.currentUser.uid)
+			);
+			getDocs(querySegnalazioni).then((res) => {
+				let listaUtenti = [];
+				res.docs.forEach((elem) => {
+					listaUtenti = [...listaUtenti, elem.data()];
+				});
+				utentiSegnalati.update((oldReports) => listaUtenti);
+			});
+			
 		} else {
 			let data = {
 				isLoggedIn: false,

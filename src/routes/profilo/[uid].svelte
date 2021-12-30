@@ -21,9 +21,11 @@
 
 <script lang="ts">
 	export let profilo;
+	import SegnalazioneUtente from '$lib/components/utilities/SegnalazioneUtente.svelte';
 	import { authStore } from '$lib/stores/authStore';
 	import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 	import { fade } from 'svelte/transition';
+	import { utentiSegnalati } from '$lib/stores/utentiStores';
 	let profilePicture;
 	let file;
 	const onChange = () => {
@@ -115,6 +117,20 @@
 		<p>Matricola: {profilo.matricola}</p>
 		<p>Corso di Laurea: {profilo.nomeCorsoLaurea}</p>
 		<p>Anno di corso: {profilo.annoDiCorso}</p>
+		{#if $authStore.isLoggedIn}
+			{#if $authStore.user.uid != profilo.uid}
+				<div class="connect-report-buttons">
+					<button class="bottone collegati">🙏Collegati</button>
+					<div class="report">
+						{#if $utentiSegnalati.find((elem) => elem.idSegnalato == profilo.uid)}
+							<SegnalazioneUtente idUtente={profilo.uid} segnalato={true} />
+						{:else}
+							<SegnalazioneUtente idUtente={profilo.uid} segnalato={false} />
+						{/if}
+					</div>
+				</div>
+			{/if}
+		{/if}
 	</div>
 	<div class="bio">
 		<p>Bio</p>
@@ -310,5 +326,31 @@
 		justify-content: center;
 		align-items: center;
 		overflow-wrap: anywhere;
+	}
+
+	.connect-report-buttons {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.bottone {
+		width: fit-content;
+		padding: 0.3rem 1rem;
+		border-radius: 0.3rem;
+		border: none;
+		color: white;
+		cursor: pointer;
+	}
+
+	.collegati {
+		background-color: blueviolet;
+	}
+
+	.report {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 </style>

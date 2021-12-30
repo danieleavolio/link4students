@@ -6,7 +6,6 @@
 	import { onMount } from 'svelte';
 	import Recensione from '../utilities/Recensione.svelte';
 	import Vuoto from '../utilities/Vuoto.svelte';
-
 	export let idCorso;
 
 	let recensioni = [];
@@ -55,13 +54,13 @@
 	}
 	.container {
 		margin-bottom: 2rem;
-		width: 100vw;
+		width: 90vw;
 	}
 
 	.lista-recensioni {
-		display: flex;
-		gap: 4rem;
-		flex-wrap: wrap;
+		display: grid;
+		grid-template-columns: auto auto;
+		gap: 2rem;
 		justify-content: center;
 	}
 </style>

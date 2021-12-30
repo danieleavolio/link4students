@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 	import { db } from '$lib/firebaseConfig';
 	import { fly } from 'svelte/transition';
-	import { esamiRecensiti, recensioniSegnalate } from '$lib/stores/recensioniStore';
+	import { esamiRecensiti } from '$lib/stores/recensioniStore';
 	import {
 		collection,
 		deleteDoc,
@@ -10,7 +10,6 @@
 		getDocs,
 		increment,
 		query,
-		serverTimestamp,
 		setDoc,
 		Timestamp,
 		where
@@ -18,7 +17,7 @@
 	import Segnalazione from './Segnalazione.svelte';
 
 	export let oggettoSegnalazione;
-	export let cambiaListaLocale;
+	export let cambiaRecensioniSegnalate;
 
 	let giorniSospensione;
 	let segnalazioneMostrata = false;
@@ -117,7 +116,7 @@
 									))
 							);
 							alert('Recensione eliminata!');
-							cambiaListaLocale(oggettoSegnalazione.segnalazione.id);
+							cambiaRecensioniSegnalate(oggettoSegnalazione.recensione.id);
 							// Decremento il contatore del numero di recensioni
 							setDoc(
 								doc(db, 'statistiche', 'infoSito'),

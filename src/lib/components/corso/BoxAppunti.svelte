@@ -1,10 +1,24 @@
 <script>
+	import { db } from '$lib/firebaseConfig';
+
+	import { collection, getDocs, onSnapshot, query, where } from 'firebase/firestore';
+
+	import { onMount } from 'svelte';
+
+	import Appunto from '../utilities/Appunto.svelte';
+
 	import ModalAppunti from '../utilities/ModalAppunti.svelte';
 	import Vuoto from '../utilities/Vuoto.svelte';
 
 	export let idCorso;
-
 	let appunti = [];
+
+	onMount(() => {
+		const queryAppunti = query(collection(db, 'appunti'), where('idCorso', '==', idCorso));
+		onSnapshot(queryAppunti, (snapshot) => {
+			appunti = snapshot.docs;
+		});
+	});
 </script>
 
 <div class="container">
@@ -17,7 +31,7 @@
 	{:else}
 		<div class="lista-appunti">
 			{#each appunti as appunto (appunto.id)}
-				<!-- <Appunto {appunto} /> -->
+				<Appunto {appunto} />
 			{/each}
 		</div>
 	{/if}
@@ -30,14 +44,17 @@
 	.container {
 		margin-bottom: 2rem;
 		max-width: 100vw;
-		width: 80%;
+		width: 100%;
 	}
 
 	.lista-appunti {
 		display: flex;
 		gap: 4rem;
-		flex-wrap: wrap;
-		justify-content: center;
+		margin: 1rem 0;
+		overflow-x: scroll;
+		overflow-y: hidden;
+		white-space: nowrap;
+		padding: 1rem 0;
 	}
 
 	.utilities {
@@ -45,5 +62,5 @@
 		justify-content: center;
 		align-items: center;
 		gap: 1rem;
-	}   
+	}
 </style>

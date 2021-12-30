@@ -2,7 +2,7 @@
 	import { db, storage } from '$lib/firebaseConfig';
 
 	import { authStore } from '$lib/stores/authStore';
-	import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
+	import { collection, doc, getDoc, increment, setDoc } from 'firebase/firestore';
 	import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 	let isOpen = false;
@@ -42,10 +42,20 @@
 							likes: 0,
 							dislikes: 0
 						};
+						// Aumento il numero di appunti nel sito di 1
 						setDoc(doc(collection(db, 'appunti')), data)
 							.then(() => {
 								messaggio = 'Appunti caricati!';
 								caricamento = false;
+								setDoc(
+									doc(db, 'statistiche', 'infoSito'),
+									{
+										numAppunti: increment(1)
+									},
+									{
+										merge: true
+									}
+								);
 							})
 							.catch((error) => {
 								console.log(error.message);

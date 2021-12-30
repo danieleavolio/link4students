@@ -17,7 +17,11 @@
 	import Segnalazione from './Segnalazione.svelte';
 
 	export let oggettoSegnalazione;
+
 	export let cambiaRecensioniSegnalate;
+	
+	// Quando una recensione viene risolta, viene rimossa dalla UI
+	export let risolviRecensione;
 
 	let giorniSospensione;
 	let segnalazioneMostrata = false;
@@ -204,7 +208,7 @@
 				</div>
 			</div>
 			{#if segnalazioneMostrata}
-				<Segnalazione segnalazione={oggettoSegnalazione.segnalazione} />
+				<Segnalazione segnalazione={oggettoSegnalazione.segnalazione} {risolviRecensione} />
 			{/if}
 		</div>
 	</div>

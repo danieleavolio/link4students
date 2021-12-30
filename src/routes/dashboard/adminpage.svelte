@@ -2,7 +2,7 @@
 	import { db } from '$lib/firebaseConfig';
 
 	import { authStore } from '$lib/stores/authStore';
-	import { collection, doc, getDoc, onSnapshot, query } from 'firebase/firestore';
+	import { collection, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
 
 	export async function load({ page }) {
 		let uid = page.query.get('uid');
@@ -17,19 +17,19 @@
 </script>
 
 <script>
+	import AppuntoDash from '$lib/components/dashboard/AppuntoDash.svelte';
 	import RecensioneDash from '$lib/components/dashboard/RecensioneDash.svelte';
 	import UtenteDash from '$lib/components/dashboard/UtenteDash.svelte';
+	import VuotoDash from '$lib/components/dashboard/VuotoDash.svelte';
+	import Appunto from '$lib/components/utilities/Appunto.svelte';
 
 	export let user;
 
 	let schermata;
 	// Tutto quello che va mostrato qui
 	let idDomandeSegnalate = [];
-	let listaDomande = [];
 	let listaUtenti = [];
-	let idRecensioniSegnalate = [];
 	let listaRecensioni = [];
-	let idAppuntiDaVisionare = [];
 	let listaAppunti = [];
 
 	const clickDomande = () => {
@@ -80,26 +80,32 @@
 			});
 		}
 	};
-	// Insicuro sul funzionamento
-	const cambiaRecensioniSegnalate = (idRecensione) => {
-		// Quando elimino una recensione, tolgo dalla lista locale tutte le segnalazioni di quella recensione
-		listaRecensioni = listaRecensioni.filter(elem => elem.recensione.id != idRecensione);
-	};
-
-	const cambiaUtentiSegnalati = (idSegnalazione)=>{
-		listaUtenti = listaUtenti.filter(elem => elem.segnalazione.id != idSegnalazione);
-	}
 
 	const clickAppunti = () => {
 		schermata = 'appunti';
 
-		if (idAppuntiDaVisionare.length == 0) {
-			const queryAppunti = query(collection(db, 'appunti'));
+		// Prendo solo gli appunti da revisionare
+		if (listaAppunti.length == 0) {
+			const queryAppunti = query(collection(db, 'appunti'), where('revisionato', '==', false));
 			const realTimeAppunti = onSnapshot(queryAppunti, (querySnapshot) => {
-				idAppuntiDaVisionare = querySnapshot.docs;
+				listaAppunti = querySnapshot.docs;
 			});
 		}
 	};
+	// Insicuro sul funzionamento
+	const cambiaRecensioniSegnalate = (idRecensione) => {
+		// Quando elimino una recensione, tolgo dalla lista locale tutte le segnalazioni di quella recensione
+		listaRecensioni = listaRecensioni.filter((elem) => elem.recensione.id != idRecensione);
+	};
+
+	const cambiaUtentiSegnalati = (idSegnalazione) => {
+		listaUtenti = listaUtenti.filter((elem) => elem.segnalazione.id != idSegnalazione);
+	};
+	
+	// Quando una recensione viene risolta, viene rimossa dalla UI
+	const risolviRecensione = (idSegnalazione) =>{
+		listaRecensioni = listaRecensioni.filter((elem) => elem.segnalazione.id != idSegnalazione)
+	}
 </script>
 
 <div class="dashboard">
@@ -120,24 +126,36 @@
 					<div class="schermata-selezionata">
 						{#if schermata == 'utenti'}
 							<p class="selezionato">Segnalazioni {schermata}</p>
-							<div class="lista-generica">
-								{#each listaUtenti as oggettoSegnalazione (oggettoSegnalazione.segnalazione.id)}
-									<UtenteDash {oggettoSegnalazione} {cambiaUtentiSegnalati} />
-								{/each}
-							</div>
+							{#if listaUtenti.length == 0}
+								<VuotoDash oggetti="utenti" />
+							{:else}
+								<div class="lista-generica">
+									{#each listaUtenti as oggettoSegnalazione (oggettoSegnalazione.segnalazione.id)}
+										<UtenteDash {oggettoSegnalazione} {cambiaUtentiSegnalati} />
+									{/each}
+								</div>
+							{/if}
 						{:else if schermata == 'recensioni'}
 							<p class="selezionato">Segnalazioni {schermata}</p>
-							<div class="lista-generica">
-								{#each listaRecensioni as oggettoSegnalazione (oggettoSegnalazione.segnalazione.id)}
-									<RecensioneDash {oggettoSegnalazione} cambiaRecensioniSegnalate={cambiaRecensioniSegnalate} />{/each}
-							</div>
+							{#if listaRecensioni.length == 0}
+								<VuotoDash oggetti="recensioni" />
+							{:else}
+								<div class="lista-generica">
+									{#each listaRecensioni as oggettoSegnalazione (oggettoSegnalazione.segnalazione.id)}
+										<RecensioneDash {oggettoSegnalazione} {cambiaRecensioniSegnalate} {risolviRecensione} />{/each}
+								</div>
+							{/if}
 						{:else if schermata == 'appunti'}
 							<p class="selezionato">{schermata} da visionare</p>
-							<div class="lista-generica">
-								{#each idAppuntiDaVisionare as appunto (appunto.id)}
-									<p>Appunto {appunto.data()}</p>
-								{/each}
-							</div>
+							{#if listaAppunti.length == 0}
+								<VuotoDash oggetti="appunti" />
+							{:else}
+								<div class="lista-generica">
+									{#each listaAppunti as appunto (appunto.id)}
+										<AppuntoDash {appunto} />
+									{/each}
+								</div>
+							{/if}
 						{/if}
 					</div>
 				</div>

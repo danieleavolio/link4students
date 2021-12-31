@@ -1,53 +1,48 @@
-<script>
+<script lang="ts">
 	import { db } from '$lib/firebaseConfig';
 
-	import { authStore } from '$lib/stores/authStore';
-	import { addDoc, collection } from 'firebase/firestore';
-import { onMount } from 'svelte';
+	import { doc, setDoc } from 'firebase/firestore';
+	import ContentCartaCorso from '../dashboard/ContentCartaCorso.svelte';
 
+	export let corso;
 	let isOpen = false;
-	export let cdl;
-	export let listaCorsi;
 
 	let caricamento = false;
 	let messaggio = '';
 
-	let nomeCorso;
-	let annoCorso;
-	let cfu;
-	let codiceCorso;
-	let professore;
-	let oreInsegnamento = '';
-	let linkScheda = '';
-
+	// @ts-ignore
+	let nomeCorso = corso.data().nome;
+	let annoCorso = corso.data().anno;
+	let cfu = corso.data().cfu;
+	let codiceCorso = corso.data().codiceCorso;
+	let professore = corso.data().professore;
+	let oreInsegnamento = corso.data().oreInsegnamento != undefined ? corso.data().oreInsegnamento : '';
+	let linkScheda = corso.data().linkScheda != undefined ? corso.data().linkScheda : '';
+	let cdl = corso.data().cdl;
 
 	/**
 	 * Aggiunge il corso al database firebase.
 	 * Se il corso esiste già, mostra un messaggio di errore tramite la variabile messaggio
 	 */
-	const aggiungiCorso = () => {
-		if (listaCorsi.find((elem) => elem.data().codiceCorso == codiceCorso)) {
-			messaggio = 'Corso già esistente! ⛔';
-		} else {
-			let dati = {
-				anno: annoCorso,
-				cdl: cdl.id,
-				cfu: cfu,
-				codiceCorso: codiceCorso,
-				nome: nomeCorso,
-				professore: professore,
-				oreInsegnamento: oreInsegnamento,
-				linkScheda: linkScheda
-			};
+	const modificaCorso = () => {
+		let dati = {
+			anno: annoCorso,
+			cdl: cdl,
+			cfu: cfu,
+			codiceCorso: codiceCorso,
+			nome: nomeCorso,
+			professore: professore,
+			oreInsegnamento: oreInsegnamento,
+			linkScheda: linkScheda
+		};
 
-			addDoc(collection(db, 'corsidelcdl'), dati)
-				.then(() => {
-					messaggio = `Corso aggiunto con successo a ${cdl.data().nome} `;
-				})
-				.catch((error) => {
-					messaggio = error.message;
-				});
-		}
+		setDoc(doc(db, 'corsidelcdl', corso.id), dati)
+			.then(() => {
+				messaggio = `${nomeCorso} modificato con successo `;
+			})
+			.catch((error) => {
+				messaggio = error.message;
+			});
 	};
 	const open = () => {
 		isOpen = true;
@@ -56,25 +51,12 @@ import { onMount } from 'svelte';
 
 	const close = () => {
 		isOpen = false;
-		pulisciCampi();
 	};
-
-	const pulisciCampi = () =>{
-		nomeCorso = '';
-		annoCorso = '';
-		cfu = '';
-		codiceCorso = '';
-		professore = '';
-		oreInsegnamento = '';
-		linkScheda = '';
-	}
 </script>
 
-{#if $authStore.isLoggedIn}
-	<slot name="trigger" {open}>
-		<button class="domanda-button" on:click={open}>Aggiungi Corso</button>
-	</slot>
-{/if}
+<slot name="trigger" {open}>
+	<ContentCartaCorso {open} {corso} />
+</slot>
 
 {#if isOpen}
 	<div class="modal">
@@ -83,7 +65,7 @@ import { onMount } from 'svelte';
 			<button class="close-button" on:click={close}> ❌ </button>
 			<slot name="header">
 				<div class="titolo">
-					<p>Aggiungi un Corso a <span>{cdl.data().nome}</span></p>
+					<p>Modifica informazioni <span>{corso.data().nome}</span></p>
 				</div>
 			</slot>
 			{#if caricamento}
@@ -92,74 +74,73 @@ import { onMount } from 'svelte';
 				<div class="contenuto">
 					<slot name="content" />
 					<div class="domande">
-						<form action="" on:submit|preventDefault={aggiungiCorso}>
+						<form action="" on:submit|preventDefault={modificaCorso}>
 							<div class="inputs-container">
-								<label for="input-nome1">Inserisci il nome del Corso</label>
+								<label for="input-nome">Inserisci il nome del Corso</label>
 								<input
 									type="text"
-									id="input-nome1"
+									id="input-nome"
 									bind:value={nomeCorso}
 									required
 									placeholder="Fondamenti di ..."
 								/>
-								<label for="input-anno1">Inserisci l'anno del Corso</label>
+								<label for="input-anno">Inserisci l'anno del Corso</label>
 								<input
 									type="number"
-									id="input-anno1"
+									id="input-anno"
 									bind:value={annoCorso}
 									required
 									min="1"
 									max="6"
 									placeholder="1..2..3.."
 								/>
-								<label for="input-cfu1">Inserisci i CFU del Corso</label>
+								<label for="input-cfu">Inserisci i CFU del Corso</label>
 								<input
 									type="number"
-									id="input-cfu1"
+									id="input-cfu"
 									bind:value={cfu}
 									required
 									min="1"
 									max="30"
 									placeholder="3..6..12"
 								/>
-								<label for="input-codice1">Inserisci il codice del Corso</label>
+								<label for="input-codice">Inserisci il codice del Corso</label>
 								<input
 									type="number"
-									id="input-codice1"
+									id="input-codice"
 									bind:value={codiceCorso}
 									required
 									placeholder="XXXXXXXX"
 								/>
-								<label for="input-nomeprof1">Inserisci il nome dell'insegnante</label>
+								<label for="input-nomeprof">Inserisci il nome dell'insegnante</label>
 								<input
 									type="text"
-									id="input-nomeprof1"
+									id="input-nomeprof"
 									bind:value={professore}
 									required
 									placeholder="Michele Poggi"
 								/>
-								<label for="input-ore1"
-									>Inserisci (se sono disponibili) le ore di insegnamento</label
+								<label for="input-ore">Inserisci (se sono disponibili) le ore di insegnamento</label
 								>
 								<input
 									type="number"
-									id="input-ore1"
+									id="input-ore"
 									bind:value={oreInsegnamento}
 									placeholder="Opzionale.."
 								/>
-								<label for="input-scheda1"
+								<label for="input-scheda"
 									>Inserisci (se esiste) il link alla scheda di insegnamento</label
 								>
 								<input
 									type="url"
-									id="input-scheda1"
+									id="input-scheda"
 									bind:value={linkScheda}
 									placeholder="Opzionale.."
 								/>
 							</div>
 
 							<div class="submit-box">
-								<button type="submit"> Aggiungi CDL </button>
+								<button type="submit"> Salva modifiche </button>
 							</div>
 						</form>
 					</div>
@@ -174,20 +155,6 @@ import { onMount } from 'svelte';
 {/if}
 
 <style>
-	.domanda-button {
-		display: flex;
-		align-self: center;
-		padding: 0.4rem;
-		background-color: blue;
-		border-radius: 6px;
-		color: white;
-		border: none;
-		outline: none;
-		cursor: pointer;
-		margin: auto;
-		font-size: 1.2rem;
-	}
-
 	.modal {
 		position: fixed;
 		top: 0;

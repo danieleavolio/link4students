@@ -5,7 +5,7 @@
 	// Quando la pagina si carica, prendi la lista degli esami
 	export async function load({ page }) {
 		const cdsid = page.params.cdsid;
-		const queryToDo = query(collection(db, 'corsidelcdl'), where('cds', '==', cdsid));
+		const queryToDo = query(collection(db, 'corsidelcdl'), where('cdl', '==', cdsid));
 		let corsi = [];
 		await getDocs(queryToDo).then((res) => {
 			corsi = res.docs;

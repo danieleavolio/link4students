@@ -4,28 +4,33 @@
 	import { collection, onSnapshot } from 'firebase/firestore';
 
 	import { onMount } from 'svelte';
+	import ModalAggiungiCdl from '../utilities/ModalAggiungiCDL.svelte';
 	import ElementoLista from './ElementoLista.svelte';
+	import { flip } from 'svelte/animate';
+	import { crossfade } from 'svelte/transition';
 	let listaCorsi = [];
+
+	const [send, receive] = crossfade({});
 
 	let listaFiltrata = [];
 	let filtro = '';
 	onMount(() => {
 		// Prendo la lista dei corsi
-		onSnapshot(collection(db, 'corsidistudio'), (corsi) => {
+		onSnapshot(collection(db, 'corsidilaurea'), (corsi) => {
 			listaCorsi = corsi.docs;
 		});
 	});
 
-    $: listaFiltrata = listaCorsi.filter((corso) => corso.data().nome.toLowerCase().includes(filtro.toLowerCase()))
-    
+	$: listaFiltrata = listaCorsi.filter((corso) =>
+		corso.data().nome.toLowerCase().includes(filtro.toLowerCase())
+	);
 </script>
 
 <div class="sezione-cdl">
 	<p class="titolo">Aggiungi Corso di Laurea</p>
 
 	<div class="sezione-bottoni">
-		<button> Add Corso -- MODAL </button>
-
+		<ModalAggiungiCdl {listaCorsi} />
 		<div class="ricerca">
 			<span>🔍</span><input bind:value={filtro} type="text" />
 		</div>
@@ -33,23 +38,31 @@
 
 	<div class="sezione-lista">
 		<p class="titolo-lista">Lista corsi presenti</p>
-		<hr />
 		{#if filtro.length != 0}
 			<div class="lista-corsi">
 				{#if listaFiltrata.length != 0}
 					<!-- Ci sarà un foreach -->
 					{#each listaFiltrata as corso (corso.id)}
-						<ElementoLista nome={corso.data().nome} />
+						<div
+							in:receive={{ key: corso.id }}
+							out:send={{ key: corso.id }}
+							animate:flip="{{duration:100}}"
+							class="div"
+						>
+							<ElementoLista {corso} />
+						</div>
 					{/each}
-                    {:else}
-                        <p class="not-found">Nessun corso corrispondente</p>
+				{:else}
+					<p class="not-found">Nessun corso corrispondente</p>
 				{/if}
 			</div>
 		{:else}
 			<div class="lista-corsi">
 				<!-- Ci sarà un foreach -->
 				{#each listaCorsi as corso (corso.id)}
-					<ElementoLista nome={corso.data().nome} />
+					<div in:receive={{ key: corso.id }} out:send={{ key: corso.id }} animate:flip="{{duration:100}}" class="div">
+						<ElementoLista {corso} />
+					</div>
 				{/each}
 			</div>
 		{/if}
@@ -60,7 +73,8 @@
 	.sezione-cdl {
 		width: 100%;
 		border-radius: 0.3rem;
-		padding: 0 0.8rem;
+		padding: 0.8rem;
+		box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
 	}
 	.sezione-bottoni {
 		display: flex;
@@ -68,7 +82,6 @@
 	}
 
 	.sezione-lista {
-		box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
 		border-radius: 0.5rem;
 		padding: 0 0.4rem;
 	}
@@ -78,22 +91,18 @@
 		padding: 0 0.5rem;
 	}
 
-	hr {
-		color: black;
-		width: 80%;
-		border: black solid 1px;
-		border-radius: 1rem;
-	}
-
 	.lista-corsi {
 		padding: 1rem;
-		display: flex;
+		display: grid;
+		grid-template-columns: auto auto;
 		flex-wrap: wrap;
 		gap: 2rem;
+		box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
+		padding: 1rem;
 	}
 
-    .not-found{
-        font-weight: 600;
-        margin: auto;
-    }
+	.not-found {
+		font-weight: 600;
+		margin: auto;
+	}
 </style>

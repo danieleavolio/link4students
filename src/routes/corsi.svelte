@@ -2,27 +2,28 @@
 	import { db } from '$lib/firebaseConfig';
 	import { collection, getDocs } from 'firebase/firestore';
 
-	let array = [];
+	let arr = [];
 	export async function load({}) {
-		await getDocs(collection(db, 'corsidistudio')).then((snap) => {
-			array = snap.docs;
+		await getDocs(collection(db, 'corsidilaurea')).then((snap) => {
+			arr = snap.docs;
 		});
 
 		return {
-			props: {}
+			props: {arr}
 		};
 	}
 </script>
 
 <script lang="ts">
 	import CdlBox from '$lib/components/CdlBox.svelte';
+	export let arr;
 </script>
 <svelte:head>
 	<title>Corsi di Laurea</title>
 </svelte:head>
 <h1>Corsi</h1>
 <div class="corsi">
-	{#each array as corso}
+	{#each arr as corso}
 		<CdlBox nome={corso.data().nome} cdsId={corso.id} />
 	{/each}
 </div>

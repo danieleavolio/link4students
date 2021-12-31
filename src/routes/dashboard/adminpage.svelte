@@ -24,6 +24,7 @@
 	import SezioneCdl from '$lib/components/dashboard/SezioneCDL.svelte';
 	import UtenteDash from '$lib/components/dashboard/UtenteDash.svelte';
 	import VuotoDash from '$lib/components/dashboard/VuotoDash.svelte';
+import SezioneCorso from '$lib/components/dashboard/SezioneCorso.svelte';
 
 	export let user;
 
@@ -228,7 +229,7 @@
 					{#if azione == 'addCdl'}
 						<SezioneCdl />
 					{:else if azione == 'addCorso'}
-						<p>a</p>
+						<SezioneCorso />
 					{:else}
 						<div class="pagina-azioni">
 							<BoxSelezioneAzione {clickAzione} emoji={'🎓'} azione="Aggiungi Corso di Laurea" />

@@ -9,7 +9,6 @@
 	export let idCorso;
 
 	let recensioni = [];
-	let immaginiRecensori;
 	onMount(() => {
 		// Realtime updates
 		const queryRecensioni = query(collection(db, 'recensioni'), where('idCorso', '==', idCorso));

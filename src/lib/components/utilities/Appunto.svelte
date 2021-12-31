@@ -21,11 +21,20 @@
 
 	// Stato del voto per non spammare
 	let statoVoto = 0;
-
+	/**
+	 *
+	 * @param id
+	 * id dell'utente per fare il redirect del profilo.
+	 * Viene chiamata la funzione goto
+	 */
 	const redirectProfilo = (id) => {
 		goto(`/profilo/${id}`);
 	};
-
+	/**
+	 * Tutte le interazioni con l'appunto vengono eliminate.
+	 * L'appunto viene eliminato da fire base.
+	 * Viene diminuito il contarore degli appunti totali.
+	 */
 	const eliminaAppunto = () => {
 		// Elimino tute le interazioni con l'appunto
 		const queryAppunti = query(collection(db, 'votiAppunti'), where('idAppunto', '==', appunto.id));
@@ -57,7 +66,13 @@
 
 	let uiLocaleLike;
 	let uiLocaleDislike;
-
+	/**
+	 * La funzione controlla se il voto è stato già messo. In caso positivo:
+	 * - like --> like: viene rimosso il like
+	 * - like --> dislike: viene rimosso il like e messo il dislike
+	 * - dislike --> like: viene rimosso il dislike e messo il like
+	 * - nulla --> like: viene creato il documento per la reazione
+	 */
 	const likeFunction = async () => {
 		// Controllo se ho messo qualcosa, come like o dislike
 		if (statoVoto == 0 && $authStore.isLoggedIn && appunto.data().revisionato) {
@@ -136,7 +151,12 @@
 			});
 		}
 	};
-
+	/**
+	 * La funzione controlla se il voto è stato già messo. In caso positivo:
+	 * - dislike --> dislike: viene rimosso il dislike
+	 * - like --> dislike: viene rimosso il like e messo il dislike
+	 * - nulla --> dislike: viene creato il documento per la reazione
+	 */
 	const dislikeFunction = async () => {
 		// Controllo se ho messo qualcosa, come like o dislike
 		if (statoVoto == 0 && $authStore.isLoggedIn && appunto.data().revisionato) {
@@ -241,6 +261,9 @@
 		}
 	});
 
+	/**
+	 * Controlla se l'utente ha messo like all'appunto
+	 */
 	const messoLike = () => {
 		if ($authStore.isLoggedIn) {
 			if (
@@ -256,6 +279,9 @@
 		}
 	};
 
+	/**
+	 * Controlla se l'utente ha messo dislike all'appunto
+	 */
 	const messoDislike = () => {
 		// COntrollo se sono loggato
 		if ($authStore.isLoggedIn) {

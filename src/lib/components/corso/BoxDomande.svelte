@@ -1,6 +1,8 @@
 <script>
 	import { db } from '$lib/firebaseConfig';
-	import { collection, onSnapshot, query, where } from 'firebase/firestore';
+	import { authStore } from '$lib/stores/authStore';
+import { domandeSegnalate } from '$lib/stores/domandeStore';
+	import { collection, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 	import { onMount } from 'svelte';
 	import Domanda from '../utilities/Domanda.svelte';
 	import ModalDomanda from '../utilities/ModalDomanda.svelte';
@@ -17,6 +19,21 @@
 		const realTimeDomande = onSnapshot(queryDomande, (querySnapshot) => {
 			domande = querySnapshot.docs;
 		});
+
+		// Prendo le recensioni segnalate per mostrare un testo alternativo all'utente che ha segnalato
+		if ($authStore.isLoggedIn) {
+			const queryDomande = query(
+				collection(db, 'segnalazioniDomande'),
+				where('idSegnalatore', '==', $authStore.user.uid)
+			);
+			getDocs(queryDomande).then((res) => {
+				let listaSegnalazioni = [];
+				res.docs.forEach((elem) => {
+					listaSegnalazioni = [...listaSegnalazioni, elem.data()];
+				});
+				domandeSegnalate.update((oldReports) => listaSegnalazioni);
+			});
+		}
 	});
 
 	$: listaFiltrata = domande.filter((item) =>

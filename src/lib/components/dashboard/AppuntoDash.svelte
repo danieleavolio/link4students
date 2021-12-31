@@ -2,12 +2,10 @@
 	import { goto } from '$app/navigation';
 	import { db } from '$lib/firebaseConfig';
 	import { appuntiReagiti } from '$lib/stores/appuntiStore';
-	import { authStore } from '$lib/stores/authStore';
 	import {
 		collection,
 		deleteDoc,
 		doc,
-		getDoc,
 		getDocs,
 		increment,
 		query,
@@ -15,19 +13,20 @@
 		where
 	} from 'firebase/firestore';
 	import { fade, fly } from 'svelte/transition';
-	import { onMount } from 'svelte';
-	import ModalRecensione from '../utilities/ModalRecensione.svelte';
 	import ModalRevisione from '../utilities/ModalRevisione.svelte';
 
 	export let appunto;
 
-	// Stato del voto per non spammare
-	let statoVoto = 0;
+
 
 	const redirectProfilo = (id) => {
 		goto(`/profilo/${id}`);
 	};
 
+	/**
+	 * Effettua una query su: le reazioni degli appunti --> li elimina 1 a 1
+	 * Decrementa il contatore degli appunti sul sito
+	 */
 	const eliminaAppunto = () => {
 		// Elimino tute le interazioni con l'appunto
 		const queryAppunti = query(collection(db, 'votiAppunti'), where('idAppunto', '==', appunto.id));
@@ -57,222 +56,6 @@
 		});
 	};
 
-	let uiLocaleLike;
-	let uiLocaleDislike;
-
-	const likeFunction = async () => {
-		// Controllo se ho messo qualcosa, come like o dislike
-		if (statoVoto == 0 && $authStore.isLoggedIn && appunto.data().revisionato) {
-			statoVoto = 2;
-			let idDocumentoCreato = appunto.id + $authStore.user.uid;
-			await getDoc(doc(db, 'votiAppunti', idDocumentoCreato)).then((docRef) => {
-				if (docRef.exists()) {
-					// Se ho messo like
-					if (docRef.data().operazione == 'like') {
-						// Elimino il voto della recensione da parte mia
-						deleteDoc(doc(db, 'votiAppunti', idDocumentoCreato)).then(() => {
-							// Una volta eliminata il voto recensione, decremento il counter dei likes
-							// della recesione
-							setDoc(
-								doc(db, 'appunti', appunto.id),
-								{
-									likes: increment(-1)
-								},
-								{
-									merge: true
-								}
-							).then(() => {
-								statoVoto = 0;
-								uiLocaleLike = '';
-							});
-						});
-					}
-					// Se ho messo dislike
-					else if (docRef.data().operazione == 'dislike') {
-						// cambio l'operazione da dislike a like
-						setDoc(
-							doc(db, 'votiAppunti', idDocumentoCreato),
-							{
-								operazione: 'like'
-							},
-							{ merge: true }
-						).then((res) => {
-							// decremento i dislike e aumento i likes
-							setDoc(
-								doc(db, 'appunti', appunto.id),
-								{
-									likes: increment(1),
-									dislikes: increment(-1)
-								},
-								{ merge: true }
-							).then(() => {
-								statoVoto = 0;
-								// Cambio la UI locale, rendendo bianco un voto e l'altro colorato
-								uiLocaleLike = 'liked';
-								uiLocaleDislike = '';
-							});
-						});
-					}
-				}
-				// Se il voto non è stato mai messo da me
-				else {
-					setDoc(doc(db, 'votiAppunti', appunto.id + $authStore.user.uid), {
-						idAppunto: appunto.id,
-						idUtente: $authStore.user.uid,
-						operazione: 'like'
-					}).then(() => {
-						// Aumento il numero di likes nel post
-						setDoc(
-							doc(db, 'appunti', appunto.id),
-							{
-								likes: increment(1)
-							},
-							{ merge: true }
-						).then(() => {
-							statoVoto = 0;
-						});
-						// Aumento il contatore dei likes
-						uiLocaleLike = 'liked';
-					});
-				}
-			});
-		}
-	};
-
-	const dislikeFunction = async () => {
-		// Controllo se ho messo qualcosa, come like o dislike
-		if (statoVoto == 0 && $authStore.isLoggedIn && appunto.data().revisionato) {
-			statoVoto = 2;
-			let idDocumentoCreato = appunto.id + $authStore.user.uid;
-			await getDoc(doc(db, 'votiAppunti', idDocumentoCreato)).then((docRef) => {
-				if (docRef.exists()) {
-					// Se ho messo dislike
-					if (docRef.data().operazione == 'dislike') {
-						// Elimino il voto della appunto da parte mia
-						deleteDoc(doc(db, 'votiAppunti', idDocumentoCreato)).then(() => {
-							// Una volta eliminata il voto appunto, decremento il counter dei dislikes
-							// della recesione
-							setDoc(
-								doc(db, 'appunti', appunto.id),
-								{
-									dislikes: increment(-1)
-								},
-								{
-									merge: true
-								}
-							).then(() => {
-								statoVoto = 0;
-								uiLocaleDislike = '';
-							});
-						});
-					}
-					// Se ho messo like
-					else if (docRef.data().operazione == 'like') {
-						// cambio l'operazione da like a dislike
-						setDoc(
-							doc(db, 'votiAppunti', idDocumentoCreato),
-							{
-								operazione: 'dislike'
-							},
-							{ merge: true }
-						).then(() => {
-							// decremento i likes e aumento i dislikes
-							setDoc(
-								doc(db, 'appunti', appunto.id),
-								{
-									likes: increment(-1),
-									dislikes: increment(1)
-								},
-								{ merge: true }
-							).then(() => {
-								statoVoto = 0;
-								// Cambio la UI locale, rendendo bianco un voto e l'altro colorato
-								uiLocaleLike = '';
-								uiLocaleDislike = 'disliked';
-								// Tolgo la reazione dallo store
-							});
-						});
-					}
-				}
-				// Se il voto non è stato mai messo da me
-				else {
-					setDoc(doc(db, 'votiAppunti', appunto.id + $authStore.user.uid), {
-						idAppunto: appunto.id,
-						idUtente: $authStore.user.uid,
-						operazione: 'dislike'
-					}).then(() => {
-						// Aumento il numero di dislikes nel post
-						setDoc(
-							doc(db, 'appunti', appunto.id),
-							{
-								dislikes: increment(1)
-							},
-							{ merge: true }
-						).then(() => {
-							statoVoto = 0;
-						});
-						// Aumento il contatore dei likes
-						uiLocaleDislike = 'disliked';
-					});
-				}
-			});
-		}
-	};
-
-	onMount(() => {
-		// Se sono loggato
-		if ($authStore.isLoggedIn) {
-			// Aggiorno lo store per capire se ho reagito a qualcosa
-			let reazioniAppunti = [];
-			// Prendo gli appunti da me reagiti
-			let queryReazioni = query(
-				collection(db, 'votiAppunti'),
-				where('idUtente', '==', $authStore.user.uid)
-			);
-
-			getDocs(queryReazioni).then((res) => {
-				res.docs.forEach((doc) => {
-					reazioniAppunti = [...reazioniAppunti, doc];
-				});
-
-				// Aggiorno lo store delle reazioni
-				appuntiReagiti.update((oldReaction) => reazioniAppunti);
-				messoLike();
-				messoDislike();
-			});
-		}
-	});
-
-	const messoLike = () => {
-		if ($authStore.isLoggedIn) {
-			if (
-				$appuntiReagiti.find(
-					(element) => element.data().idAppunto == appunto.id && element.data().operazione == 'like'
-				)
-			) {
-				console.log('entrato 1');
-				uiLocaleLike = 'liked';
-				uiLocaleDislike = 'dislike';
-				console.log($appuntiReagiti[0].data());
-			}
-		}
-	};
-
-	const messoDislike = () => {
-		// COntrollo se sono loggato
-		if ($authStore.isLoggedIn) {
-			if (
-				$appuntiReagiti.find(
-					(element) =>
-						element.data().idAppunto == appunto.id && element.data().operazione == 'dislike'
-				)
-			) {
-				uiLocaleDislike = 'disliked';
-				uiLocaleLike = '';
-				console.log('entrato 2');
-			}
-		}
-	};
 </script>
 
 <div in:fly={{ y: 100, duration: 1000 }} out:fade class="appunto">
@@ -298,7 +81,7 @@
 				href={appunto.data().urlAppunti}
 				download={appunto.data().titoloAppunti}>⬇️ SCARICA</a
 			>
-			<ModalRevisione {appunto} />
+			<ModalRevisione {appunto} {eliminaAppunto} />
 		</div>
 	</div>
 </div>

@@ -2,11 +2,11 @@
 	import { goto } from '$app/navigation';
 	import { db } from '$lib/firebaseConfig';
 	import { deleteDoc, doc, setDoc, Timestamp } from 'firebase/firestore';
-
-	import Segnalazione from './Segnalazione.svelte';
+	import SegnalazioneUtente from '$lib/components/dashboard/SegnalazioneUtente.svelte';
 
 	export let oggettoSegnalazione;
-    export let cambiaUtentiSegnalati
+	export let cambiaUtentiSegnalati;
+	export let risolviSegnalazioneUtente;
 
 	let segnalazioneMostrata = false;
 	let giorniSospensione;
@@ -30,9 +30,9 @@
 			{ merge: true }
 		).then(() => {
 			// Si elimina la segnalazione
-            deleteDoc(doc(db,'segnalazioniUtenti',oggettoSegnalazione.segnalazione.id))
-            // Rimuovere localmente la recensione
-            cambiaUtentiSegnalati(oggettoSegnalazione.segnalazione.id);
+			deleteDoc(doc(db, 'segnalazioniUtenti', oggettoSegnalazione.segnalazione.id));
+			// Rimuovere localmente la recensione
+			cambiaUtentiSegnalati(oggettoSegnalazione.segnalazione.id);
 			console.log('Utente sospeso per: ', giorniSospensione);
 		});
 	};
@@ -54,7 +54,8 @@
 		<!-- Form per la sospensione -->
 		<form
 			action=""
-			on:submit|preventDefault={() => setBanTime(oggettoSegnalazione.segnalazione.data().idSegnalato)}
+			on:submit|preventDefault={() =>
+				setBanTime(oggettoSegnalazione.segnalazione.data().idSegnalato)}
 		>
 			<input
 				class="input-giorni"
@@ -70,7 +71,7 @@
 		</form>
 	</div>
 	{#if segnalazioneMostrata}
-		<Segnalazione segnalazione={oggettoSegnalazione.segnalazione} />
+		<SegnalazioneUtente {risolviSegnalazioneUtente} segnalazione={oggettoSegnalazione.segnalazione}/>
 	{/if}
 </div>
 

@@ -13,9 +13,13 @@
 	let messaggio = '';
 
 	export let appunto;
+	export let eliminaAppunto;
 
-	
-
+	/**
+	 * Aggiunge l'appunto alla lista degli appunti del sito.
+	 * il parametro REVISIONATO passa da false a true, e l'appunto diventa disponbiile
+	 * all'utente all'interno del sito
+	 */
 	const revisionato = () => {
 		// Cosa fare se l'appunto viene revisionato
 		setDoc(
@@ -33,11 +37,17 @@
 				messaggio = error.message;
 			});
 	};
-
+	/**
+	 * @function open
+	 * Apre il modal
+	 */
 	const open = () => {
 		isOpen = true;
 	};
-
+	/**
+	 * @function close
+	 * Chiude il modal
+	 */
 	const close = () => {
 		isOpen = false;
 	};
@@ -78,7 +88,9 @@
 							<p>oppure</p>
 							<div class="div">
 								<p>Se l'appunto ha problemi come copyright o altro</p>
-								<button class="elimina" id="elimina-appunto">Elimina</button>
+								<button on:click={eliminaAppunto} class="elimina" id="elimina-appunto"
+									>Elimina</button
+								>
 							</div>
 						</div>
 					</div>

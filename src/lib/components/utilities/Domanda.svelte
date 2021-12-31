@@ -15,7 +15,9 @@
 		where
 	} from 'firebase/firestore';
 	import Risposta from './Risposta.svelte';
-	import { fade,fly } from "svelte/transition";
+	import { fade, fly } from 'svelte/transition';
+	import SegnalazioneDomanda from './SegnalazioneDomanda.svelte';
+	import { domandeSegnalate } from '$lib/stores/domandeStore';
 
 	export let domanda;
 
@@ -175,6 +177,11 @@
 			<button on:click={handleMostraRisposte}>Risposte</button>
 			{#if $authStore.isLoggedIn}
 				<button class="rispondi" on:click={() => (rispondendo = !rispondendo)}>Rispondi</button>
+				{#if $domandeSegnalate.find((elem) => elem.idDomanda == domanda.id)}
+					<SegnalazioneDomanda idDomanda={domanda.id} segnalato={true} />
+				{:else}
+					<SegnalazioneDomanda idDomanda={domanda.id} segnalato={false} />
+				{/if}
 			{/if}
 		</div>
 		{#if rispondendo}

@@ -4,11 +4,11 @@
 	import { deleteDoc, doc } from 'firebase/firestore';
 
 	export let segnalazione;
-	export let risolviRecensione;
+	export let risolviSegnalazioneUtente;
 	// Quando una recensione viene risolta, viene rimossa dalla UI
 	const risolviSegnalazione = () => {
-		deleteDoc(doc(db, 'segnalazioniRecensioni', segnalazione.id)).then(() => {
-			risolviRecensione(segnalazione.id);
+		deleteDoc(doc(db, 'segnalazioniUtenti', segnalazione.id)).then(() => {
+			risolviSegnalazioneUtente(segnalazione.id);
 			alert('Segnalazione risolta');
 		});
 	};

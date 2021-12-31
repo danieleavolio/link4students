@@ -18,8 +18,10 @@
 
 <script>
 	import AppuntoDash from '$lib/components/dashboard/AppuntoDash.svelte';
+	import BoxSelezioneAzione from '$lib/components/dashboard/BoxSelezioneAzione.svelte';
 	import DomandaDash from '$lib/components/dashboard/DomandaDash.svelte';
 	import RecensioneDash from '$lib/components/dashboard/RecensioneDash.svelte';
+	import SezioneCdl from '$lib/components/dashboard/SezioneCDL.svelte';
 	import UtenteDash from '$lib/components/dashboard/UtenteDash.svelte';
 	import VuotoDash from '$lib/components/dashboard/VuotoDash.svelte';
 
@@ -33,6 +35,8 @@
 	let listaUtenti = [];
 	let listaRecensioni = [];
 	let listaAppunti = [];
+
+	let azione;
 
 	const clickDomande = () => {
 		schermata = 'domande';
@@ -103,6 +107,10 @@
 			});
 		}
 	};
+
+	const clickAzione = (action) => {
+		azione = action;
+	};
 	// Insicuro sul funzionamento
 	const cambiaRecensioniSegnalate = (idRecensione) => {
 		// Quando elimino una recensione, tolgo dalla lista locale tutte le segnalazioni di quella recensione
@@ -139,8 +147,11 @@
 			<h2>Benvenuto amministratore</h2>
 
 			<div class="scegli-sezione">
-				<button on:click={() => (sezione = 'segnalazioni')} class="bottone">Segnalazioni</button>
-				<button on:click={() => (sezione = 'gestione-corsi')} class="bottone">Gestione Corsi</button
+				<button on:click={() => ((sezione = 'segnalazioni'), (azione = ''))} class="bottone"
+					>Segnalazioni</button
+				>
+				<button on:click={() => ((sezione = 'gestione-corsi'), (azione = ''))} class="bottone"
+					>Gestione Corsi</button
 				>
 			</div>
 			{#if sezione == 'segnalazioni'}
@@ -192,7 +203,7 @@
 								{:else}
 									<div class="lista-generica">
 										{#each listaDomande as oggettoSegnalazione (oggettoSegnalazione.domanda.id)}
-											<DomandaDash {oggettoSegnalazione} {risolviSegnalazioneDomanda}/>
+											<DomandaDash {oggettoSegnalazione} {risolviSegnalazioneDomanda} />
 										{/each}
 									</div>
 								{/if}
@@ -213,7 +224,17 @@
 				</div>
 			{:else if sezione == 'gestione-corsi'}
 				<div class="gestione-corsi">
-					<p>gestione corsi</p>
+					<h1>Gestione dei corsi</h1>
+					{#if azione == 'addCdl'}
+						<SezioneCdl />
+					{:else if azione == 'addCorso'}
+						<p>a</p>
+					{:else}
+						<div class="pagina-azioni">
+							<BoxSelezioneAzione {clickAzione} emoji={'🎓'} azione="Aggiungi Corso di Laurea" />
+							<BoxSelezioneAzione {clickAzione} emoji={'📜'} azione="Aggiungi Corso al CDL" />
+						</div>
+					{/if}
 				</div>
 			{/if}
 		{:else}
@@ -279,6 +300,24 @@
 	.scegli-sezione {
 		display: flex;
 		justify-content: space-around;
+		gap: 1rem;
+	}
+
+	.gestione-corsi {
+		width: 90vw;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+	}
+
+	.pagina-azioni {
+		width: 80%;
+		height: 80%;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 		gap: 1rem;
 	}
 </style>

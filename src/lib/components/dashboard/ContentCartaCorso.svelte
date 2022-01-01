@@ -2,6 +2,7 @@
 	import { db } from '$lib/firebaseConfig';
 
 	import { deleteDoc, doc } from 'firebase/firestore';
+	import ModalEliminaSingoloCorso from './ModalEliminaSingoloCorso.svelte';
 
 	export let corso;
 	export let open;
@@ -20,31 +21,43 @@
 	};
 </script>
 
-<div class="carta-corso" on:click={open}>
-	<div class="anno-element anno{corso.data().anno}">
-		<p>{corso.data().anno}</p>
+<div class="carta-corso">
+	<div class="modifica" on:click={open}>
+		<div class="anno-element anno{corso.data().anno}">
+			<p>{corso.data().anno}</p>
+		</div>
+
+		<div class="info">
+			<p class="nome">{corso.data().nome.toUpperCase()}</p>
+			<p>CFU - {corso.data().cfu}</p>
+			<p>Codice - {corso.data().codiceCorso}</p>
+		</div>
 	</div>
 
-	<div class="info">
-		<p class="nome">{corso.data().nome.toUpperCase()}</p>
-		<p>CFU - {corso.data().cfu}</p>
-		<p>Codice - {corso.data().codiceCorso}</p>
-	</div>
-
-	<button on:click={eliminaCorso} class="delete-button">Elimina</button>
+	<ModalEliminaSingoloCorso {corso} />
 </div>
 
 <style>
 	.carta-corso {
 		display: flex;
 		gap: 1rem;
-		justify-content: left;
+		justify-content: space-between;
 		align-items: center;
 		box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
 		border-radius: 0.4rem;
 		padding: 0.3rem;
 		cursor: pointer;
 	}
+	.modifica {
+		display: flex;
+		gap: 1rem;
+		justify-content: left;
+		align-items: center;
+		border-radius: 0.4rem;
+		padding: 0.3rem;
+		cursor: pointer;
+	}
+
 	.info {
 		display: flex;
 		flex-direction: column;

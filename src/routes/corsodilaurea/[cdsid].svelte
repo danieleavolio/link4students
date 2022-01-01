@@ -33,7 +33,8 @@
 
 <style>
 	.lista {
-		display: flex;
+		display: grid;
+		grid-template-columns: 1fr 1fr;
 		gap: 1rem;
 		flex-wrap: wrap;
 		justify-content: center;

@@ -311,6 +311,7 @@
 	</div>
 
 	<div class="contenuto">
+		<p class="titolo-appunti">{appunto.data().titoloAppunti}</p>
 		<p>{appunto.data().contenuto}</p>
 	</div>
 
@@ -458,5 +459,9 @@
 
 	.disliked {
 		background-color: rgba(255, 50, 50, 0.5);
+	}
+
+	.titolo-appunti{
+		font-weight: 600;
 	}
 </style>

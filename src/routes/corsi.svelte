@@ -31,7 +31,7 @@
 <style>
 	.corsi {
 		display: grid;
-		grid-template-columns: auto auto;
+		grid-template-columns: 1fr 1fr;
 		gap: 1rem;
 	}
 

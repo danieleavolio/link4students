@@ -81,6 +81,7 @@
 		border-radius: 0.3rem;
 		padding: 0.8rem;
 		box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
+		margin: 1.5rem 0;
 	}
 	.sezione-bottoni {
 		display: flex;

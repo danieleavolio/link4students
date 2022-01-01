@@ -19,6 +19,7 @@
 </script>
 
 <div class="pannello-corso">
+	<p class="nome-corso">{cdlSelezionato.data().nome}</p>
 	<ModalAggiungiCorso {listaCorsi} cdl={cdlSelezionato} />
 	<div class="lista-corsi">
 		{#each listaCorsi as corso (corso.id)}
@@ -33,5 +34,9 @@
 		grid-template-columns: 1fr 1fr;
 		gap: 1rem;
         margin: 1rem 0;
+	}
+	.nome-corso{
+		text-align: center;
+		font-size: 2rem;
 	}
 </style>

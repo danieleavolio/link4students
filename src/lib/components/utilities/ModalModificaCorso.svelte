@@ -16,14 +16,12 @@
 	let cfu = corso.data().cfu;
 	let codiceCorso = corso.data().codiceCorso;
 	let professore = corso.data().professore;
-	let oreInsegnamento = corso.data().oreInsegnamento != undefined ? corso.data().oreInsegnamento : '';
+	let oreInsegnamento =
+		corso.data().oreInsegnamento != undefined ? corso.data().oreInsegnamento : '';
 	let linkScheda = corso.data().linkScheda != undefined ? corso.data().linkScheda : '';
 	let cdl = corso.data().cdl;
 
-	/**
-	 * Aggiunge il corso al database firebase.
-	 * Se il corso esiste già, mostra un messaggio di errore tramite la variabile messaggio
-	 */
+	
 	const modificaCorso = () => {
 		let dati = {
 			anno: annoCorso,
@@ -36,7 +34,7 @@
 			linkScheda: linkScheda
 		};
 
-		setDoc(doc(db, 'corsidelcdl', corso.id), dati)
+		setDoc(doc(db, 'corsidelcdl', corso.id), dati, { merge: true })
 			.then(() => {
 				messaggio = `${nomeCorso} modificato con successo `;
 			})

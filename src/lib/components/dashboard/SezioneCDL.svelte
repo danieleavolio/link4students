@@ -44,9 +44,9 @@
 					<!-- Ci sarà un foreach -->
 					{#each listaFiltrata as corso (corso.id)}
 						<div
-							in:receive={{ key: corso.id }}
-							out:send={{ key: corso.id }}
-							animate:flip="{{duration:100}}"
+							in:receive|local={{ key: corso.id }}
+							out:send|local={{ key: corso.id }}
+							animate:flip={{ duration: 100 }}
 							class="div"
 						>
 							<ElementoLista {corso} />
@@ -59,8 +59,15 @@
 		{:else}
 			<div class="lista-corsi">
 				<!-- Ci sarà un foreach -->
+				<!-- Local fa in modo che la transition venga applicata solo al parent, e non a tutti gli elmenti all'interno -->
+
 				{#each listaCorsi as corso (corso.id)}
-					<div in:receive={{ key: corso.id }} out:send={{ key: corso.id }} animate:flip="{{duration:100}}" class="div">
+					<div
+						in:receive|local={{ key: corso.id }}
+						out:send={{ key: corso.id }}
+						animate:flip={{ duration: 100 }}
+						class="div"
+					>
 						<ElementoLista {corso} />
 					</div>
 				{/each}

@@ -25,6 +25,7 @@ import { onMount } from 'svelte';
 	 * Aggiunge il corso al database firebase.
 	 * Se il corso esiste già, mostra un messaggio di errore tramite la variabile messaggio
 	 */
+	
 	const aggiungiCorso = () => {
 		if (listaCorsi.find((elem) => elem.data().codiceCorso == codiceCorso)) {
 			messaggio = 'Corso già esistente! ⛔';

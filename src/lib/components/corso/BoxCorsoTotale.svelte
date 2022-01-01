@@ -140,6 +140,7 @@
 		width: 80%;
 		display: flex;
 		gap: 1rem;
+		justify-content: center;
 	}
 
 	.left {

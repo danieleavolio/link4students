@@ -4,6 +4,8 @@ import { db } from "$lib/firebaseConfig";
 import { deleteDoc, doc } from "firebase/firestore";
 
     import { fly } from "svelte/transition";
+import ModalEliminaCdl from "./ModalEliminaCDL.svelte";
+import ModalElimina from "./ModalEliminaCDL.svelte";
 	export let corso;
 
 
@@ -17,7 +19,7 @@ import { deleteDoc, doc } from "firebase/firestore";
 
 <div class="corsodilaurea">
 	<p>{corso.data().nome}</p>
-    <button on:click={eliminaCorso} class="elimina-cdl">Elimina CDL</button>
+    <ModalEliminaCdl {corso}></ModalEliminaCdl>
 </div>
 
 <style>
@@ -30,20 +32,7 @@ import { deleteDoc, doc } from "firebase/firestore";
         justify-content: space-between;
         }
 
-    .elimina-cdl{
-        background-color: darkred;
-        font-size: 1rem;
-        color: white;
-        border-radius: 0.2rem;
-        border: none;
-        cursor: pointer;
-        margin: 0;
-        transition: all 0.5s ease;
-    }
-
-    .elimina-cdl:hover{
-        background-color: rgb(105, 2, 2);
-    }
+    
 
    
 </style>

@@ -4,7 +4,7 @@
     export let cdsId;
 </script>
 
-<a href={`corsodilaurea/${cdsId}`}>{nome}<br>{cdsId}</a>
+<a href={`corsodilaurea/${cdsId}`}>{nome}</a>
 
 <style>
 	a {

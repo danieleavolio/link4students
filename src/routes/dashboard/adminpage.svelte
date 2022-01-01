@@ -232,8 +232,8 @@ import SezioneCorso from '$lib/components/dashboard/SezioneCorso.svelte';
 						<SezioneCorso />
 					{:else}
 						<div class="pagina-azioni">
-							<BoxSelezioneAzione {clickAzione} emoji={'🎓'} azione="Aggiungi Corso di Laurea" />
-							<BoxSelezioneAzione {clickAzione} emoji={'📜'} azione="Aggiungi Corso al CDL" />
+							<BoxSelezioneAzione {clickAzione} emoji={'🎓'} azione="Gestisci Corsi di Laurea" />
+							<BoxSelezioneAzione {clickAzione} emoji={'📜'} azione="Gestisci Singoli Corsi" />
 						</div>
 					{/if}
 				</div>

@@ -1,5 +1,5 @@
 <script context="module">
-	import { auth, db, storage } from '$lib/firebaseConfig';
+	import { db, storage } from '$lib/firebaseConfig';
 	import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 	export async function load({ page }) {
 		// Prendere da Firebase le informazioni dell'utente come singolo documento
@@ -26,6 +26,7 @@
 	import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 	import { fade } from 'svelte/transition';
 	import { utentiSegnalati } from '$lib/stores/utentiStores';
+	import ModalAggLibretto from '$lib/components/profilo/ModalAggLibretto.svelte';
 	let profilePicture;
 	let file;
 	const onChange = () => {
@@ -169,8 +170,51 @@
 		{/if}
 	</div>
 </div>
+<div class="sezione-titolo-libretto">
+	<p class="titolo-libretto">Libretto</p>
+	{#if $authStore.isLoggedIn}
+		{#if $authStore.user.uid == profilo.uid}
+			<ModalAggLibretto {profilo} />
+		{/if}
+	{/if}
+</div>
+
+<div class="container-libretto">
+	<div class="statistiche">
+		<p>Statistiche studente</p>
+	</div>
+	<div class="lista-esami">
+		<p>Lista esami</p>
+	</div>
+</div>
 
 <style>
+	.sezione-titolo-libretto {
+		text-align: center;
+		font-size: 1.5rem;
+	}
+
+	.container-libretto {
+		width: 80%;
+		box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.3);
+		padding: 1rem;
+		border-radius: 0.5rem;
+		display: grid;
+		grid-template-columns: 1fr 2fr;
+		gap: 1rem;
+	}
+	.statistiche {
+		border-radius: 0.5rem;
+		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+		text-align: center;
+	}
+
+	.lista-esami {
+		border-radius: 0.5rem;
+		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+		text-align: center;
+	}
+
 	.container-profilo {
 		display: flex;
 		flex-wrap: wrap;

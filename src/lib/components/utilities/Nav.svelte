@@ -3,9 +3,19 @@
 	import { fly } from 'svelte/transition';
 	import { onAuthStateChanged } from 'firebase/auth';
 	import { auth, db } from '$lib/firebaseConfig';
-	import { collection, doc, getDoc, getDocs, query, Timestamp, where } from 'firebase/firestore';
+	import {
+		collection,
+		doc,
+		getDoc,
+		getDocs,
+		onSnapshot,
+		query,
+		Timestamp,
+		where
+	} from 'firebase/firestore';
 	import { esamiReagiti, esamiRecensiti } from '$lib/stores/recensioniStore';
 	import { utentiSegnalati } from '$lib/stores/utentiStores';
+	import { esamiLibretto } from '$lib/stores/esamiLibretto';
 	const logout = async () => {
 		await auth.signOut().then(() => {
 			location.reload();
@@ -72,7 +82,19 @@
 				});
 				utentiSegnalati.update((oldReports) => listaUtenti);
 			});
-			
+
+			// Lista degli esami del libretto
+			let libretto = [];
+			const queryLibretto = query(
+				collection(db, 'esamiLibretto'),
+				where('uidUtente', '==', fbUser.uid)
+			);
+			onSnapshot(queryLibretto, (snapshot) => {
+				snapshot.docs.forEach((esame) => {
+					libretto = [...libretto, esame];
+				});
+				esamiLibretto.update((oldEsami) => libretto);
+			});
 		} else {
 			let data = {
 				isLoggedIn: false,
@@ -90,7 +112,7 @@
 	<div class="div">
 		{#if $authStore.isLoggedIn == true}
 			<a transition:fly={{ y: 200, duration: 1000 }} href="/profilo/{auth.currentUser.uid}"
-				>{$authStore.user.email}</a
+				>Profilo</a
 			>
 			<a href="/dashboard/adminpage?uid={$authStore.user.uid}">Admin</a>
 			<button class="logout" on:click={logout}>Logout</button>

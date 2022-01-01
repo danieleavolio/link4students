@@ -138,7 +138,8 @@
 
 	.corso-container {
 		width: 80%;
-		display: flex;
+		display: grid;
+		grid-template-columns: 2fr 1fr;
 		gap: 1rem;
 		justify-content: center;
 	}
@@ -146,10 +147,11 @@
 	.left {
 		display: flex;
 		gap: 1rem;
-		justify-content: space-around;
+		justify-content: space-evenly;
 		align-items: center;
 		background: blueviolet;
 		color: white;
+		width: 100%;
 	}
 
 	.right {
@@ -158,6 +160,8 @@
 		justify-content: center;
 		background-color: brown;
 		padding: 0.5rem;
+		width: 100%;
+		align-items: center;
 	}
 
 	.mancanti {
@@ -165,15 +169,16 @@
 	}
 
 	.media {
-		width: 100px;
 		text-align: center;
 		background: yellowgreen;
-		height: 100%;
+		border-radius: 0.5rem;
 	}
 
 	.media > h3 {
 		font-size: 3rem;
+		padding: 3rem;
 		color: black;
+		margin: 0;
 	}
 
 	.recensione-box {

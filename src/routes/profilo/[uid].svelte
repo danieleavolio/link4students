@@ -1,7 +1,6 @@
 <script context="module">
 	import { db, storage } from '$lib/firebaseConfig';
-	import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
-	import { fly } from 'svelte/transition';
+	import { collection, doc, getDocs, onSnapshot, query, setDoc, where } from 'firebase/firestore';
 	export async function load({ page }) {
 		// Prendere da Firebase le informazioni dell'utente come singolo documento
 		// per utilizzarlo all'interno della pagina per scegliere cosa mostrare.
@@ -9,28 +8,52 @@
 		const uid = page.params.uid;
 		const collectionRef = collection(db, 'users');
 		const queryToDo = query(collectionRef, where('uid', '==', uid));
-		let profilo = {};
-		await getDocs(queryToDo).then((document) => {
+		let profilo;
+		let esamiCdl = [];
+		let esamiSuperati = [];
+		await getDocs(queryToDo).then(async (document) => {
 			let docs = document.docs;
 			profilo = docs[0].data();
+
+			// SET PREFERENZA SE NON SETTATA
+			profilo.preferenzaLibretto = profilo.preferenzaLibretto != 	undefined ? profilo.preferenzaLibretto : 'tutti';
+			let queryEsamiCDL = query(
+				collection(db, 'corsidelcdl'),
+				where('cdl', '==', profilo.corsoDiLaurea)
+			);
+			// await altrimenti ritorna fuori dalla funzione prima della fine
+			await getDocs(queryEsamiCDL).then((esami) => {
+				esamiCdl = esami.docs;
+			});
+			const queryEsamiSuperati = query(
+				collection(db, 'esamiLibretto'),
+				where('uidUtente', '==', uid)
+			);
+			await getDocs(queryEsamiSuperati).then((esami2) => {
+				esamiSuperati = esami2.docs;
+			});
 		});
+
 		return {
-			props: { profilo }
+			props: { profilo: profilo, esamiCdl: esamiCdl, esamiSuperati: esamiSuperati }
 		};
 	}
 </script>
 
 <script lang="ts">
 	export let profilo;
+	export let esamiCdl;
+	export let esamiSuperati;
 	import SegnalazioneUtente from '$lib/components/utilities/SegnalazioneUtente.svelte';
 	import { authStore } from '$lib/stores/authStore';
 	import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 	import { fade } from 'svelte/transition';
 	import { utentiSegnalati } from '$lib/stores/utentiStores';
 	import ModalAggLibretto from '$lib/components/profilo/ModalAggLibretto.svelte';
-	import { esamiLibretto } from '$lib/stores/esamiLibretto';
 	import EsamePub from '$lib/components/profilo/EsamePub.svelte';
 	import EsamePriv from '$lib/components/profilo/EsamePriv.svelte';
+	import { onMount } from 'svelte';
+	import Libretto from '$lib/components/profilo/Libretto.svelte';
 	let profilePicture;
 	let file;
 
@@ -39,12 +62,14 @@
 		file = profilePicture.files[0];
 	};
 
+	// CHECK PREFERENZA PROFILO SE NON SETTATA
+
 	let modificaBio = false;
 	let contenutoBio = profilo.bio != undefined ? profilo.bio : 'Bio vuota..';
 
 	const cambiaFoto = () => {
 		if (file) {
-			let picturesRef = ref(storage, `profilePictures/${file.name}`);
+			let picturesRef = ref(storage, `profilePictures/avatar${profilo.uid}`);
 			// Carico l'immagine del profilo nel database
 			uploadBytes(picturesRef, file).then(() => {
 				// Prendo l'url dell'immagine appena caricata
@@ -66,6 +91,33 @@
 			alert('Errore caricamento immagine');
 		}
 	};
+	let sommaVoti = 0;
+	let mediaUtente = 0;
+	let loading = true;
+	let modificaPreferenze = false;
+	let preferenza;
+
+	$: if (esamiSuperati.length > 0) {
+		sommaVoti = 0;
+		esamiSuperati.forEach((elem) => (sommaVoti += elem.data().voto));
+		mediaUtente = sommaVoti / esamiSuperati.length;
+		console.log(sommaVoti);
+	}
+
+	onMount(() => {
+		// realtime updates
+
+		const queryEsamiSuperati = query(
+			collection(db, 'esamiLibretto'),
+			where('uidUtente', '==', profilo.uid)
+		);
+
+		onSnapshot(queryEsamiSuperati, (snapshot) => {
+			esamiSuperati = snapshot.docs;
+		});
+
+		loading = false;
+	});
 
 	const cambiaBio = () => {
 		// Controllo
@@ -85,6 +137,23 @@
 					modificaBio = false;
 				});
 		}
+	};
+
+	const cambiaPreferenza = () => {
+		// Preferenza libretto
+		setDoc(
+			doc(db, 'users', profilo.uid),
+			{
+				preferenzaLibretto: preferenza
+			},
+			{ merge: true }
+		)
+			.then(() => {
+				modificaPreferenze = false;
+			})
+			.catch((error) => {
+				alert(error.message);
+			});
 	};
 </script>
 
@@ -135,6 +204,20 @@
 						{/if}
 					</div>
 				</div>
+			{:else if modificaPreferenze}
+				<div class="modifica-preferenza">
+					<form on:submit|preventDefault={cambiaPreferenza} action="">
+						<select bind:value={preferenza} name="preferenze" id="preferenze">
+							<option value="tutti">Tutti</option>
+							<option value="connessi">Solo connessi</option>
+							<option value="nessuno">Nessuno</option>
+						</select>
+						<button type="submit">Salva</button>
+						<button type="reset" on:click={() => (modificaPreferenze = false)}>Annulla</button>
+					</form>
+				</div>
+			{:else}
+				<button on:click={() => (modificaPreferenze = true)}>Modifica preferenze</button>
 			{/if}
 		{/if}
 	</div>
@@ -179,20 +262,31 @@
 	<p class="titolo-libretto">Libretto</p>
 	{#if $authStore.isLoggedIn}
 		{#if $authStore.user.uid == profilo.uid}
-			<ModalAggLibretto {profilo}  />
+			<ModalAggLibretto {profilo} />
 		{/if}
 	{/if}
 </div>
 <div class="container-libretto">
-	<div class="statistiche">
-		<p>Statistiche studente</p>
-	</div>
-	<div class="lista-esami">
-		<p>Lista esami</p>
-		{#each $esamiLibretto as esame (esame.id)}
-			<EsamePub {esame} />
-		{/each}
-	</div>
+	<!-- Separo le due viste -->
+	{#if $authStore.isLoggedIn}
+		{#if $authStore.user.uid == profilo.uid}
+			<Libretto bind:loading {mediaUtente} {esamiSuperati} {esamiCdl} />
+		{:else if profilo.preferenzaLibretto == 'tutti'}
+			<Libretto bind:loading {mediaUtente} {esamiSuperati} {esamiCdl} />
+		{:else if profilo.preferenzaLibretto == 'connessi'}
+			<p>TO DO CONNESSI</p>
+		{:else if profilo.preferenzaLibretto == 'nessuno'}
+			<p>TO DO COMPONENT LIBRETTO NASCOSTO</p>
+		{/if}
+		<!-- SE NON SEI LOGGATO -->
+	{:else if profilo.preferenzaLibretto == 'tutti'}
+		<Libretto bind:loading {mediaUtente} {esamiSuperati} {esamiCdl} />
+	{:else if profilo.preferenzaLibretto == 'connessi'}
+		<p>TO DO CONNESSI</p>
+	{:else if profilo.preferenzaLibretto == 'nessuno'}
+		<p>TO DO COMPONENT LIBRETTO NASCOSTO</p>
+		}
+	{/if}
 </div>
 
 <style>
@@ -209,17 +303,6 @@
 		display: grid;
 		grid-template-columns: 1fr 2fr;
 		gap: 1rem;
-	}
-	.statistiche {
-		border-radius: 0.5rem;
-		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-		text-align: center;
-	}
-
-	.lista-esami {
-		border-radius: 0.5rem;
-		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-		text-align: center;
 	}
 
 	.container-profilo {
@@ -403,5 +486,14 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+
+	@keyframes loading {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
 	}
 </style>

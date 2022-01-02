@@ -1,6 +1,7 @@
 <script context="module">
 	import { db, storage } from '$lib/firebaseConfig';
 	import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
+	import { fly } from 'svelte/transition';
 	export async function load({ page }) {
 		// Prendere da Firebase le informazioni dell'utente come singolo documento
 		// per utilizzarlo all'interno della pagina per scegliere cosa mostrare.
@@ -27,8 +28,12 @@
 	import { fade } from 'svelte/transition';
 	import { utentiSegnalati } from '$lib/stores/utentiStores';
 	import ModalAggLibretto from '$lib/components/profilo/ModalAggLibretto.svelte';
+	import { esamiLibretto } from '$lib/stores/esamiLibretto';
+	import EsamePub from '$lib/components/profilo/EsamePub.svelte';
+	import EsamePriv from '$lib/components/profilo/EsamePriv.svelte';
 	let profilePicture;
 	let file;
+
 	const onChange = () => {
 		// Quando scelgo l'immagine viene assegnato a questo file
 		file = profilePicture.files[0];
@@ -174,17 +179,19 @@
 	<p class="titolo-libretto">Libretto</p>
 	{#if $authStore.isLoggedIn}
 		{#if $authStore.user.uid == profilo.uid}
-			<ModalAggLibretto {profilo} />
+			<ModalAggLibretto {profilo}  />
 		{/if}
 	{/if}
 </div>
-
 <div class="container-libretto">
 	<div class="statistiche">
 		<p>Statistiche studente</p>
 	</div>
 	<div class="lista-esami">
 		<p>Lista esami</p>
+		{#each $esamiLibretto as esame (esame.id)}
+			<EsamePub {esame} />
+		{/each}
 	</div>
 </div>
 

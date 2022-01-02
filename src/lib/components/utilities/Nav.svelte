@@ -90,6 +90,10 @@
 				where('uidUtente', '==', fbUser.uid)
 			);
 			onSnapshot(queryLibretto, (snapshot) => {
+				// Se non svuoto ho duplicati
+				// Problema con rendering in keyed each block
+				// Render di 2 cose con lo stesso id --> promise catch error
+				libretto = [];
 				snapshot.docs.forEach((esame) => {
 					libretto = [...libretto, esame];
 				});

@@ -3,11 +3,10 @@
 
 	import { authStore } from '$lib/stores/authStore';
 	import { esamiLibretto } from '$lib/stores/esamiLibretto';
-	import { addDoc, collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
+	import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
 	import { onMount } from 'svelte';
 
-	let isOpen = false;
-
+	let isOpen;
 	let caricamento = false;
 	let messaggio = '';
 
@@ -17,6 +16,8 @@
 
 	export let profilo;
 	let listaEsamiPossibili = [];
+
+	
 	// Gli esami possibili che posso prendere dal corso di laurea
 	onMount(() => {
 		const queryEsami = query(
@@ -34,14 +35,13 @@
 			codiceCorso: corsoScelto.data().codiceCorso,
 			nomeCorso: corsoScelto.data().nome,
 			voto: voto,
-			lode: lode
+			lode: lode,
+			uidCorso: corsoScelto.id
 		};
 
 		// Aggiungo l'esame al libretto
 		addDoc(collection(db, 'esamiLibretto'), dati).then((docum) => {
-			esamiLibretto.update((oldEsami) => [...oldEsami, docum]);
-			alert('ESAME AGGIUNTO');
-			close();
+			messaggio = 'Esame aggiunto al libretto!'
 		});
 	};
 
@@ -62,7 +62,9 @@
 		pulisciCampi();
 	};
 
-	const pulisciCampi = () => {};
+	const pulisciCampi = () => {
+		voto = '';
+	};
 </script>
 
 {#if $authStore.isLoggedIn}
@@ -93,7 +95,7 @@
 									<label for="scegli-esame">Scegli l'esame da aggiungere al libretto</label>
 									<select required bind:value={corsoScelto} name="esame" id="scegli-esame">
 										{#each listaEsamiPossibili as esame (esame.id)}
-											<option value={esame}>{esame.data().nome}</option>
+											<option selected value={esame}>{esame.data().nome}</option>
 										{/each}
 									</select>
 									<div class="voto">
@@ -125,10 +127,10 @@
 									<button type="submit"> Aggiungi CDL </button>
 								</div>
 							</form>
-                            {:else}
-                            <div class="finito">
-                                <p>Non hai esami da aggiungere!</p>
-                            </div>
+						{:else}
+							<div class="finito">
+								<p>Non hai esami da aggiungere!</p>
+							</div>
 						{/if}
 					</div>
 				</div>

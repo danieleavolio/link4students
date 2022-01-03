@@ -1,9 +1,11 @@
 <script>
 	import { authStore } from '$lib/stores/authStore';
+	import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 
 	import EsamePriv from './EsamePriv.svelte';
 
 	import EsamePub from './EsamePub.svelte';
+	import ListaCollegamenti from './ListaCollegamenti.svelte';
 	import NoExams from './NoExams.svelte';
 
 	export let esamiSuperati;
@@ -18,7 +20,10 @@
 	{#if !loading}
 		<p>Media: {mediaUtente}</p>
 		<p>Esami superati: {esamiSuperati.length} / {esamiCdl.length}</p>
-		<p>Collegamenti: TO-DO</p>
+		<p>Collegamenti:</p>
+		<!-- NON FUNZIONA -->
+		<!-- FIX PER OGNI UTENTE -->
+		<ListaCollegamenti collegamenti={$collegamentiUtente} />
 	{:else}
 		<div class="loading" />
 	{/if}

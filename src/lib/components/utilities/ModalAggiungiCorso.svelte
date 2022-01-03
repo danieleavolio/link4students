@@ -2,8 +2,8 @@
 	import { db } from '$lib/firebaseConfig';
 
 	import { authStore } from '$lib/stores/authStore';
-	import { addDoc, collection } from 'firebase/firestore';
-import { onMount } from 'svelte';
+	import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
+	import { onMount } from 'svelte';
 
 	let isOpen = false;
 	export let cdl;
@@ -20,13 +20,13 @@ import { onMount } from 'svelte';
 	let oreInsegnamento = '';
 	let linkScheda = '';
 
-
 	/**
 	 * Aggiunge il corso al database firebase.
 	 * Se il corso esiste già, mostra un messaggio di errore tramite la variabile messaggio
 	 */
-	
+
 	const aggiungiCorso = () => {
+		// Questo è un check solamente sull singolo CDL
 		if (listaCorsi.find((elem) => elem.data().codiceCorso == codiceCorso)) {
 			messaggio = 'Corso già esistente! ⛔';
 		} else {
@@ -41,13 +41,25 @@ import { onMount } from 'svelte';
 				linkScheda: linkScheda
 			};
 
-			addDoc(collection(db, 'corsidelcdl'), dati)
-				.then(() => {
-					messaggio = `Corso aggiunto con successo a ${cdl.data().nome} `;
-				})
-				.catch((error) => {
-					messaggio = error.message;
-				});
+			// Controllo che il codice del corso sia univoco
+			// A differenza di quello sopra, questo è globale su tutti i CDL
+			const queryCheck = query(
+				collection(db, 'corsidelcdl'),
+				where('codiceCorso', '==', codiceCorso)
+			);
+			getDocs(queryCheck).then((res) => {
+				if (res.empty)
+					addDoc(collection(db, 'corsidelcdl'), dati)
+						.then(() => {
+							messaggio = `Corso aggiunto con successo a ${cdl.data().nome} `;
+						})
+						.catch((error) => {
+							messaggio = error.message;
+						});
+				else{
+					alert('Corso con lo stesso codice già esistente!')
+				}
+			});
 		}
 	};
 	const open = () => {
@@ -60,7 +72,7 @@ import { onMount } from 'svelte';
 		pulisciCampi();
 	};
 
-	const pulisciCampi = () =>{
+	const pulisciCampi = () => {
 		nomeCorso = '';
 		annoCorso = '';
 		cfu = '';
@@ -68,7 +80,7 @@ import { onMount } from 'svelte';
 		professore = '';
 		oreInsegnamento = '';
 		linkScheda = '';
-	}
+	};
 </script>
 
 {#if $authStore.isLoggedIn}

@@ -1,6 +1,15 @@
 <script context="module">
 	import { db, storage } from '$lib/firebaseConfig';
-	import { collection, doc, getDocs, onSnapshot, query, setDoc, where } from 'firebase/firestore';
+	import {
+		collection,
+		doc,
+		getDoc,
+		getDocs,
+		onSnapshot,
+		query,
+		setDoc,
+		where
+	} from 'firebase/firestore';
 	export async function load({ page }) {
 		// Prendere da Firebase le informazioni dell'utente come singolo documento
 		// per utilizzarlo all'interno della pagina per scegliere cosa mostrare.
@@ -54,6 +63,7 @@
 	import { onMount } from 'svelte';
 	import Libretto from '$lib/components/profilo/Libretto.svelte';
 	import LibrettoNascosto from '$lib/components/profilo/LibrettoNascosto.svelte';
+	import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 	let profilePicture;
 	let file;
 
@@ -97,7 +107,7 @@
 	let modificaPreferenze = false;
 	let isVotiMostrati = profilo.votiMostrati == undefined ? true : profilo.votiMostrati;
 	let preferenza = profilo.preferenzaLibretto == undefined ? 'tutti' : profilo.preferenzaLibretto;
-
+	let collegati = false;
 	$: if (esamiSuperati.length > 0) {
 		sommaVoti = 0;
 		esamiSuperati.forEach((elem) => (sommaVoti += elem.data().voto));
@@ -115,6 +125,8 @@
 			esamiSuperati = snapshot.docs;
 		});
 		loading = false;
+
+		// Controllare se i due sono collegati
 	});
 
 	const cambiaBio = () => {
@@ -154,6 +166,27 @@
 				alert(error.message);
 			});
 	};
+
+	const mandaRichiestaCollegamento = () => {
+		if ($authStore.isLoggedIn) {
+			// GESTIRE SE GIA' PRESENTE
+
+			// Prendo le info del mittente
+			getDoc(doc(db, 'users', $authStore.user.uid)).then((user) => {
+				// Manda richiesta all'id della pagina
+				setDoc(doc(db, 'richiesteCollegamento', $authStore.user.uid + profilo.uid), {
+					uidMittente: $authStore.user.uid,
+					uidDestinatario: profilo.uid,
+					nomeCognomeMittente: user.data().nome + ' ' + user.data().cognome,
+					avatarMittente: user.data().avatar
+				});
+			});
+		}
+	};
+
+	$: if ($collegamentiUtente.find((elem) => elem.data().idCollegato == profilo.uid)) {
+		collegati = true;
+	}
 </script>
 
 <svelte:head>
@@ -194,7 +227,11 @@
 		{#if $authStore.isLoggedIn}
 			{#if $authStore.user.uid != profilo.uid}
 				<div class="connect-report-buttons">
-					<button class="bottone collegati">🙏Collegati</button>
+					{#if !collegati}
+						<button on:click={mandaRichiestaCollegamento} class="bottone collegati"
+							>🙏Collegati</button
+						>
+					{/if}
 					<div class="report">
 						{#if $utentiSegnalati.find((elem) => elem.idSegnalato == profilo.uid)}
 							<SegnalazioneUtente idUtente={profilo.uid} segnalato={true} />
@@ -284,7 +321,11 @@
 		{:else if profilo.preferenzaLibretto == 'tutti'}
 			<Libretto bind:loading {mediaUtente} {esamiSuperati} {esamiCdl} {isVotiMostrati} />
 		{:else if profilo.preferenzaLibretto == 'connessi'}
-			<p>TO DO CONNESSI</p>
+			{#if collegati}
+				<Libretto bind:loading {mediaUtente} {esamiSuperati} {esamiCdl} {isVotiMostrati} />
+			{:else}
+				<LibrettoNascosto />
+			{/if}
 		{:else if profilo.preferenzaLibretto == 'nessuno'}
 			<LibrettoNascosto />
 		{/if}
@@ -292,10 +333,9 @@
 	{:else if profilo.preferenzaLibretto == 'tutti'}
 		<Libretto bind:loading {mediaUtente} {esamiSuperati} {esamiCdl} {isVotiMostrati} />
 	{:else if profilo.preferenzaLibretto == 'connessi'}
-		<p>TO DO CONNESSI</p>
+		<LibrettoNascosto />
 	{:else if profilo.preferenzaLibretto == 'nessuno'}
 		<LibrettoNascosto />
-		
 	{/if}
 </div>
 

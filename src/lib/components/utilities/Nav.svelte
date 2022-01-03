@@ -16,6 +16,9 @@
 	import { esamiReagiti, esamiRecensiti } from '$lib/stores/recensioniStore';
 	import { utentiSegnalati } from '$lib/stores/utentiStores';
 	import { esamiLibretto } from '$lib/stores/esamiLibretto';
+	import { richiesteUtente } from '$lib/stores/richiesteStore';
+	import ModalRichiesteCollegamento from './ModalRichiesteCollegamento.svelte';
+import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 	const logout = async () => {
 		await auth.signOut().then(() => {
 			location.reload();
@@ -99,6 +102,29 @@
 				});
 				esamiLibretto.update((oldEsami) => libretto);
 			});
+
+			// Gestione richieste di collegamento
+			const queryRichieste = query(
+				collection(db, 'richiesteCollegamento'),
+				where('uidDestinatario', '==', fbUser.uid)
+			);
+			let richiesteList = [];
+			onSnapshot(queryRichieste, (richiesteSnap) => {
+				richiesteList = richiesteSnap.docs;
+				richiesteUtente.update((oldRichieste) => richiesteList);
+				
+			});
+
+			// Aggiorno i collegamenti utente
+			let collegamenti = [];
+			const queryCollegamenti = query(collection(db,'collegamenti'),where('idUtente','==', fbUser.uid));
+			onSnapshot(queryCollegamenti,(collegamentiSnap)=>{
+				collegamenti = collegamentiSnap.docs;
+				collegamentiUtente.update((oldCollegamenti) => collegamenti);
+				$collegamentiUtente.forEach((coll) => {
+					console.log(coll.data());
+				});
+			})
 		} else {
 			let data = {
 				isLoggedIn: false,
@@ -119,6 +145,7 @@
 				>Profilo</a
 			>
 			<a href="/dashboard/adminpage?uid={$authStore.user.uid}">Admin</a>
+			<ModalRichiesteCollegamento />
 			<button class="logout" on:click={logout}>Logout</button>
 		{:else if !$authStore.isLoggedIn && $authStore.isLoggedIn != undefined}
 			<a transition:fly={{ y: -200, duration: 500 }} href="/joinus">Unisciti</a>

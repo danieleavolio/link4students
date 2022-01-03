@@ -122,6 +122,10 @@ import SezioneCorso from '$lib/components/dashboard/SezioneCorso.svelte';
 		listaUtenti = listaUtenti.filter((elem) => elem.segnalazione.id != idSegnalazione);
 	};
 
+	const cambiaDomandeSegnalate = (idDomanda) =>{
+		listaDomande = listaDomande.filter((elem) => elem.domanda.id != idDomanda);
+	}
+
 	// Quando una recensione viene risolta, viene rimossa dalla UI
 	const risolviRecensione = (idSegnalazione) => {
 		listaRecensioni = listaRecensioni.filter((elem) => elem.segnalazione.id != idSegnalazione);
@@ -204,7 +208,7 @@ import SezioneCorso from '$lib/components/dashboard/SezioneCorso.svelte';
 								{:else}
 									<div class="lista-generica">
 										{#each listaDomande as oggettoSegnalazione (oggettoSegnalazione.domanda.id)}
-											<DomandaDash {oggettoSegnalazione} {risolviSegnalazioneDomanda} />
+											<DomandaDash {oggettoSegnalazione} {risolviSegnalazioneDomanda} {cambiaDomandeSegnalate} />
 										{/each}
 									</div>
 								{/if}

@@ -16,6 +16,7 @@
 
 	export let oggettoSegnalazione;
 	export let risolviSegnalazioneDomanda;
+	export let cambiaDomandeSegnalate;
 
 	let segnalazioneMostrata = false;
 
@@ -55,6 +56,8 @@
 						});
 					})
 					.then(() => {
+						// cambio le domande segnalate localmente
+						cambiaDomandeSegnalate(oggettoSegnalazione.domanda.id);
 						// Elimino la domanda stessa
 						deleteDoc(doc(db, 'domande', oggettoSegnalazione.domanda.id))
 							.then(() => {

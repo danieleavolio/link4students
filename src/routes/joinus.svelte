@@ -1,6 +1,6 @@
 <script context="module">
 	export async function load({}) {
-		const queryCorsi = query(collection(db, 'corsidistudio'));
+		const queryCorsi = query(collection(db, 'corsidilaurea'));
 
 		let corsi = [];
 		await getDocs(queryCorsi).then((res) => {

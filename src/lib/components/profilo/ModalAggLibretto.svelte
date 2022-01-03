@@ -3,7 +3,7 @@
 
 	import { authStore } from '$lib/stores/authStore';
 	import { esamiLibretto } from '$lib/stores/esamiLibretto';
-	import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
+	import { addDoc, collection, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 	import { onMount } from 'svelte';
 
 	let isOpen;
@@ -14,20 +14,13 @@
 	let voto;
 	let lode = false;
 
-	export let profilo;
-	let listaEsamiPossibili = [];
+	$: if (voto != 30) {
+		lode = false;
+	}
 
-	
-	// Gli esami possibili che posso prendere dal corso di laurea
-	onMount(() => {
-		const queryEsami = query(
-			collection(db, 'corsidelcdl'),
-			where('cdl', '==', profilo.corsoDiLaurea)
-		);
-		getDocs(queryEsami).then((esami) => {
-			listaEsamiPossibili = esami.docs;
-		});
-	});
+	export let profilo;
+	export let librettoEsami;
+	let listaEsamiPossibili = [];
 
 	const aggiungiAlLibretto = () => {
 		let dati = {
@@ -41,20 +34,32 @@
 
 		// Aggiungo l'esame al libretto
 		addDoc(collection(db, 'esamiLibretto'), dati).then((docum) => {
-			messaggio = 'Esame aggiunto al libretto!'
+			messaggio = 'Esame aggiunto al libretto!';
 		});
 	};
+	// Gli esami possibili che posso prendere dal corso di laurea
 
 	const open = () => {
-		isOpen = true;
-		messaggio = '';
-		if ($authStore.isLoggedIn) {
-			$esamiLibretto.forEach((esame) => {
-				listaEsamiPossibili = listaEsamiPossibili.filter(
-					(esamePossibile) => esamePossibile.data().codiceCorso != esame.data().codiceCorso
-				);
+		const queryEsami = query(
+			collection(db, 'corsidelcdl'),
+			where('cdl', '==', profilo.corsoDiLaurea)
+		);
+		getDocs(queryEsami)
+			.then((esami) => {
+				listaEsamiPossibili = esami.docs;
+			})
+			// Faccio le azioni qui altrimenti la lista si popolerebbe dopo che faccio il filtro
+			.then(() => {
+				isOpen = true;
+				messaggio = '';
+
+
+				librettoEsami.forEach((esame) => {
+					listaEsamiPossibili = listaEsamiPossibili.filter(
+						(esamePossibile) => esamePossibile.data().codiceCorso != esame.data().codiceCorso
+					);
+				});
 			});
-		}
 	};
 
 	const close = () => {

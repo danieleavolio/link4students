@@ -262,7 +262,7 @@
 	}
 
 	.avatar > img {
-		width: 100%;
+		width: 40px;
 		height: 40px;
 		object-fit: cover;
 		border-radius: 100%;

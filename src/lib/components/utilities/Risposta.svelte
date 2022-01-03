@@ -97,7 +97,7 @@ import { goto } from '$app/navigation';
 	}
 
 	.avatar > img {
-		width: 100%;
+		width: 50px;
 		height: 50px;
         border-radius: 100%;
 		object-fit: cover;

@@ -16,7 +16,8 @@
 			profilo = docs[0].data();
 
 			// SET PREFERENZA SE NON SETTATA
-			profilo.preferenzaLibretto = profilo.preferenzaLibretto != 	undefined ? profilo.preferenzaLibretto : 'tutti';
+			profilo.preferenzaLibretto =
+				profilo.preferenzaLibretto != undefined ? profilo.preferenzaLibretto : 'tutti';
 			let queryEsamiCDL = query(
 				collection(db, 'corsidelcdl'),
 				where('cdl', '==', profilo.corsoDiLaurea)
@@ -50,10 +51,9 @@
 	import { fade } from 'svelte/transition';
 	import { utentiSegnalati } from '$lib/stores/utentiStores';
 	import ModalAggLibretto from '$lib/components/profilo/ModalAggLibretto.svelte';
-	import EsamePub from '$lib/components/profilo/EsamePub.svelte';
-	import EsamePriv from '$lib/components/profilo/EsamePriv.svelte';
 	import { onMount } from 'svelte';
 	import Libretto from '$lib/components/profilo/Libretto.svelte';
+	import LibrettoNascosto from '$lib/components/profilo/LibrettoNascosto.svelte';
 	let profilePicture;
 	let file;
 
@@ -95,18 +95,17 @@
 	let mediaUtente = 0;
 	let loading = true;
 	let modificaPreferenze = false;
-	let preferenza;
+	let isVotiMostrati = profilo.votiMostrati == undefined ? true : profilo.votiMostrati;
+	let preferenza = profilo.preferenzaLibretto == undefined ? 'tutti' : profilo.preferenzaLibretto;
 
 	$: if (esamiSuperati.length > 0) {
 		sommaVoti = 0;
 		esamiSuperati.forEach((elem) => (sommaVoti += elem.data().voto));
 		mediaUtente = sommaVoti / esamiSuperati.length;
-		console.log(sommaVoti);
 	}
 
 	onMount(() => {
 		// realtime updates
-
 		const queryEsamiSuperati = query(
 			collection(db, 'esamiLibretto'),
 			where('uidUtente', '==', profilo.uid)
@@ -115,7 +114,6 @@
 		onSnapshot(queryEsamiSuperati, (snapshot) => {
 			esamiSuperati = snapshot.docs;
 		});
-
 		loading = false;
 	});
 
@@ -144,7 +142,8 @@
 		setDoc(
 			doc(db, 'users', profilo.uid),
 			{
-				preferenzaLibretto: preferenza
+				preferenzaLibretto: preferenza,
+				votiMostrati: isVotiMostrati
 			},
 			{ merge: true }
 		)
@@ -207,11 +206,22 @@
 			{:else if modificaPreferenze}
 				<div class="modifica-preferenza">
 					<form on:submit|preventDefault={cambiaPreferenza} action="">
-						<select bind:value={preferenza} name="preferenze" id="preferenze">
-							<option value="tutti">Tutti</option>
-							<option value="connessi">Solo connessi</option>
-							<option value="nessuno">Nessuno</option>
-						</select>
+						<div class="inputs">
+							<select bind:value={preferenza} name="preferenze" id="preferenze">
+								<option value="tutti">Tutti</option>
+								<option value="connessi">Solo connessi</option>
+								<option value="nessuno">Nessuno</option>
+							</select>
+							<div class="pref-voti">
+								<label for="mostra-voti">Mostra voti?</label>
+								<input
+									bind:checked={isVotiMostrati}
+									type="checkbox"
+									name="mostravoti"
+									id="mostra-voti"
+								/>
+							</div>
+						</div>
 						<button type="submit">Salva</button>
 						<button type="reset" on:click={() => (modificaPreferenze = false)}>Annulla</button>
 					</form>
@@ -262,7 +272,7 @@
 	<p class="titolo-libretto">Libretto</p>
 	{#if $authStore.isLoggedIn}
 		{#if $authStore.user.uid == profilo.uid}
-			<ModalAggLibretto {profilo} />
+			<ModalAggLibretto {profilo} bind:librettoEsami={esamiSuperati} />
 		{/if}
 	{/if}
 </div>
@@ -270,22 +280,22 @@
 	<!-- Separo le due viste -->
 	{#if $authStore.isLoggedIn}
 		{#if $authStore.user.uid == profilo.uid}
-			<Libretto bind:loading {mediaUtente} {esamiSuperati} {esamiCdl} />
+			<Libretto bind:loading {mediaUtente} {esamiSuperati} {esamiCdl} {isVotiMostrati} />
 		{:else if profilo.preferenzaLibretto == 'tutti'}
-			<Libretto bind:loading {mediaUtente} {esamiSuperati} {esamiCdl} />
+			<Libretto bind:loading {mediaUtente} {esamiSuperati} {esamiCdl} {isVotiMostrati} />
 		{:else if profilo.preferenzaLibretto == 'connessi'}
 			<p>TO DO CONNESSI</p>
 		{:else if profilo.preferenzaLibretto == 'nessuno'}
-			<p>TO DO COMPONENT LIBRETTO NASCOSTO</p>
+			<LibrettoNascosto />
 		{/if}
 		<!-- SE NON SEI LOGGATO -->
 	{:else if profilo.preferenzaLibretto == 'tutti'}
-		<Libretto bind:loading {mediaUtente} {esamiSuperati} {esamiCdl} />
+		<Libretto bind:loading {mediaUtente} {esamiSuperati} {esamiCdl} {isVotiMostrati} />
 	{:else if profilo.preferenzaLibretto == 'connessi'}
 		<p>TO DO CONNESSI</p>
 	{:else if profilo.preferenzaLibretto == 'nessuno'}
-		<p>TO DO COMPONENT LIBRETTO NASCOSTO</p>
-		}
+		<LibrettoNascosto />
+		
 	{/if}
 </div>
 
@@ -480,6 +490,10 @@
 
 	.collegati {
 		background-color: blueviolet;
+	}
+
+	.inputs {
+		display: flex;
 	}
 
 	.report {

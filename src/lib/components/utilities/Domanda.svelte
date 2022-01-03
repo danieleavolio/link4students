@@ -57,13 +57,26 @@
 				});
 			})
 			.then(() => {
-				// Elimino la domanda stessa
-				deleteDoc(doc(db, 'domande', domanda.id))
-					.then(() => {
-						alert('Domanda eliminata');
+				//Elimino tutte le segnalazioni alla domanda
+				const querySegnalazioni = query(
+					collection(db, 'segnalazioniDomande'),
+					where('idDomanda', '==', domanda.id)
+				);
+				getDocs(querySegnalazioni)
+					.then((segnalazioni) => {
+						segnalazioni.forEach((segnalazione) => {
+							deleteDoc(segnalazione.ref);
+						});
 					})
-					.catch((error) => {
-						alert(error.message);
+					.then(() => {
+						// Elimino la domanda stessa
+						deleteDoc(doc(db, 'domande', domanda.id))
+							.then(() => {
+								alert('Domanda eliminata');
+							})
+							.catch((error) => {
+								alert(error.message);
+							});
 					});
 			})
 			.catch((error) => {
@@ -278,7 +291,7 @@
 	}
 
 	.avatar > img {
-		width: 100%;
+		width: 75px;
 		height: 75px;
 		border-radius: 100%;
 		object-fit: cover;

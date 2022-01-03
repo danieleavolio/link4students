@@ -1,10 +1,16 @@
 <script>
+	import { authStore } from '$lib/stores/authStore';
+
+	import EsamePriv from './EsamePriv.svelte';
+
 	import EsamePub from './EsamePub.svelte';
+	import NoExams from './NoExams.svelte';
 
 	export let esamiSuperati;
 	export let esamiCdl;
 	export let mediaUtente;
 	export let loading;
+	export let isVotiMostrati;
 </script>
 
 <div class="statistiche">
@@ -20,10 +26,21 @@
 <div class="lista-esami">
 	<p>Lista esami</p>
 	{#if !loading}
-		{#each esamiSuperati as esame (esame.id)}
-			<EsamePub {esame} />
-			<!-- <EsamePriv nome={esame.data().nomeCorso} uidCorso={esame.id} /> -->
-		{/each}
+		{#if esamiSuperati.length > 0}
+			{#each esamiSuperati as esame (esame.id)}
+				{#if $authStore.isLoggedIn}
+					{#if esame.data().uidUtente == $authStore.user.uid}
+						<EsamePub {esame} />
+					{/if}
+				{:else if isVotiMostrati}
+					<EsamePub {esame} />
+				{:else}
+					<EsamePriv nome={esame.data().nomeCorso} uidCorso={esame.data().uidCorso} />
+				{/if}
+			{/each}
+		{:else}
+			<NoExams />
+		{/if}
 	{:else}
 		<div class="loading" />
 	{/if}
@@ -49,5 +66,14 @@
 		height: 100px;
 		animation: loading 0.5s infinite;
 		margin: auto;
+	}
+
+	@keyframes loading {
+		0% {
+			transform: rotate(0deg);
+		}
+		100% {
+			transform: rotate(360deg);
+		}
 	}
 </style>

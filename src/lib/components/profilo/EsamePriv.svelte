@@ -9,6 +9,7 @@ import { goto } from "$app/navigation";
     const paginaCorso = () =>{
         goto(`/corsodilaurea/corso/${uidCorso}`)
     }
+	
 
 </script>
 

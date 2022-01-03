@@ -483,7 +483,7 @@
 	}
 
 	.avatar > img {
-		width: 100%;
+		width: 75px;
 		height: 75px;
 		object-fit: cover;
 		border-radius: 100%;

@@ -20,6 +20,7 @@
 		let profilo;
 		let esamiCdl = [];
 		let esamiSuperati = [];
+		let collegamentiUtente = [];
 		await getDocs(queryToDo).then(async (document) => {
 			let docs = document.docs;
 			profilo = docs[0].data();
@@ -42,10 +43,29 @@
 			await getDocs(queryEsamiSuperati).then((esami2) => {
 				esamiSuperati = esami2.docs;
 			});
+
+			// Prendo i collegamenti dell'utente
+			const queryCollegamenti = query(collection(db, 'collegamenti'), where('idUtente', '==', uid));
+			await getDocs(queryCollegamenti).then((collegamenti) => {
+				collegamentiUtente = collegamenti.docs;
+			});
 		});
 
+		// Controlli fatti quando faccio il load della pagina per avere tutto pronto
+		let isVotiMostrati = profilo.votiMostrati == undefined ? true : profilo.votiMostrati;
+		let preferenza = profilo.preferenzaLibretto == undefined ? 'tutti' : profilo.preferenzaLibretto;
+		let contenutoBio = profilo.bio != undefined ? profilo.bio : 'Bio vuota..';
+
 		return {
-			props: { profilo: profilo, esamiCdl: esamiCdl, esamiSuperati: esamiSuperati }
+			props: {
+				profilo,
+				esamiCdl,
+				esamiSuperati,
+				collegamentiUtente,
+				isVotiMostrati,
+				preferenza,
+				contenutoBio
+			}
 		};
 	}
 </script>
@@ -54,6 +74,11 @@
 	export let profilo;
 	export let esamiCdl;
 	export let esamiSuperati;
+	export let collegamentiUtente;
+	export let isVotiMostrati;
+	export let preferenza;
+	export let contenutoBio;
+
 	import SegnalazioneUtente from '$lib/components/utilities/SegnalazioneUtente.svelte';
 	import { authStore } from '$lib/stores/authStore';
 	import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -63,9 +88,9 @@
 	import { onMount } from 'svelte';
 	import Libretto from '$lib/components/profilo/Libretto.svelte';
 	import LibrettoNascosto from '$lib/components/profilo/LibrettoNascosto.svelte';
-	import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 	let profilePicture;
 	let file;
+	import { fly } from 'svelte/transition';
 
 	const onChange = () => {
 		// Quando scelgo l'immagine viene assegnato a questo file
@@ -73,9 +98,11 @@
 	};
 
 	// CHECK PREFERENZA PROFILO SE NON SETTATA
-
+	let sommaVoti = 0;
+	let mediaUtente = 0;
+	let loading = true;
+	let modificaPreferenze = false;
 	let modificaBio = false;
-	let contenutoBio = profilo.bio != undefined ? profilo.bio : 'Bio vuota..';
 
 	const cambiaFoto = () => {
 		if (file) {
@@ -101,17 +128,15 @@
 			alert('Errore caricamento immagine');
 		}
 	};
-	let sommaVoti = 0;
-	let mediaUtente = 0;
-	let loading = true;
-	let modificaPreferenze = false;
-	let isVotiMostrati = profilo.votiMostrati == undefined ? true : profilo.votiMostrati;
-	let preferenza = profilo.preferenzaLibretto == undefined ? 'tutti' : profilo.preferenzaLibretto;
+	
+
+	
 	let collegati = false;
 	$: if (esamiSuperati.length > 0) {
 		sommaVoti = 0;
 		esamiSuperati.forEach((elem) => (sommaVoti += elem.data().voto));
-		mediaUtente = sommaVoti / esamiSuperati.length;
+		mediaUtente= Math.round((sommaVoti / esamiSuperati.length)*100)/100
+		
 	}
 
 	onMount(() => {
@@ -120,10 +145,16 @@
 			collection(db, 'esamiLibretto'),
 			where('uidUtente', '==', profilo.uid)
 		);
-
+		// Realtime-esami
 		onSnapshot(queryEsamiSuperati, (snapshot) => {
 			esamiSuperati = snapshot.docs;
 		});
+
+		// Realtime collegamenti
+		const queryCollegamenti = query(collection(db, 'collegamenti'), where('idUtente', '==', profilo.uid));
+			onSnapshot(queryCollegamenti,(collegamenti) => {
+				collegamentiUtente = collegamenti.docs;
+			});
 		loading = false;
 
 		// Controllare se i due sono collegati
@@ -184,7 +215,7 @@
 		}
 	};
 
-	$: if ($collegamentiUtente.find((elem) => elem.data().idCollegato == profilo.uid)) {
+	$: if (collegamentiUtente.find((elem) => elem.data().idUtente == profilo.uid)) {
 		collegati = true;
 	}
 </script>
@@ -244,7 +275,12 @@
 				<div class="modifica-preferenza">
 					<form on:submit|preventDefault={cambiaPreferenza} action="">
 						<div class="inputs">
-							<select bind:value={preferenza} name="preferenze" id="preferenze">
+							<select
+								bind:value={preferenza}
+								name="preferenze"
+								id="preferenze"
+								class="select-preferenza"
+							>
 								<option value="tutti">Tutti</option>
 								<option value="connessi">Solo connessi</option>
 								<option value="nessuno">Nessuno</option>
@@ -259,12 +295,12 @@
 								/>
 							</div>
 						</div>
-						<button type="submit">Salva</button>
-						<button type="reset" on:click={() => (modificaPreferenze = false)}>Annulla</button>
+						<button class="salva" type="submit">Salva</button>
+						<button class="annulla" type="reset" on:click={() => (modificaPreferenze = false)}>Annulla</button>
 					</form>
 				</div>
 			{:else}
-				<button on:click={() => (modificaPreferenze = true)}>Modifica preferenze</button>
+				<button class="modifica-preferenza" on:click={() => (modificaPreferenze = true)}>Modifica preferenze</button>
 			{/if}
 		{/if}
 	</div>
@@ -313,33 +349,51 @@
 		{/if}
 	{/if}
 </div>
-<div class="container-libretto">
-	<!-- Separo le due viste -->
-	{#if $authStore.isLoggedIn}
-		{#if $authStore.user.uid == profilo.uid}
-			<Libretto bind:loading {mediaUtente} {esamiSuperati} {esamiCdl} {isVotiMostrati} />
-		{:else if profilo.preferenzaLibretto == 'tutti'}
-			<Libretto bind:loading {mediaUtente} {esamiSuperati} {esamiCdl} {isVotiMostrati} />
-		{:else if profilo.preferenzaLibretto == 'connessi'}
-			{#if collegati}
-				<Libretto bind:loading {mediaUtente} {esamiSuperati} {esamiCdl} {isVotiMostrati} />
-			{:else}
+{#if !loading}
+	<div transition:fly class="container-libretto">
+		<!-- Separo le due viste -->
+		{#if $authStore.isLoggedIn}
+			{#if $authStore.user.uid == profilo.uid}
+				<Libretto {mediaUtente} {esamiSuperati} {esamiCdl} {isVotiMostrati} {collegamentiUtente} />
+			{:else if profilo.preferenzaLibretto == 'tutti'}
+				<Libretto {mediaUtente} {esamiSuperati} {esamiCdl} {isVotiMostrati} {collegamentiUtente} />
+			{:else if profilo.preferenzaLibretto == 'connessi'}
+				{#if collegati}
+					<Libretto
+						{mediaUtente}
+						{esamiSuperati}
+						{esamiCdl}
+						{isVotiMostrati}
+						{collegamentiUtente}
+					/>
+				{:else}
+					<LibrettoNascosto />
+				{/if}
+			{:else if profilo.preferenzaLibretto == 'nessuno'}
 				<LibrettoNascosto />
 			{/if}
+			<!-- SE NON SEI LOGGATO -->
+		{:else if profilo.preferenzaLibretto == 'tutti'}
+			<Libretto {mediaUtente} {esamiSuperati} {esamiCdl} {isVotiMostrati} {collegamentiUtente} />
+		{:else if profilo.preferenzaLibretto == 'connessi'}
+			<LibrettoNascosto />
 		{:else if profilo.preferenzaLibretto == 'nessuno'}
 			<LibrettoNascosto />
 		{/if}
-		<!-- SE NON SEI LOGGATO -->
-	{:else if profilo.preferenzaLibretto == 'tutti'}
-		<Libretto bind:loading {mediaUtente} {esamiSuperati} {esamiCdl} {isVotiMostrati} />
-	{:else if profilo.preferenzaLibretto == 'connessi'}
-		<LibrettoNascosto />
-	{:else if profilo.preferenzaLibretto == 'nessuno'}
-		<LibrettoNascosto />
-	{/if}
-</div>
+	</div>
+{:else}
+	<div class="loading" />
+{/if}
 
 <style>
+
+	button{
+		font-size: 1rem;
+		border-radius: 0.4rem;
+		padding: 0.3rem;
+		border: none;
+		cursor: pointer;
+	}
 	.sezione-titolo-libretto {
 		text-align: center;
 		font-size: 1.5rem;
@@ -512,6 +566,31 @@
 		overflow-wrap: anywhere;
 	}
 
+	.modifica-preferenza {
+		border: none;
+		padding: 0.5rem;
+		font-size: 1rem;
+		border-radius: 0.3rem;
+		background-color: palegreen;
+		cursor: pointer;
+	}
+
+	.salva{
+		background-color: blue;
+		color: white;
+	}
+
+	.annulla{
+		background-color: gray;
+	}
+
+
+	.select-preferenza{
+		font-size: 1rem;
+		border-radius: 00.3rem;
+		border-radius: none;
+		outline: none;
+	}
 	.connect-report-buttons {
 		display: flex;
 		gap: 1rem;
@@ -540,6 +619,16 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+
+	.loading {
+		border: white solid;
+		border-top: black solid;
+		border-radius: 50%;
+		width: 100px;
+		height: 100px;
+		animation: loading 0.5s infinite;
+		margin: auto;
 	}
 
 	@keyframes loading {

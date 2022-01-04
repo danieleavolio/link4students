@@ -17,12 +17,14 @@
 	let recensioni;
 	let domande;
 	let appunti;
-
 	let scelta;
 
 	// Variabili dinamiche
 	$: difficoltaMancante = 5 - corso.data().mediaDifficolta;
 	$: utilitaMancante = 5 - corso.data().mediaUtilita;
+	
+
+	let mediaVoti = corso.data().mediaVoti == null ? '❌' : corso.data().mediaVoti;
 
 	// Real-time updates per le info date dagli studenti
 	onSnapshot(doc(db, 'corsidelcdl', corso.id), (documento) => {
@@ -73,7 +75,7 @@
 	<div class="corso-container">
 		<div class="left">
 			<div class="media">
-				<h3>26</h3>
+				<h3>{mediaVoti}</h3>
 			</div>
 			<InfoCorso {corso} />
 		</div>

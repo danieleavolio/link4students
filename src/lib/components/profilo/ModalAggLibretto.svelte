@@ -2,9 +2,17 @@
 	import { db } from '$lib/firebaseConfig';
 
 	import { authStore } from '$lib/stores/authStore';
-	import { esamiLibretto } from '$lib/stores/esamiLibretto';
-	import { addDoc, collection, getDocs, onSnapshot, query, where } from 'firebase/firestore';
-	import { onMount } from 'svelte';
+	import {
+		addDoc,
+		collection,
+		doc,
+		getDoc,
+		getDocs,
+		increment,
+		query,
+		setDoc,
+		where
+	} from 'firebase/firestore';
 
 	let isOpen;
 	let caricamento = false;
@@ -22,7 +30,43 @@
 	export let librettoEsami;
 	let listaEsamiPossibili = [];
 
-	const aggiungiAlLibretto = () => {
+	/**
+	 * Cambia la media del singolo corso in base al libretto
+	 */
+	const cambiaMediaVotoEsame = () => {
+		getDoc(doc(db, 'corsidelcdl', corsoScelto.id)).then((corso) => {
+			// Ho il corso.. devo prendermi i dati
+
+			if (corso.data().mediaVoti == null) {
+				// Non è mai esistito un voto, allora.
+				let mediaVoti = voto;
+				let numeroVoti = 1;
+
+				let data = {
+					mediaVoti,
+					numeroVoti
+				};
+
+				setDoc(doc(db, 'corsidelcdl', corsoScelto.id), data, { merge: true });
+			}
+			// Se invece esistono già voti registrati nei libretti degli altri
+			else {
+				let vecchioTotale = corso.data().mediaVoti * corso.data().numeroVoti;
+				let nuovoNumVoti = corso.data().numeroVoti + 1;
+				let nuovaMedia = Math.round((vecchioTotale + voto) / nuovoNumVoti);
+				// ho la nuova media
+				// ho il nuovo numero di recensioni
+				let data = {
+					mediaVoti: nuovaMedia,
+					numeroVoti: increment(1)
+				};
+				// posso settare il doc
+				setDoc(doc(db, 'corsidelcdl', corsoScelto.id), data, { merge: true });
+			}
+		});
+	};
+
+	const aggiungiAlLibretto = async () => {
 		let dati = {
 			uidUtente: $authStore.user.uid,
 			codiceCorso: corsoScelto.data().codiceCorso,
@@ -33,9 +77,12 @@
 		};
 
 		// Aggiungo l'esame al libretto
-		addDoc(collection(db, 'esamiLibretto'), dati).then((docum) => {
+		await addDoc(collection(db, 'esamiLibretto'), dati).then((docum) => {
 			messaggio = 'Esame aggiunto al libretto!';
 		});
+
+		// Gestione media voto
+		cambiaMediaVotoEsame();
 	};
 	// Gli esami possibili che posso prendere dal corso di laurea
 
@@ -52,7 +99,6 @@
 			.then(() => {
 				isOpen = true;
 				messaggio = '';
-
 
 				librettoEsami.forEach((esame) => {
 					listaEsamiPossibili = listaEsamiPossibili.filter(

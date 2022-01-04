@@ -10,7 +10,7 @@
 
 	let colore = '';
 	// Controllo per il voto
-	if (esame.data().voto > 26) colore = 'ottimo';
+	$: if (esame.data().voto > 26) colore = 'ottimo';
 	else if (esame.data().voto > 22) colore = 'medio';
 	else colore = 'sufficiente';
 </script>
@@ -37,8 +37,7 @@
 </div>
 
 <style>
-
-	.esame{
+	.esame {
 		display: flex;
 	}
 	.esame-libretto {

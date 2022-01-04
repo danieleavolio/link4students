@@ -115,16 +115,7 @@ import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 				
 			});
 
-			// Aggiorno i collegamenti utente
-			let collegamenti = [];
-			const queryCollegamenti = query(collection(db,'collegamenti'),where('idUtente','==', fbUser.uid));
-			onSnapshot(queryCollegamenti,(collegamentiSnap)=>{
-				collegamenti = collegamentiSnap.docs;
-				collegamentiUtente.update((oldCollegamenti) => collegamenti);
-				$collegamentiUtente.forEach((coll) => {
-					console.log(coll.data());
-				});
-			})
+			
 		} else {
 			let data = {
 				isLoggedIn: false,

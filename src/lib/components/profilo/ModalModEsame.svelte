@@ -3,17 +3,17 @@
 
 	import { authStore } from '$lib/stores/authStore';
 	import { esamiLibretto } from '$lib/stores/esamiLibretto';
-	import { deleteDoc, doc, setDoc } from 'firebase/firestore';
+	import { deleteDoc, doc, getDoc, increment, setDoc } from 'firebase/firestore';
 
 	let isOpen;
 	let caricamento = false;
 	let messaggio = '';
 
-
 	export let esame;
+	let oldVoto = esame.data().voto;
+
 	let voto = esame.data().voto;
 	let lode = esame.data().lode;
-
 
 	$: if (voto != 30) {
 		lode = false;
@@ -21,25 +21,68 @@
 
 	let listaEsamiPossibili = [];
 
+	const modificaVotoMedioCorso = () => {
+		getDoc(doc(db, 'corsidelcdl', esame.data().uidCorso)).then((corsodelcdl) => {
+			let totale = corsodelcdl.data().mediaVoti * corsodelcdl.data().numeroVoti - oldVoto;
+			let nuovaMedia = (totale + voto) / corsodelcdl.data().numeroVoti;
+			setDoc(
+				doc(db, 'corsidelcdl', esame.data().uidCorso),
+				{
+					mediaVoti: nuovaMedia
+				},
+				{ merge: true }
+			);
+		});
+	};
+
+	const modificaVotiPreElimina = () => {
+		getDoc(doc(db, 'corsidelcdl', esame.data().uidCorso)).then((corsodelcdl) => {
+			if (corsodelcdl.data().numeroVoti > 1) {
+				let totale = corsodelcdl.data().mediaVoti * corsodelcdl.data().numeroVoti - oldVoto;
+				let nuovaMedia = totale / (corsodelcdl.data().numeroVoti - 1);
+				setDoc(
+					doc(db, 'corsidelcdl', esame.data().uidCorso),
+					{
+						mediaVoti: nuovaMedia,
+						numeroVoti: increment(-1)
+					},
+					{ merge: true }
+				);
+			}
+			else{
+				setDoc(
+					doc(db, 'corsidelcdl', esame.data().uidCorso),
+					{
+						mediaVoti: null,
+						numeroVoti: increment(-1)
+					},
+					{ merge: true }
+				);
+			}
+		});
+	};
+
 	const modificaEsame = () => {
-        caricamento = true;
+		caricamento = true;
 		setDoc(
 			doc(db, 'esamiLibretto', esame.id),
 			{
 				voto: voto,
-                lode: lode
+				lode: lode
 			},
 			{ merge: true }
-		).then(()=>{
-            caricamento = false;
-            messaggio = 'Esame modificato!'
-        });
+		).then(() => {
+			modificaVotoMedioCorso();
+			caricamento = false;
+			messaggio = 'Esame modificato!';
+		});
 	};
 
 	const eliminaDalLibretto = () => {
-        deleteDoc(doc(db,'esamiLibretto',esame.id))
-        close()
-    };
+		modificaVotiPreElimina();
+		deleteDoc(doc(db, 'esamiLibretto', esame.id));
+		close();
+	};
 
 	const open = () => {
 		isOpen = true;
@@ -199,16 +242,15 @@
 		align-items: center;
 	}
 
-	.elimina{
-        border:none;
-        background-color: darkred;
-        color: white;
-        padding: 1rem;
-        border-radius: 0.4rem;
-        cursor: pointer;
-    }
+	.elimina {
+		border: none;
+		background-color: darkred;
+		color: white;
+		padding: 1rem;
+		border-radius: 0.4rem;
+		cursor: pointer;
+	}
 
-	
 	.submit-box {
 		display: flex;
 		flex-direction: column;

@@ -23,14 +23,6 @@
 	export let corsi;
 
 	let ordinaPer = 'anno';
-	// $: ordinaRisposte = () => {
-	// 	if (tipoSort == 'recenti') {
-	// 		listaRisposte = listaRisposte.sort((a, b) => a.data().data.seconds - b.data().data.seconds);
-	// 	} else {
-	// 		listaRisposte = listaRisposte.sort((a, b) => b.data().data.seconds - a.data().data.seconds);
-	// 	}
-	// };
-
 	// Sorting corsi
 	$: if (ordinaPer == 'cfu') {
 		corsi = corsi.sort((a, b) => a.data().cfu - b.data().cfu);
@@ -39,6 +31,13 @@
 	} else if (ordinaPer == 'nome') {
 		corsi = corsi.sort((a, b) => a.data().nome.localeCompare(b.data().nome));
 	}
+
+	let listaFiltrata = [];
+	let filtro = '';
+	// Script per filtering lista
+	$: listaFiltrata = corsi.filter((elem) =>
+		elem.data().nome.toLowerCase().includes(filtro.toLowerCase())
+	);
 </script>
 
 <BackButton />
@@ -49,11 +48,18 @@
 		<option value="cfu">CFU</option>
 		<option value="nome">Nome</option>
 	</select>
+	<span>🔎</span><input bind:value={filtro} type="text" />
 </div>
 <div class="lista">
-	{#each corsi as corso (corso.id)}
-		<CorsoBox {corso} />
-	{/each}
+	{#if listaFiltrata.length < 0}
+		{#each corsi as corso (corso.id)}
+			<CorsoBox {corso} />
+		{/each}
+	{:else}
+		{#each listaFiltrata as corso (corso.id)}
+			<CorsoBox {corso} />
+		{/each}
+	{/if}
 </div>
 
 <style>

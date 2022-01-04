@@ -128,15 +128,12 @@
 			alert('Errore caricamento immagine');
 		}
 	};
-	
 
-	
 	let collegati = false;
 	$: if (esamiSuperati.length > 0) {
 		sommaVoti = 0;
 		esamiSuperati.forEach((elem) => (sommaVoti += elem.data().voto));
-		mediaUtente= Math.round((sommaVoti / esamiSuperati.length)*100)/100
-		
+		mediaUtente = Math.round((sommaVoti / esamiSuperati.length) * 100) / 100;
 	}
 
 	onMount(() => {
@@ -151,14 +148,24 @@
 		});
 
 		// Realtime collegamenti
-		const queryCollegamenti = query(collection(db, 'collegamenti'), where('idUtente', '==', profilo.uid));
-			onSnapshot(queryCollegamenti,(collegamenti) => {
-				collegamentiUtente = collegamenti.docs;
-			});
+		const queryCollegamenti = query(
+			collection(db, 'collegamenti'),
+			where('idUtente', '==', profilo.uid)
+		);
+		onSnapshot(queryCollegamenti, (collegamenti) => {
+			collegamentiUtente = collegamenti.docs;
+		});
 		loading = false;
-
-		// Controllare se i due sono collegati
 	});
+
+	// Controllare se i due sono collegati
+	// Quando refreshi --> sei sloggato per controllo da firebase
+	// Quando torni riloggato --> si esegue la funzione
+	$: if ($authStore.isLoggedIn) {
+		if (collegamentiUtente.find((elem) => elem.data().idCollegato == $authStore.user.uid)) {
+			collegati = true;
+		}
+	}
 
 	const cambiaBio = () => {
 		// Controllo
@@ -214,10 +221,6 @@
 			});
 		}
 	};
-
-	$: if (collegamentiUtente.find((elem) => elem.data().idUtente == profilo.uid)) {
-		collegati = true;
-	}
 </script>
 
 <svelte:head>
@@ -296,11 +299,15 @@
 							</div>
 						</div>
 						<button class="salva" type="submit">Salva</button>
-						<button class="annulla" type="reset" on:click={() => (modificaPreferenze = false)}>Annulla</button>
+						<button class="annulla" type="reset" on:click={() => (modificaPreferenze = false)}
+							>Annulla</button
+						>
 					</form>
 				</div>
 			{:else}
-				<button class="modifica-preferenza" on:click={() => (modificaPreferenze = true)}>Modifica preferenze</button>
+				<button class="modifica-preferenza" on:click={() => (modificaPreferenze = true)}
+					>Modifica preferenze</button
+				>
 			{/if}
 		{/if}
 	</div>
@@ -386,8 +393,7 @@
 {/if}
 
 <style>
-
-	button{
+	button {
 		font-size: 1rem;
 		border-radius: 0.4rem;
 		padding: 0.3rem;
@@ -575,17 +581,16 @@
 		cursor: pointer;
 	}
 
-	.salva{
+	.salva {
 		background-color: blue;
 		color: white;
 	}
 
-	.annulla{
+	.annulla {
 		background-color: gray;
 	}
 
-
-	.select-preferenza{
+	.select-preferenza {
 		font-size: 1rem;
 		border-radius: 00.3rem;
 		border-radius: none;

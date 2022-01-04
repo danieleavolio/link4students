@@ -1,15 +1,14 @@
 <script>
-
 	import Collegamento from './Collegamento.svelte';
 	export let collegamentiUtente;
 </script>
 
 <div class="lista-collegamenti">
-	<div class="singolo-collegamento">
-		{#each collegamentiUtente as collegamento}
+	{#each collegamentiUtente as collegamento(collegamento.id)}
+		<div class="singolo-collegamento">
 			<Collegamento {collegamento} />
-		{/each}
-	</div>
+		</div>
+	{/each}
 </div>
 
 <style>
@@ -24,11 +23,10 @@
 		display: none;
 	}
 
-    .singolo-collegamento{
-        display: flex;
-        gap: 1rem;
-        justify-content: center;
-        align-items: center;
-    }
-    
+	.singolo-collegamento {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		align-items: center;
+	}
 </style>

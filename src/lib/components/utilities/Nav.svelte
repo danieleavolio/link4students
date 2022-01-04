@@ -18,7 +18,8 @@
 	import { esamiLibretto } from '$lib/stores/esamiLibretto';
 	import { richiesteUtente } from '$lib/stores/richiesteStore';
 	import ModalRichiesteCollegamento from './ModalRichiesteCollegamento.svelte';
-import { collegamentiUtente } from '$lib/stores/collegamentiStore';
+	import { collegamentiUtente } from '$lib/stores/collegamentiStore';
+	import BarraRicerca from './BarraRicerca.svelte';
 	const logout = async () => {
 		await auth.signOut().then(() => {
 			location.reload();
@@ -112,10 +113,7 @@ import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 			onSnapshot(queryRichieste, (richiesteSnap) => {
 				richiesteList = richiesteSnap.docs;
 				richiesteUtente.update((oldRichieste) => richiesteList);
-				
 			});
-
-			
 		} else {
 			let data = {
 				isLoggedIn: false,
@@ -128,6 +126,7 @@ import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 
 <nav>
 	<a href="/">Link4Students</a>
+	<BarraRicerca />
 	<a href="/corsi">Corsi</a>
 	<a href="/info">Info</a>
 	<div class="div">

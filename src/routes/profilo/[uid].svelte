@@ -55,6 +55,15 @@
 		let isVotiMostrati = profilo.votiMostrati == undefined ? true : profilo.votiMostrati;
 		let preferenza = profilo.preferenzaLibretto == undefined ? 'tutti' : profilo.preferenzaLibretto;
 		let contenutoBio = profilo.bio != undefined ? profilo.bio : 'Bio vuota..';
+		let sommaVoti=0;
+		let mediaUtente=0;
+
+		if (esamiSuperati.length > 0) {
+			sommaVoti = 0;
+			esamiSuperati.forEach((elem) => (sommaVoti += elem.data().voto));
+			mediaUtente = Math.round((sommaVoti / esamiSuperati.length) * 100) / 100;
+		}
+		// Calcolo dati utente
 
 		return {
 			props: {
@@ -64,7 +73,9 @@
 				collegamentiUtente,
 				isVotiMostrati,
 				preferenza,
-				contenutoBio
+				contenutoBio,
+				sommaVoti,
+				mediaUtente
 			}
 		};
 	}
@@ -78,6 +89,10 @@
 	export let isVotiMostrati;
 	export let preferenza;
 	export let contenutoBio;
+	export let sommaVoti;
+	export let mediaUtente;
+
+
 
 	import SegnalazioneUtente from '$lib/components/utilities/SegnalazioneUtente.svelte';
 	import { authStore } from '$lib/stores/authStore';
@@ -98,8 +113,6 @@
 	};
 
 	// CHECK PREFERENZA PROFILO SE NON SETTATA
-	let sommaVoti = 0;
-	let mediaUtente = 0;
 	let loading = true;
 	let modificaPreferenze = false;
 	let modificaBio = false;
@@ -137,6 +150,7 @@
 	}
 
 	onMount(() => {
+		console.log('lol	');
 		// realtime updates
 		const queryEsamiSuperati = query(
 			collection(db, 'esamiLibretto'),

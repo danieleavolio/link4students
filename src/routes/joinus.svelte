@@ -89,7 +89,7 @@
 						);
 					});
 					// Manda la mail di verifica per evitare account non istituzionali
-					sendEmailVerification(auth.currentUser);
+					await sendEmailVerification(auth.currentUser);
 					// Fai uscire perchè firebase fa subito il login
 					signOut(auth);
 				})

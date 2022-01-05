@@ -6,8 +6,11 @@ import { goto } from '$app/navigation';
     //<a href="/dashboard/adminpage?uid={$authStore.user.uid}">Admin</a>
 
     const gotoRicerca = (tipo) => {
-        goto(`/ricerca?keyword=${ricerca}&tipo=${tipo}`)
+		ricerca = ricerca.trim();
+        goto(`/ricerca?keyword=${ricerca}&tipo=${tipo}`);
+		ricerca = '';
     }
+
 
 </script>
 
@@ -15,7 +18,7 @@ import { goto } from '$app/navigation';
 	<form on:submit|preventDefault={() => gotoRicerca('utenti')} action="">
 		<span>🔎</span><input bind:value={ricerca} type="text" />
 	</form>
-	{#if ricerca.length > 4}
+	{#if ricerca.length >= 4}
 		<SuggerimentoRicerca bind:ricerca {gotoRicerca} />
 	{/if}
 </div>

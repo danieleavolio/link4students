@@ -18,13 +18,13 @@
 	import { esamiLibretto } from '$lib/stores/esamiLibretto';
 	import { richiesteUtente } from '$lib/stores/richiesteStore';
 	import ModalRichiesteCollegamento from './ModalRichiesteCollegamento.svelte';
-	import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 	import BarraRicerca from './BarraRicerca.svelte';
 	const logout = async () => {
 		await auth.signOut().then(() => {
 			location.reload();
 		});
 	};
+	let datiUtente;
 
 	onAuthStateChanged(auth, (fbUser) => {
 		if (fbUser) {
@@ -35,6 +35,7 @@
 
 			// Se per qualche motivo tu fossi bannato
 			getDoc(doc(db, 'users', fbUser.uid)).then((user) => {
+				datiUtente = user;
 				if (user.data().banTime) {
 					// Se il tempo di ban è ancora maggiore rispetto a ora
 					// Ancora non è passato abbastanza tempo dal ban (in giorni)
@@ -134,7 +135,11 @@
 			<a transition:fly={{ y: 200, duration: 1000 }} href="/profilo/{auth.currentUser.uid}"
 				>Profilo</a
 			>
-			<a href="/dashboard/adminpage?uid={$authStore.user.uid}">Admin</a>
+			{#if datiUtente != null}
+				{#if datiUtente.data().superuser}
+					<a href="/dashboard/adminpage">Admin</a>
+				{/if}
+			{/if}
 			<ModalRichiesteCollegamento />
 			<button class="logout" on:click={logout}>Logout</button>
 		{:else if !$authStore.isLoggedIn && $authStore.isLoggedIn != undefined}

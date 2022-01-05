@@ -1,21 +1,3 @@
-<script context="module">
-	import { db } from '$lib/firebaseConfig';
-
-	import { authStore } from '$lib/stores/authStore';
-	import { collection, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
-
-	export async function load({ page }) {
-		let uid = page.query.get('uid');
-		let user;
-		await getDoc(doc(db, 'users', uid)).then((doc) => {
-			user = doc;
-		});
-		return {
-			props: { user }
-		};
-	}
-</script>
-
 <script>
 	import AppuntoDash from '$lib/components/dashboard/AppuntoDash.svelte';
 	import BoxSelezioneAzione from '$lib/components/dashboard/BoxSelezioneAzione.svelte';
@@ -24,10 +6,14 @@
 	import SezioneCdl from '$lib/components/dashboard/SezioneCDL.svelte';
 	import UtenteDash from '$lib/components/dashboard/UtenteDash.svelte';
 	import VuotoDash from '$lib/components/dashboard/VuotoDash.svelte';
-import SezioneCorso from '$lib/components/dashboard/SezioneCorso.svelte';
+	import SezioneCorso from '$lib/components/dashboard/SezioneCorso.svelte';
+	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
+	import { authStore } from '$lib/stores/authStore';
+	import { db } from '$lib/firebaseConfig';
+	import { collection, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
 
-	export let user;
-
+	let user;
 	let sezione;
 	let schermata;
 
@@ -38,6 +24,16 @@ import SezioneCorso from '$lib/components/dashboard/SezioneCorso.svelte';
 	let listaAppunti = [];
 
 	let azione;
+	onMount(async () => {
+		if ($authStore.isLoggedIn) {
+			await getDoc(doc(db, 'users', $authStore.user.uid)).then((doc) => {
+				user = doc;
+			});
+			if (!user.data().superuser) goto('/');
+		} else {
+			goto('/');
+		}
+	});
 
 	const clickDomande = () => {
 		schermata = 'domande';
@@ -122,9 +118,9 @@ import SezioneCorso from '$lib/components/dashboard/SezioneCorso.svelte';
 		listaUtenti = listaUtenti.filter((elem) => elem.segnalazione.id != idSegnalazione);
 	};
 
-	const cambiaDomandeSegnalate = (idDomanda) =>{
+	const cambiaDomandeSegnalate = (idDomanda) => {
 		listaDomande = listaDomande.filter((elem) => elem.domanda.id != idDomanda);
-	}
+	};
 
 	// Quando una recensione viene risolta, viene rimossa dalla UI
 	const risolviRecensione = (idSegnalazione) => {
@@ -148,7 +144,7 @@ import SezioneCorso from '$lib/components/dashboard/SezioneCorso.svelte';
 </svelte:head>
 <div class="dashboard">
 	{#if $authStore.isLoggedIn}
-		{#if user.data().superuser}
+		{#if user != null && user.data().superuser}
 			<h2>Benvenuto amministratore</h2>
 
 			<div class="scegli-sezione">
@@ -208,7 +204,11 @@ import SezioneCorso from '$lib/components/dashboard/SezioneCorso.svelte';
 								{:else}
 									<div class="lista-generica">
 										{#each listaDomande as oggettoSegnalazione (oggettoSegnalazione.domanda.id)}
-											<DomandaDash {oggettoSegnalazione} {risolviSegnalazioneDomanda} {cambiaDomandeSegnalate} />
+											<DomandaDash
+												{oggettoSegnalazione}
+												{risolviSegnalazioneDomanda}
+												{cambiaDomandeSegnalate}
+											/>
 										{/each}
 									</div>
 								{/if}
@@ -243,7 +243,7 @@ import SezioneCorso from '$lib/components/dashboard/SezioneCorso.svelte';
 				</div>
 			{/if}
 		{:else}
-			<p>NON SEI UN AMMINISTRATORE</p>
+			<div class="loading" />
 		{/if}
 	{/if}
 </div>
@@ -324,5 +324,24 @@ import SezioneCorso from '$lib/components/dashboard/SezioneCorso.svelte';
 		align-items: center;
 		justify-content: center;
 		gap: 1rem;
+	}
+
+	.loading {
+		width: 10px;
+		height: 10px;
+		border-radius: 0.3rem;
+		animation: loading infinite 1s;
+		border: black solid;
+		background-color: rgb(162, 0, 255);
+		margin: auto;
+	}
+
+	@keyframes loading {
+		0% {
+			width: 10px;
+		}
+		100% {
+			width: 100px;
+		}
 	}
 </style>

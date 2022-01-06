@@ -27,5 +27,7 @@
 
 	:global(:root) {
     --neumorphism: 5px 10px 10px rgba(0, 0, 0, 0.2), -5px -10px 10px rgba(219, 255, 255, 0.5);
+	--sfondo:rgb(198, 209, 255);
+	--testo:rgb(27, 27, 27);
 }
 </style>

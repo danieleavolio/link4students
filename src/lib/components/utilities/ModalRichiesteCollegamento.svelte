@@ -19,9 +19,7 @@
 
 {#if $authStore.isLoggedIn}
 	<slot name="trigger" {open}>
-		<button class="domanda-button" on:click={open}
-			>Richieste <span>{$richiesteUtente.length}</span></button
-		>
+		<button class="domanda-button" on:click={open}>🔔<span>{$richiesteUtente.length}</span></button>
 	</slot>
 {/if}
 
@@ -40,18 +38,17 @@
 			{:else if messaggio == ''}
 				<div class="contenuto">
 					<slot name="content" />
-                    {#if $richiesteUtente.length > 0}
-                        
-					<div class="scelte">
-                        {#each $richiesteUtente as richiesta (richiesta.id)}
-                        <RichiestaCollegamento {richiesta} />
-						{/each}
-					</div>
-                    {:else}
-                    <div class="vuoto">
-                        <p>Non ci sono richieste 💭</p>
-                    </div>
-                    {/if}
+					{#if $richiesteUtente.length > 0}
+						<div class="scelte">
+							{#each $richiesteUtente as richiesta (richiesta.id)}
+								<RichiestaCollegamento {richiesta} />
+							{/each}
+						</div>
+					{:else}
+						<div class="vuoto">
+							<p>Non ci sono richieste 💭</p>
+						</div>
+					{/if}
 				</div>
 			{:else}
 				<div class="message-div">
@@ -66,12 +63,15 @@
 	.domanda-button {
 		margin: auto;
 		padding: 0.4rem;
-		background-color: rgba(176, 44, 209, 0.349);
+		background-color: var(--sfondo);
+		color: var(--testo);
 		border-radius: 6px;
-		color: white;
 		border: none;
+		font-size: 1rem;
 		outline: none;
 		cursor: pointer;
+		font-weight: 600;
+		box-shadow: var(--neumorphism);
 	}
 
 	.modal {

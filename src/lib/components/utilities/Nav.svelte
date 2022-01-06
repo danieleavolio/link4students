@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { authStore } from '$lib/stores/authStore';
-	import { fly } from 'svelte/transition';
 	import { onAuthStateChanged } from 'firebase/auth';
 	import { auth, db } from '$lib/firebaseConfig';
 	import {
@@ -19,12 +18,16 @@
 	import { richiesteUtente } from '$lib/stores/richiesteStore';
 	import ModalRichiesteCollegamento from './ModalRichiesteCollegamento.svelte';
 	import BarraRicerca from './BarraRicerca.svelte';
+	import { fly } from 'svelte/transition';
+	import { goto } from '$app/navigation';
 	const logout = async () => {
 		await auth.signOut().then(() => {
 			location.reload();
 		});
 	};
 	let datiUtente;
+
+	let isOpen = false;
 
 	onAuthStateChanged(auth, (fbUser) => {
 		if (fbUser) {
@@ -123,60 +126,185 @@
 			authStore.update((oldStore) => data);
 		}
 	});
+
+	const handleOpen = () => {
+		isOpen = !isOpen;
+	};
+
+	const gotoProfilo = () => {
+		goto(`${auth.currentUser.uid}`);
+		handleOpen();
+	};
 </script>
 
-<nav>
-	<a href="/">Link4Students</a>
-	<BarraRicerca />
-	<a href="/corsi">Corsi</a>
-	<a href="/info">Info</a>
-	<div class="div">
-		{#if $authStore.isLoggedIn == true}
-			<a transition:fly={{ y: 200, duration: 1000 }} href="/profilo/{auth.currentUser.uid}"
-				>Profilo</a
-			>
-			{#if datiUtente != null}
-				{#if datiUtente.data().superuser}
-					<a href="/dashboard/adminpage">Admin</a>
-				{/if}
+{#if !isOpen}
+	<button transition:fly={{ x: -100 }} class="open-button" on:click={handleOpen}>🌎</button>
+{:else}
+	<nav transition:fly={{ x: -100 }}>
+		<div on:click={handleOpen} class="backdrop" />
+		<p class="company-name">Link 4 Students</p>
+		<button class="close-button" on:click={handleOpen}>❌</button>
+		<BarraRicerca />
+		<a on:click={handleOpen} href="/"> <span class="icona">🏚️</span> Home</a>
+		<a on:click={handleOpen} href="/corsi"> <span class="icona">🎓</span> Corsi</a>
+		<a on:click={handleOpen} href="/info"> <span class="icona">📄</span> Info</a>
+		<a on:click={handleOpen} href="/info"> <span class="icona">✉️</span> Contattaci</a>
+		{#if datiUtente != null}
+			{#if datiUtente.data().superuser}
+				<a on:click={handleOpen} href="/dashboard/adminpage"> <span class="icona">🔒</span> Admin</a>
 			{/if}
-			<ModalRichiesteCollegamento />
-			<button class="logout" on:click={logout}>Logout</button>
-		{:else if !$authStore.isLoggedIn && $authStore.isLoggedIn != undefined}
-			<a transition:fly={{ y: -200, duration: 500 }} href="/joinus">Unisciti</a>
 		{/if}
-	</div>
-</nav>
+		<div class="profilo">
+			{#if $authStore.isLoggedIn == true}
+				<div class="info" on:click={gotoProfilo}>
+					<div class="avatar">
+						<img src={datiUtente.data().avatar} alt="" />
+					</div>
+					<a class="nome-profilo" href="/profilo/{auth.currentUser.uid}"
+						>{datiUtente.data().nome} {datiUtente.data().cognome}</a
+					>
+				</div>
+				<div class="others">
+					<ModalRichiesteCollegamento />
+
+					<button class="logout" on:click={logout}>Logout</button>
+				</div>
+			{:else if !$authStore.isLoggedIn && $authStore.isLoggedIn != undefined}
+				<a class="unisciti" href="/joinus"> <span class="icona">🙏</span> Unisciti</a>
+			{/if}
+		</div>
+	</nav>
+{/if}
 
 <style>
-	nav {
-		width: 100%;
+	.company-name {
+		font-size: 2rem;
+		font-weight: 600;
+		text-align: center;
+		box-shadow: var(--neumorphism);
+		border-radius: 0.5rem;
+		margin: 2rem 0.5rem;
+	}
+	.open-button {
+		position: fixed;
+		top: 10px;
+		left: 10px;
+		font-size: 1.5rem;
+		border-radius: 100%;
+		width: 50px;
 		height: 50px;
-		background-color: purple;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 1em;
-		align-items: center;
-		justify-content: center;
-		position: sticky;
-		top: 0;
+		border: none;
+		background-color: var(--sfondo);
+		box-shadow: var(--neumorphism);
+		cursor: pointer;
+	}
+
+	.close-button {
+		position: absolute;
+		right: -2rem;
+		font-size: 1.5rem;
+		border-radius: 100%;
+		width: 50px;
+		height: 50px;
+		border: none;
+		background-color: var(--sfondo);
+		box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2), -5px -10px 10px rgba(219, 255, 255, 0.5);
+		cursor: pointer;
+	}
+
+	nav {
+		position: fixed;
+		top: 0%;
 		left: 0;
-		z-index: 100;
+		width: 300px;
+		height: 100vh;
+		background-color: rgb(198, 209, 255);
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+	.backdrop {
+		position: absolute;
+		width: 100vw;
+		height: 100vh;
+		left: 300px;
 	}
 
 	a {
-		color: white;
+		color: rgb(27, 27, 27);
+		padding: 1rem;
+		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+		padding: 0.5rem;
+		border-radius: 0.5rem;
 		text-decoration: none;
 		outline: none;
+		margin: 0 auto;
+		width: 80%;
+		
+		font-size: 1.5rem;
+	}
+
+	.icona{
+		font-weight: 600;
+
 	}
 
 	.logout {
-		font-size: 1.1rem;
 		border: none;
 		background-color: crimson;
 		color: white;
 		border-radius: 8px;
 		padding: 6px;
 		cursor: pointer;
+		height: fit-content;
+		align-self: center;
+		width: 50%;
+	}
+
+	.profilo {
+		position: absolute;
+		bottom: 3rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+		width: 90%;
+		margin: 0 1rem;
+	}
+
+	.info {
+		display: flex;
+		gap: 0.5rem;
+		align-items: center;
+		justify-content: space-around;
+		box-shadow: var(--neumorphism);
+		padding: 0.2rem;
+		border-radius: 0.5rem;
+		cursor: pointer;
+	}
+
+	.avatar,
+	img {
+		width: 75px;
+		height: 75px;
+		object-fit: contain;
+		border-radius: 100%;
+		border: solid lightblue;
+	}
+
+	.nome-profilo {
+		text-align: center;
+		align-self: center;
+	}
+
+	.unisciti {
+		
+		text-align: center;
+	}
+
+	.others {
+		display: flex;
+		gap: 1rem;
+		justify-content: center;
+		margin: 1rem 0;
 	}
 </style>

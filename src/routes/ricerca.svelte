@@ -1,6 +1,5 @@
 <script context="module">
 	import { db } from '$lib/firebaseConfig';
-
 	import { collection, getDocs, limit, query, startAfter } from 'firebase/firestore';
 	import { fly } from 'svelte/transition';
 
@@ -50,7 +49,6 @@
 
 <script lang="ts">
 	import UtenteRicercato from '$lib/components/ricerca/UtenteRicercato.svelte';
-	import CorsoRicercato from '$lib/components/ricerca/corsoRicercato.svelte';
 	import AppuntoRicerca from '$lib/components/ricerca/AppuntoRicerca.svelte';
 	import VuotoRicerca from '$lib/components/ricerca/VuotoRicerca.svelte';
 	import CorsoRicerca from '$lib/components/ricerca/CorsoRicerca.svelte';

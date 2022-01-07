@@ -19,22 +19,21 @@
 
 <style>
 	.container {
-		box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+		box-shadow: var(--neumorphism);
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		padding: 1rem;
 		border-radius: 10px;
-		background-color: aliceblue;
+		background-color: var(--sfondo);
         cursor: pointer;
-        transition: all 0.5s cubic-bezier(0.39, 0.575, 0.565, 1)
+        transition: all 0.3s ease-in-out;
 	}
 
     .container:hover{
-        box-shadow: 0 10px 5px rgba(0, 0, 0, 0.2);
-        background-color: antiquewhite;
-
+       box-shadow: var(--innerNeu)
+	   
     }
 	.image-div {
 		width: 100px;

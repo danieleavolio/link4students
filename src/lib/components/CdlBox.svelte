@@ -10,9 +10,11 @@
 	a {
 		text-decoration: none;
 		padding: 1rem;
-		background: blue;
-		color: white;
+		background: var(--sfondo);
+		color: var(--testo);
 		border-radius: 6px;
 		cursor: pointer;
+		box-shadow: var(--neumorphism);
+		font-size: 1.2rem;
 	}
 </style>

@@ -42,13 +42,20 @@
 
 <BackButton />
 <div class="ordina-div">
-	<label for="ordina">Ordina per:</label>
-	<select bind:value={ordinaPer} name="ordina" id="ordina">
-		<option value="anno">Anno</option>
-		<option value="cfu">CFU</option>
-		<option value="nome">Nome</option>
-	</select>
-	<span>🔎</span><input bind:value={filtro} type="text" />
+	{#if corsi.length > 0}
+		<label for="ordina">Ordina per:</label>
+		<select bind:value={ordinaPer} name="ordina" id="ordina">
+			<option value="anno">Anno</option>
+			<option value="cfu">CFU</option>
+			<option value="nome">Nome</option>
+		</select>
+		<span>🔎</span><input bind:value={filtro} type="text" />
+		{:else}
+		<div class="vuoto">
+			<p class="emoji">📜</p>
+			<p class="testo">Non ci sono corsi disponibili per questo Corso di Laurea</p>
+		</div>
+	{/if}
 </div>
 <div class="lista">
 	{#if listaFiltrata.length < 0}
@@ -82,4 +89,25 @@
 		justify-content: center;
 		align-items: center;
 	}
+
+	.vuoto{
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.emoji{
+		font-size: 3rem;
+		margin: 0;
+		border-radius: 0.5rem;
+		box-shadow: var(--neumorphism);
+		background-color: var(--sfondo);
+	}
+
+	.testo{
+		font-size: 2rem;
+	}
+
+
 </style>

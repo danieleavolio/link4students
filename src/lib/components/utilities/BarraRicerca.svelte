@@ -24,20 +24,33 @@
 	.search {
 		color: rgb(27, 27, 27);
 		padding: 1rem;
-		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+		box-shadow: var(--neumorphism);
 		padding: 0.5rem;
 		border-radius: 0.5rem;
 		text-decoration: none;
 		outline: none;
 		margin: 0 auto;
 		width: 80%;
+		transition: var(--velocita);
 	}
 
+	.search:hover{
+		box-shadow: var(--innerNeu);
+		transform: scale(1.1)
+	}
+
+	form{
+		display: flex;
+	}
 	input {
 		border: none;
 		outline: none;
-		box-shadow: var(--neumorphism);
 		border-radius: 0.2rem;
 		font-size: 1rem;
+	}
+
+	span{
+		font-size: 1.5rem;
+		font-weight: 600;
 	}
 </style>

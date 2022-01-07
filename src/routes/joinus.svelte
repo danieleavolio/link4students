@@ -107,11 +107,14 @@
 	const handleLogin = async () => {
 		await signInWithEmailAndPassword(auth, email, password)
 			.then(() => {
-				if ($authStore.user.emailVerified == false) {
-					signOut(auth);
-					message = 'Email non verificata';
-				} else {
-					goto('/');
+				if ($authStore.isLoggedIn) {
+					console.log('entrato')
+					if ($authStore.user.emailVerified == false) {
+						signOut(auth);
+						message = 'Email non verificata';
+					} else {
+						goto('/');
+					}
 				}
 			})
 			.catch((error) => {
@@ -194,6 +197,7 @@
 		{/if}
 	{:else}
 		<p>Hai già effettuato l'accesso!</p>
+		<button class="torna-home" on:click={()=> goto('/')}>Torna alla home</button>
 	{/if}
 
 	<p class="message" transition:fade>{message}</p>
@@ -259,5 +263,16 @@
 
 	.message {
 		background-color: #c300ff;
+	}
+
+	.torna-home{
+		font-size: 1.3rem;
+		box-shadow: var(--neumorphism);
+		padding: 1rem;
+		border-radius: 0.5rem;
+		border:none;
+		color:var(--testo);
+		background-color: var(--sfondo);
+		max-width: 200px;
 	}
 </style>

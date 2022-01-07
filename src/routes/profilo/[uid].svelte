@@ -55,8 +55,8 @@
 		let isVotiMostrati = profilo.votiMostrati == undefined ? true : profilo.votiMostrati;
 		let preferenza = profilo.preferenzaLibretto == undefined ? 'tutti' : profilo.preferenzaLibretto;
 		let contenutoBio = profilo.bio != undefined ? profilo.bio : 'Bio vuota..';
-		let sommaVoti=0;
-		let mediaUtente=0;
+		let sommaVoti = 0;
+		let mediaUtente = 0;
 
 		if (esamiSuperati.length > 0) {
 			sommaVoti = 0;
@@ -91,8 +91,6 @@
 	export let contenutoBio;
 	export let sommaVoti;
 	export let mediaUtente;
-
-
 
 	import SegnalazioneUtente from '$lib/components/utilities/SegnalazioneUtente.svelte';
 	import { authStore } from '$lib/stores/authStore';
@@ -411,8 +409,16 @@
 		font-size: 1rem;
 		border-radius: 0.4rem;
 		padding: 0.3rem;
-		border: none;
 		cursor: pointer;
+		box-shadow: var(--neumorphism);
+		transition: var(--velocita);
+		border: var(--bordo);
+		color: var(--testo);
+	}
+
+	button:hover {
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
 	}
 	.sezione-titolo-libretto {
 		text-align: center;
@@ -421,7 +427,7 @@
 
 	.container-libretto {
 		width: 80%;
-		box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.3);
+		box-shadow: var(--neumorphism);
 		padding: 1rem;
 		border-radius: 0.5rem;
 		display: grid;
@@ -433,7 +439,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		width: 80%;
-		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+		box-shadow: var(--neumorphism);
 		border-radius: 20px;
 		padding: 1rem;
 		justify-content: space-around;
@@ -472,11 +478,10 @@
 	}
 
 	.button-modifica {
-		border: none;
 		outline: none;
 		padding: 0.4rem 0;
 		border-radius: 6px;
-		background-color: skyblue;
+		background-color: var(--sfondo);
 		text-transform: uppercase;
 		cursor: pointer;
 		width: 50%;
@@ -485,24 +490,21 @@
 
 	.button-salva {
 		width: 50%;
-		border: none;
 		outline: none;
 		padding: 0.4rem 0;
 		border-radius: 6px;
-		background-color: rgb(173, 135, 235);
 		text-transform: uppercase;
 		cursor: pointer;
 	}
 
 	.button-annulla {
 		width: 50%;
-		border: none;
 		outline: none;
 		padding: 0.4rem 0;
 		border-radius: 6px;
-		background-color: rgb(218, 218, 218);
 		text-transform: uppercase;
 		cursor: pointer;
+		color: var(--alert);
 	}
 	.modifica-bio {
 		display: flex;
@@ -514,14 +516,16 @@
 	}
 
 	.textarea-bio {
-		border: none;
-		border-radius: 6px;
+		border-radius: 1rem;
 		outline: none;
-		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5), -5px -5px 5px rgba(176, 191, 255, 0.5);
+		box-shadow: var(--innerNeu);
 		resize: none;
 		padding: 0.3rem;
-		width: 100%;
-		height: 100px;
+		width: 300px;
+		height: 130px;
+		background-color: var(--sfondo);
+		color: var(--testo);
+		border: var(--bordo);
 	}
 
 	form {
@@ -533,19 +537,16 @@
 	}
 
 	.bottone-file {
-		background-color: antiquewhite;
 		border-radius: 5px;
-		border: none;
 		padding: 5px 10px;
-		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2);
+		box-shadow: var(--neumorphism);
 		cursor: pointer;
 	}
 
 	.conferma {
 		cursor: pointer;
-		background-color: rgba(55, 255, 131, 0.753);
 		border-radius: 8px;
-		border: none;
+
 		outline: none;
 		padding: 5px 10px;
 		width: 50%;
@@ -576,7 +577,7 @@
 		width: 80%;
 		height: 100px;
 		font-style: italic;
-		box-shadow: 0 5px 5px rgba(176, 191, 255, 0.5);
+		box-shadow: var(--neumorphism);
 		border-radius: 10px;
 		align-self: center;
 		margin: 0.5rem;
@@ -587,28 +588,29 @@
 	}
 
 	.modifica-preferenza {
-		border: none;
 		padding: 0.5rem;
 		font-size: 1rem;
 		border-radius: 0.3rem;
-		background-color: palegreen;
 		cursor: pointer;
 	}
 
 	.salva {
-		background-color: blue;
-		color: white;
+		color: var(--testo);
 	}
 
 	.annulla {
-		background-color: gray;
+		color: var(--alert);
 	}
+	
 
 	.select-preferenza {
 		font-size: 1rem;
 		border-radius: 00.3rem;
-		border-radius: none;
 		outline: none;
+		border: var(--bordo);
+		background-color: var(--sfondo);
+		color: var(--testo);
+		box-shadow: var(--neumorphism);
 	}
 	.connect-report-buttons {
 		display: flex;
@@ -621,13 +623,12 @@
 		width: fit-content;
 		padding: 0.3rem 1rem;
 		border-radius: 0.3rem;
-		border: none;
-		color: white;
+
+		color: var(--testo);
 		cursor: pointer;
 	}
 
 	.collegati {
-		background-color: blueviolet;
 	}
 
 	.inputs {

@@ -72,7 +72,7 @@
 	}
 
 	.main-links {
-		background-color: cornflowerblue;
+		background-color: var(--sfondo);
 		display: flex;
 		gap: 1rem;
 		padding: 1rem;

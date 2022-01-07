@@ -29,15 +29,16 @@
 
 	let isOpen = false;
 
-	onAuthStateChanged(auth, (fbUser) => {
+	onAuthStateChanged(auth, async (fbUser) => {
 		if (fbUser) {
 			let data = {
 				isLoggedIn: true,
 				user: fbUser
 			};
+			authStore.update((oldStore) => data);
 
 			// Se per qualche motivo tu fossi bannato
-			getDoc(doc(db, 'users', fbUser.uid)).then((user) => {
+			await getDoc(doc(db, 'users', fbUser.uid)).then((user) => {
 				datiUtente = user;
 				if (user.data().banTime) {
 					// Se il tempo di ban è ancora maggiore rispetto a ora
@@ -48,7 +49,6 @@
 					}
 				}
 			});
-			authStore.update((oldStore) => data);
 			// Quando loggo prendo l'id degli esami e li passo allo store apposito
 			let idEsami = [];
 			let queryIdEsami = query(
@@ -132,7 +132,7 @@
 	};
 
 	const gotoProfilo = () => {
-		goto(`${auth.currentUser.uid}`);
+		goto(`/profilo/${auth.currentUser.uid}`);
 		handleOpen();
 	};
 </script>
@@ -208,8 +208,13 @@
 		height: 50px;
 		border: none;
 		background-color: var(--sfondo);
-		box-shadow: 0 10px 10px rgba(0, 0, 0, 0.2), -5px -10px 10px rgba(219, 255, 255, 0.5);
+		box-shadow: var(--neumorphism);
 		cursor: pointer;
+		transition: all 0.5s ease;
+	}
+
+	.close-button:hover{
+		box-shadow: var(--innerNeu);
 	}
 
 	nav {
@@ -218,7 +223,9 @@
 		left: 0;
 		width: 300px;
 		height: 100vh;
-		background-color: rgb(198, 209, 255);
+		background-color: var(--sfondo);
+		box-shadow: var(--neumorphism);
+		border-radius: 1rem;
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
@@ -233,15 +240,20 @@
 	a {
 		color: rgb(27, 27, 27);
 		padding: 1rem;
-		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+		box-shadow: var(--neumorphism);
 		padding: 0.5rem;
 		border-radius: 0.5rem;
 		text-decoration: none;
 		outline: none;
 		margin: 0 auto;
 		width: 80%;
-		
+		transition:all 0.2s ease;
 		font-size: 1.5rem;
+	}
+
+	a:hover{
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
 	}
 
 	.icona{
@@ -251,14 +263,22 @@
 
 	.logout {
 		border: none;
-		background-color: crimson;
-		color: white;
+		background-color: var(--sfondo);
+		color: darkred;
 		border-radius: 8px;
 		padding: 6px;
 		cursor: pointer;
 		height: fit-content;
 		align-self: center;
 		width: 50%;
+		box-shadow: var(--neumorphism);
+		transition: all 0.2s ease;
+		font-weight: 600;
+	}
+
+	.logout:hover{
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto)
 	}
 
 	.profilo {
@@ -280,6 +300,16 @@
 		padding: 0.2rem;
 		border-radius: 0.5rem;
 		cursor: pointer;
+		transition: var(--velocita);
+	}
+
+	.info:hover{
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
+	}
+
+	.info > a{
+		box-shadow: none;
 	}
 
 	.avatar,

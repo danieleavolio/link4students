@@ -5,7 +5,7 @@
 
 <style>
 	.back {
-		margin: 1rem;
+		margin: 2.5rem 1rem;
 		border: none;
 		background: var(--sfondo);
 		box-shadow: var(--neumorphism);

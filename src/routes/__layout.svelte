@@ -24,6 +24,8 @@
 		font-weight: 400;
 	}
 
+
+
 	:global(:root) {
 		--neumorphism: 5px 5px 10px rgb(197, 197, 197), -5px -5px 10px rgba(255, 255, 255),
 			inset 0 0 0 rgba(0, 0, 0, 0.2), inset 0 0 0 rgba(219, 255, 255, 0.5);
@@ -35,6 +37,7 @@
 		--velocita: 0.2s ease;
 		--premuto: scale(0.98);
 		--bordo: rgb(204, 204, 204) solid 2px;
-		
+		--collegati: rgb(111, 4, 161);
+		--submit: rgb(45,76,200);
 	}
 </style>

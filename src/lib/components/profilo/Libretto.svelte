@@ -32,6 +32,10 @@
 				{:else}
 					<EsamePriv nome={esame.data().nomeCorso} uidCorso={esame.data().uidCorso} />
 				{/if}
+			{:else if isVotiMostrati}
+				<EsamePub {esame} />
+			{:else}
+				<EsamePriv nome={esame.data().nomeCorso} uidCorso={esame.data().uidCorso} />
 			{/if}
 		{/each}
 	{:else}
@@ -42,13 +46,13 @@
 <style>
 	.statistiche {
 		border-radius: 0.5rem;
-		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+		box-shadow: var(--innerNeu);
 		text-align: center;
 	}
 
 	.lista-esami {
 		border-radius: 0.5rem;
-		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+		box-shadow: var(--innerNeu);
 		text-align: center;
 	}
 </style>

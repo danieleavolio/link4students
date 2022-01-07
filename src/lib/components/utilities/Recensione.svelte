@@ -438,12 +438,12 @@
 
 <style>
 	.recensione {
-		background-color: rgb(199, 199, 199);
 		padding: 0.2rem 0;
 		border-radius: 20px;
 		max-width: 400px;
 		width: 400px;
 		padding: 0.5rem;
+		box-shadow: var(--innerNeu);
 	}
 	.up-part {
 		display: flex;
@@ -456,30 +456,27 @@
 		align-items: center;
 		align-self: center;
 		border: none;
-		background-color: rgba(41, 41, 41, 0.5);
 		border-radius: 100%;
 		font-weight: 600;
 		font-size: 1.3rem;
-		color: darkred;
+		color: var(--alert);
 		height: 50px;
 		width: 50px;
 		cursor: pointer;
-		transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
 		position: absolute;
 		margin-left: -2rem;
 		margin-top: -6rem;
+		box-shadow: var(--innerNeu)
 	}
 
-	.delete-review:hover {
-		background-color: rgb(41, 41, 41);
-	}
+	
 
 	.avatar {
 		max-width: 75px;
 		max-height: 75px;
 		border-radius: 100%;
 		cursor: pointer;
-		border: black solid;
+		border: var(--bordo);
 	}
 
 	.avatar > img {
@@ -508,9 +505,10 @@
 	}
 
 	.contenuto {
-		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+		box-shadow: var(--innerNeu);
 		border-radius: 10px;
 		padding: 0.5rem;
+		margin: 0.2rem;
 		overflow-wrap: break-word;
 		max-width: 380px;
 		width: 100%;
@@ -547,11 +545,11 @@
 	}
 
 	.liked {
-		background-color: rgba(0, 255, 100, 0.5);
+		background-color: var(--submit)
 	}
 
 	.disliked {
-		background-color: rgba(255, 50, 50, 0.5);
+		background-color: var(--alert);
 	}
 
 	.box-bottoni {

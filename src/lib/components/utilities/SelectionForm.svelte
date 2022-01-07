@@ -155,12 +155,21 @@
 		height: 50px;
 		padding: 0.5rem;
 		cursor: pointer;
-		box-shadow: 5px 0 5px rgba(0, 0, 0, 0.3);
+		box-shadow: var(--neumorphism);
 		border-radius: 10px;
+		transition: var(--velocita);
+		font-weight: 600;
 	}
 
+	li > label:hover{
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
+	}
 	input[type='radio']:checked ~ label {
-		background-color: rgb(255, 131, 131);
-		color: black;
+		background-color: var(--alert);
+	}
+
+	input[type='radio']:checked ~ label:hover {
+		box-shadow: var(--neumorphism);
 	}
 </style>

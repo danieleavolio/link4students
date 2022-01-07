@@ -10,9 +10,10 @@
 <style>
 
     .container{
-        border-radius: 6px;
+        border-radius: 1rem;
         width: 150px;
-        box-shadow: 5px 5px 5px rgba(0,0,0,0.3);
+        box-shadow: var(--innerNeu);
+        border: var(--bordo);
         display: flex;
         justify-content: center;
         align-items: center;

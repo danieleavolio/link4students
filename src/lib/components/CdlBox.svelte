@@ -16,5 +16,11 @@
 		cursor: pointer;
 		box-shadow: var(--neumorphism);
 		font-size: 1.2rem;
+		transition: var(--velocita);
+	}
+
+	a:hover{
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
 	}
 </style>

@@ -155,7 +155,7 @@
 			{/if}
 		{/if}
 		<div class="profilo">
-			{#if $authStore.isLoggedIn == true}
+			{#if $authStore.isLoggedIn}
 				<div class="info" on:click={gotoProfilo}>
 					<div class="avatar">
 						<img src={datiUtente.data().avatar} alt="" />
@@ -169,8 +169,8 @@
 
 					<button class="logout" on:click={logout}>Logout</button>
 				</div>
-			{:else if !$authStore.isLoggedIn && $authStore.isLoggedIn != undefined}
-				<a class="unisciti" href="/joinus"> <span class="icona">🙏</span> Unisciti</a>
+			{:else if !$authStore.isLoggedIn}
+				<a on:click={handleOpen}  class="unisciti" href="/joinus"> <span class="icona">🙏</span> Unisciti</a>
 			{/if}
 		</div>
 	</nav>
@@ -197,6 +197,12 @@
 		background-color: var(--sfondo);
 		box-shadow: var(--neumorphism);
 		cursor: pointer;
+		transition: var(--velocita);
+	}
+
+	.open-button:hover{
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
 	}
 
 	.close-button {
@@ -254,6 +260,11 @@
 	a:hover{
 		box-shadow: var(--innerNeu);
 		transform: var(--premuto);
+	}
+
+	span{
+		color: var(--testo);
+
 	}
 
 	.icona{
@@ -318,7 +329,7 @@
 		height: 75px;
 		object-fit: contain;
 		border-radius: 100%;
-		border: solid lightblue;
+		border: var(--bordo);
 	}
 
 	.nome-profilo {

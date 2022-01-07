@@ -83,11 +83,11 @@
 			<p>Valutazione degli studenti</p>
 			{#if corso.data().numRecensioni}
 				<div class="difficolta">
-					<p>
+					<p class="singola-diff">
 						Difficolta: <span> {stampaEmoji(corso.data().mediaDifficolta, '🧠')} </span>
 						<span class="mancanti"> {stampaEmoji(difficoltaMancante, '🧠')} </span>
 					</p>
-					<p>
+					<p class="singola-diff">
 						Utilita: <span>{stampaEmoji(corso.data().mediaUtilita, '🎓')}</span>
 						<span class="mancanti"> {stampaEmoji(utilitaMancante, '🎓')} </span>
 					</p>
@@ -128,6 +128,8 @@
 </div>
 
 <style>
+
+	
 	.container {
 		max-width: 90vw;
 		width: 100%;
@@ -146,13 +148,15 @@
 		justify-content: center;
 	}
 
+	
 	.left {
 		display: flex;
 		gap: 1rem;
 		justify-content: space-evenly;
 		align-items: center;
-		background: blueviolet;
-		color: white;
+		background: var(--sfondo);
+		box-shadow: var(--innerNeu);
+		border-radius: 1rem;
 		width: 100%;
 	}
 
@@ -160,10 +164,11 @@
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
-		background-color: brown;
 		padding: 0.5rem;
 		width: 100%;
 		align-items: center;
+		box-shadow: var(--innerNeu);
+		border-radius: 1rem;
 	}
 
 	.mancanti {
@@ -172,14 +177,14 @@
 
 	.media {
 		text-align: center;
-		background: yellowgreen;
 		border-radius: 0.5rem;
+		box-shadow: var(--innerNeu);
+		border-radius: 3rem;
 	}
 
 	.media > h3 {
 		font-size: 3rem;
 		padding: 3rem;
-		color: black;
 		margin: 0;
 	}
 
@@ -212,7 +217,12 @@
 		outline: none;
 		padding: 10px;
 		cursor: pointer;
-		background-color: blueviolet;
-		color: white;
+		background-color: var(--sfondo)
+	}
+
+	.singola-diff{
+		box-shadow: var(--innerNeu);
+		padding: 1rem ;
+		border-radius: 1rem;	
 	}
 </style>

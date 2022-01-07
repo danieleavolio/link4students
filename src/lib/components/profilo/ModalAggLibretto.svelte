@@ -199,14 +199,22 @@
 		display: flex;
 		align-self: center;
 		padding: 0.4rem;
-		background-color: blue;
+		background-color: var(--sfondo);
+		box-shadow: var(--neumorphism);
+		color: var(--testo);
+		border: var(--bordo);
 		border-radius: 6px;
-		color: white;
-		border: none;
 		outline: none;
 		cursor: pointer;
 		margin: auto;
 		font-size: 1.2rem;
+		transition: var(--velocita);
+		margin: 1rem;
+	}
+
+	.domanda-button:hover{
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
 	}
 
 	.modal {
@@ -215,7 +223,6 @@
 		left: 0;
 		width: 100%;
 		height: 100vh;
-
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -234,7 +241,8 @@
 		max-width: 70vw;
 		width: 50%;
 		border-radius: 0.3rem;
-		background-color: white;
+		background-color: var(--sfondo);
+		box-shadow: var(--innerNeu);
 		overflow: hidden;
 		padding: 2rem;
 		display: flex;
@@ -244,7 +252,8 @@
 	.close-button {
 		outline: none;
 		font-size: 1.2rem;
-		border: black solid;
+		border: var(--bordo);
+		box-shadow: var(--innerNeu);
 		border-radius: 50%;
 		width: 50px;
 		height: 50px;
@@ -252,6 +261,11 @@
 		position: absolute;
 		margin-left: -3rem;
 		margin-top: -3rem;
+		transition: var(--velocita);
+	}
+
+	.close-button:hover{
+		transform: var(--premuto);
 	}
 	.titolo {
 		font-size: 1.3rem;
@@ -286,7 +300,16 @@
 	select {
 		font-size: 1.1rem;
 		width: fit-content;
+		background-color: var(--sfondo);
+		border-radius: 0.5rem;
+		outline: none;
+		border: var(--bordo);
 	}
+
+	option{
+		background-color: var(--sfondo);
+	}
+	
 
 	.voto {
 		display: flex;
@@ -303,13 +326,19 @@
 	}
 
 	.submit-box > button {
-		background-color: blue;
+		background-color: var(--sfondo);
+		box-shadow: var(--neumorphism);
+		border: var(--bordo);
+		color: var(--submit);
 		font-size: 1rem;
 		border-radius: 8px;
-		border: none;
 		cursor: pointer;
 		padding: 5px 5px;
-		color: white;
+		transition: var(--velocita);
+	}
+
+	.submit-box > button:hover{
+		box-shadow: var(--innerNeu);
 	}
 
 	.loading-div {

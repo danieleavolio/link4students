@@ -25,14 +25,16 @@
 		justify-content: center;
 		align-items: center;
 		padding: 1rem;
-		border-radius: 10px;
+		border-radius: 1rem;
 		background-color: var(--sfondo);
         cursor: pointer;
-        transition: all 0.3s ease-in-out;
+        transition: var(--velocita);
+		border: var(--bordo);
 	}
 
     .container:hover{
-       box-shadow: var(--innerNeu)
+       box-shadow: var(--innerNeu);
+	   transform: var(--premuto);
 	   
     }
 	.image-div {

@@ -20,11 +20,12 @@
 	.container {
 		text-align: center;
 		width: 80%;
-		box-shadow: 2px 5px 5px rgba(0, 0, 0, 0.4), -2px -5px 5px rgba(129, 192, 230, 0.4);
+		box-shadow: var(--innerNeu);
 		margin: 1rem;
 		padding: 1rem;
-		border-radius: 10px;
+		border-radius: 1rem;
 		display: flex;
+		border: var(--bordo);
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;

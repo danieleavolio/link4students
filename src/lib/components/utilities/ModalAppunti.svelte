@@ -150,10 +150,8 @@
 		display: flex;
 		align-self: center;
 		padding: 0.4rem;
-		background-color: blue;
-		border-radius: 6px;
-		color: white;
-		border: none;
+		border-radius: 0.5rem;
+		font-size: 1rem;
 		outline: none;
 		cursor: pointer;
 	}
@@ -182,8 +180,9 @@
 		z-index: 10;
 		max-width: 70vw;
 		width: 50%;
-		border-radius: 0.3rem;
-		background-color: white;
+		border-radius: 0.5rem;
+		background-color: var(--sfondo);
+		box-shadow: var(--innerNeu);
 		overflow: hidden;
 		padding: 2rem;
 		display: flex;
@@ -193,8 +192,8 @@
 	.close-button {
 		outline: none;
 		font-size: 1.2rem;
-		border: black solid;
 		border-radius: 50%;
+		box-shadow: var(--innerNeu);
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
@@ -231,7 +230,7 @@
 	}
 
 	.domanda {
-		box-shadow: 0px 5px 3px 0px rgb(0 0 0 / 20%);
+		box-shadow: var(--innerNeu);
 		border-radius: 10px;
 		padding: 0.5rem;
 		background: lightcyan;
@@ -258,13 +257,11 @@
 	}
 
 	.submit-box > button {
-		background-color: blue;
 		font-size: 1rem;
 		border-radius: 8px;
-		border: none;
 		cursor: pointer;
 		padding: 5px 5px;
-		color: white;
+		color: var(--submit);
 	}
 
 	.input-file {
@@ -274,8 +271,8 @@
 	}
 
 	.loading-div {
-		border: white solid 10px;
-		border-top: solid black 10px;
+		border: var(--sfondo) solid 10px;
+		border-top: solid var(--testo) 10px;
 		width: 40px;
 		height: 40px;
 		border-radius: 50%;
@@ -302,11 +299,12 @@
 	.message-div > p {
 		font-family: 'Roboto', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 		text-align: center;
-		background-color: black;
 		padding: 0;
 		border-radius: 4px;
 		font-weight: 700;
 		font-size: 2rem;
-		color: white;
+		box-shadow: var(--innerNeu);
+		padding: 1rem;
+		border-radius: 0.4rem;
 	}
 </style>

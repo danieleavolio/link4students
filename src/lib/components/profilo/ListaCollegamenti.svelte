@@ -13,10 +13,9 @@
 
 <style>
 	.lista-collegamenti {
-		width: 80%;
 		height: 400px;
 		overflow-y: scroll;
-		margin: auto;
+		margin: 1rem;
 	}
 
 	.lista-collegamenti::-webkit-scrollbar {

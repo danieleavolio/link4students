@@ -26,7 +26,7 @@
 			</p>
 		</div>
 		<div class="destra">
-			<p alt="ciao">{esame.data().nomeCorso}</p>
+			<p alt="nome corso">{esame.data().nomeCorso}</p>
 		</div>
 	</div>
 	{#if $authStore.isLoggedIn}
@@ -39,25 +39,39 @@
 <style>
 	.esame {
 		display: flex;
+		justify-content: center;
 	}
 	.esame-libretto {
 		width: 80%;
 		display: grid;
 		grid-template-columns: 1fr 2fr;
 		border-radius: 0.4rem;
-		box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+		box-shadow: var(--neumorphism);
 		margin: 0.4rem;
-		place-items: center;
 		cursor: pointer;
+		padding: 0.2rem;
+		transition: var(--velocita);
+	}
+
+	.esame-libretto:hover{
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
 	}
 
 	.sinistra {
-		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-		border-radius: 0.4rem;
+		box-shadow: var(--neumorphism);
+		border-radius: 100%;
+		width: 50px;
+		height: 50px;
+		place-self: center;
+		background-color: var(--sfondo);
+		box-shadow: var(--neumorphism);
 	}
-	.voto {
-		padding: 0 1rem;
+
+	.voto{
+		font-weight: 800;
 	}
+	
 
 	.destra {
 		display: flex;
@@ -66,12 +80,12 @@
 	}
 
 	.ottimo {
-		background-color: rgb(0, 255, 136);
+		color: rgb(23, 117, 87);
 	}
 	.medio {
-		background-color: rgb(59, 95, 255);
+		color: rgb(27, 9, 126);
 	}
 	.sufficiente {
-		background-color: rgb(255, 255, 80);
+		color: rgb(128, 98, 16);
 	}
 </style>

@@ -12,3 +12,16 @@ body {
     background-color: var(--sfondo);
     color: var(--testo);
 }
+
+button {
+    background-color: var(--sfondo);
+    color: var(--testo);
+    box-shadow: var(--neumorphism);
+    transition: var(--velocita);
+    border: var(--bordo);
+}
+
+button:hover {
+    box-shadow: var(--innerNeu);
+    transform: var(--premuto);
+}

@@ -1,23 +1,17 @@
 <script>
-import { goto } from "$app/navigation";
-
+	import { goto } from '$app/navigation';
 
 	export let nome;
-    export let uidCorso
+	export let uidCorso;
 
-
-    const paginaCorso = () =>{
-        goto(`/corsodilaurea/corso/${uidCorso}`)
-    }
-	
-
+	const paginaCorso = () => {
+		goto(`/corsodilaurea/corso/${uidCorso}`);
+	};
 </script>
 
 <div class="esame-libretto" on:click={paginaCorso}>
 	<div class="sinistra">
-		<p class="voto">
-			🎓
-		</p>
+		<p class="voto">🎓</p>
 	</div>
 	<div class="destra">
 		<p>{nome}</p>
@@ -26,20 +20,27 @@ import { goto } from "$app/navigation";
 
 <style>
 	.esame-libretto {
-        width: 80%;
-
+		width: 80%;
+		padding: 0.5rem;
 		display: grid;
 		grid-template-columns: 1fr 2fr;
 		border-radius: 0.4rem;
-		box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+		box-shadow: var(--neumorphism);
 		margin: 0.4rem;
 		place-items: center;
-        cursor: pointer;
+		cursor: pointer;
+		transition: var(--velocita);
+		margin: 1rem auto;
+	}
+
+	.esame-libretto:hover{
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
 	}
 
 	.sinistra {
 		border-radius: 0.4rem;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
 	}
 	.voto {
 		padding: 0 1rem;

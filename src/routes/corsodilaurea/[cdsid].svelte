@@ -74,12 +74,24 @@
 		padding: 1.2rem;
 		font-size: 1.1rem;
 		margin: 1rem;
-		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+		box-shadow:var(--innerNeu);
 		border-radius: 0.4rem;
 	}
 
 	select {
 		font-size: 1.1rem;
+		background-color: var(--sfondo);
+		border-radius: 0.5rem;
+		border: var(--bordo);
+		outline: none;
+	}
+
+	input{
+		border: var(--bordo);
+		outline: none;
+		box-shadow: var(--innerNeu);
+		padding: 0.3rem;
+		border-radius: 0.5rem;
 	}
 	.lista {
 		display: grid;
@@ -88,6 +100,10 @@
 		flex-wrap: wrap;
 		justify-content: center;
 		align-items: center;
+		padding: 3rem;
+		box-shadow: var(--innerNeu);
+		margin: 1rem;
+		border-radius: 1rem;
 	}
 
 	.vuoto{

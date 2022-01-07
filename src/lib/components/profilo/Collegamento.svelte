@@ -27,31 +27,38 @@
 	};
 </script>
 
-<div class="collegamento">
-	<div class="avatar" on:click={gotoProfilo}>
+<div class="collegamento" on:click={gotoProfilo}>
+	<div class="avatar">
 		<img src={collegamento.data().avatarCollegato} alt="" />
 	</div>
 
 	<div class="nome-cognome">
 		<p>{collegamento.data().nomeCognomeCollegato}</p>
 	</div>
-	{#if $authStore.isLoggedIn}
+</div>
+{#if $authStore.isLoggedIn}
 		{#if collegamento.data().idUtente == $authStore.user.uid}
-			<button on:click={eliminaCollegamento}>❌</button>
+			<button class="elimina-collegamento" on:click={eliminaCollegamento}>❌</button>
 		{/if}
 	{/if}
-</div>
 
 <style>
 	.collegamento {
-		display: flex;
+		display: grid;
 		gap: 1rem;
-		justify-content: center;
-		align-items: center;
+		grid-template-columns: 1fr 2fr;
+		place-items: center;
 		padding: 0.5rem;
 		margin: 0.5rem;
-		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+		box-shadow: var(--neumorphism);
 		border-radius: 0.5rem;
+		transition: var(--velocita);
+		cursor: pointer;
+	}
+
+	.collegamento:hover{
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
 	}
 	.avatar {
 		width: 50px;
@@ -68,12 +75,18 @@
 		border-radius: 100%;
 	}
 
-	button {
+	.elimina-collegamento {
 		padding: 0.5rem;
 		font-size: 1rem;
-		border-radius: 0.4rem;
-		border: none;
 		cursor: pointer;
-		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+		border: var(--bordo);
+		box-shadow: var(--neumorphism);
+		border-radius: 0.5rem;
+		transition: var(--velocita);
+	}
+
+	.elimina-collegamento:hover{
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
 	}
 </style>

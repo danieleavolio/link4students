@@ -33,6 +33,9 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 1rem;
+		box-shadow: var(--innerNeu);
+		padding: 2rem;
+		border-radius: 1rem;
 	}
 
 	h1 {

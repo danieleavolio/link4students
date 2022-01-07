@@ -171,8 +171,7 @@
 
 <style>
 	.recensione {
-		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2), 5px 5px 5px rgba(255, 255, 255, 0.5);
-		border: none;
+		
 		text-transform: uppercase;
 		outline: none;
 		padding: 0.5rem;
@@ -196,22 +195,22 @@
 		position: absolute;
 		width: 100%;
 		height: 100%;
-		background: rgba(0, 0, 0, 0.4);
+		background: rgba(56, 56, 56, 0.4);
 	}
 
 	.content-wrapper {
 		z-index: 10;
 		max-width: 70vw;
 		border-radius: 0.3rem;
-		background-color: white;
+		background-color: var(--sfondo);
 		overflow: hidden;
 		padding: 2rem;
+		box-shadow: var(--innerNeu);
 	}
 
 	.close-button {
 		outline: none;
 		font-size: 1.2rem;
-		border: black solid;
 		border-radius: 50%;
 		width: 50px;
 		height: 50px;
@@ -219,6 +218,7 @@
 		position: absolute;
 		margin-left: -3rem;
 		margin-top: -3rem;
+		box-shadow: var(--innerNeu);
 	}
 	.titolo {
 		font-size: 1.3rem;
@@ -237,10 +237,9 @@
 	}
 
 	.domanda {
-		box-shadow: 0px 5px 3px 0px rgb(0 0 0 / 20%);
+		box-shadow: var(--innerNeu);
 		border-radius: 10px;
 		padding: 0.5rem;
-		background: lightcyan;
 		justify-content: center;
 		display: flex;
 		flex-direction: column;
@@ -252,6 +251,12 @@
 		border: none;
 		width: 80%;
 		font-size: 1rem;
+		background-color: var(--sfondo);
+		box-shadow: var(--innerNeu);
+		padding: 1rem;
+		border-radius: 1rem;
+		outline: none;
+		color: var(--testo);
 	}
 
 	.icona {
@@ -268,12 +273,10 @@
 	}
 
 	.submit-box > button {
-		background-color: blue;
 		font-size: 1rem;
 		border-radius: 8px;
-		border: none;
 		cursor: pointer;
 		padding: 5px 5px;
-		color: white;
+		color:var(--submit)
 	}
 </style>

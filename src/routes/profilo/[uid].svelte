@@ -275,7 +275,7 @@
 				<div class="connect-report-buttons">
 					{#if !collegati}
 						<button on:click={mandaRichiestaCollegamento} class="bottone collegati"
-							>🙏Collegati</button
+							>Collegati</button
 						>
 					{/if}
 					<div class="report">
@@ -427,7 +427,7 @@
 
 	.container-libretto {
 		width: 80%;
-		box-shadow: var(--neumorphism);
+		box-shadow: var(--innerNeu);
 		padding: 1rem;
 		border-radius: 0.5rem;
 		display: grid;
@@ -439,7 +439,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		width: 80%;
-		box-shadow: var(--neumorphism);
+		box-shadow: var(--innerNeu);
 		border-radius: 20px;
 		padding: 1rem;
 		justify-content: space-around;
@@ -452,13 +452,15 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		box-shadow: var(--neumorphism);
+		border: var(--bordo);
+		border-radius: 100%;
 	}
 
 	.image-div > img {
 		width: 100%;
 		height: 100%;
 		border-radius: 100%;
-		border: black solid;
 		object-fit: cover;
 	}
 	.avatar {
@@ -541,6 +543,12 @@
 		padding: 5px 10px;
 		box-shadow: var(--neumorphism);
 		cursor: pointer;
+		transition: var(--velocita);
+	}
+
+	.bottone-file:hover {
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
 	}
 
 	.conferma {
@@ -601,7 +609,6 @@
 	.annulla {
 		color: var(--alert);
 	}
-	
 
 	.select-preferenza {
 		font-size: 1rem;
@@ -623,12 +630,8 @@
 		width: fit-content;
 		padding: 0.3rem 1rem;
 		border-radius: 0.3rem;
-
 		color: var(--testo);
 		cursor: pointer;
-	}
-
-	.collegati {
 	}
 
 	.inputs {
@@ -658,5 +661,9 @@
 		100% {
 			transform: rotate(360deg);
 		}
+	}
+
+	.collegati {
+		color: var(--collegati);
 	}
 </style>

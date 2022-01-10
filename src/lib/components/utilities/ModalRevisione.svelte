@@ -109,10 +109,7 @@
 		display: flex;
 		align-self: center;
 		padding: 0.4rem;
-		background-color: blue;
 		border-radius: 6px;
-		color: white;
-		border: none;
 		outline: none;
 		cursor: pointer;
 	}
@@ -142,7 +139,6 @@
 		max-width: 70vw;
 		width: 50%;
 		border-radius: 0.3rem;
-		background-color: white;
 		overflow: hidden;
 		padding: 2rem;
 		display: flex;
@@ -152,7 +148,6 @@
 	.close-button {
 		outline: none;
 		font-size: 1.2rem;
-		border: black solid;
 		border-radius: 50%;
 		width: 50px;
 		height: 50px;
@@ -160,6 +155,7 @@
 		position: absolute;
 		margin-left: -3rem;
 		margin-top: -3rem;
+		box-shadow: var(--innerNeu);
 	}
 	.titolo {
 		font-size: 1.3rem;
@@ -199,19 +195,22 @@
 	}
 
 	.submit-box > button {
-		background-color: blue;
 		font-size: 1rem;
 		border-radius: 8px;
-		border: none;
 		cursor: pointer;
 		padding: 5px 5px;
-		color: white;
 		margin: 1rem;
+		color: var(--submit);
+	}
+
+	.submit-box > button:hover {
+		color: var(--sfondo);
+		box-shadow: var(--submitHover);
 	}
 
 	.loading-div {
-		border: white solid 10px;
-		border-top: solid black 10px;
+		border: var(--testo) solid 10px;
+		border-top: solid var(--sfondo) 10px;
 		width: 40px;
 		height: 40px;
 		border-radius: 50%;
@@ -255,12 +254,15 @@
 	.elimina {
 		white-space: nowrap;
 		font-family: 'Roboto', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-		border: none;
-		background-color: black;
-		color: white;
+		color: var(--alert);
 		border-radius: 0.3em;
 		font-size: 1.2rem;
 		padding: 0.5rem 1rem;
 		cursor: pointer;
+	}
+
+	.elimina:hover{
+		color: var(--sfondo);
+		box-shadow: var(--alertHover);
 	}
 </style>

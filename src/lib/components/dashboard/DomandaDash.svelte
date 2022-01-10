@@ -151,11 +151,10 @@
 
 <style>
 	.domanda {
-		background-color: rgb(199, 199, 199);
-		padding: 0.2rem 0;
-		border-radius: 20px;
-		width: 400px;
+		border-radius: 0.5rem;
 		padding: 0.5rem;
+		box-shadow: var(--neumorphism);
+		margin: 1rem;
 	}
 
 	.titolo-domanda {
@@ -175,12 +174,10 @@
 		justify-content: center;
 		align-items: center;
 		align-self: center;
-		border: none;
-		background-color: rgba(41, 41, 41, 0.5);
 		border-radius: 100%;
 		font-weight: 600;
 		font-size: 1.3rem;
-		color: darkred;
+		color: var(--alert);
 		height: 50px;
 		width: 50px;
 		cursor: pointer;
@@ -188,19 +185,22 @@
 		position: absolute;
 		margin-left: -2rem;
 		margin-top: -6rem;
+		box-shadow: var(--innerNeu);
+		background-color: var(--sfondo);
 	}
 
-	.delete-domanda:hover {
-		background-color: rgb(41, 41, 41);
+	.delete-domanda:hover{
+		transform: var(--premuto);
 	}
+
+	
 
 	.avatar {
 		max-width: 75px;
 		max-height: 75px;
-		background-color: brown;
 		border-radius: 100%;
-		border: black solid;
 		cursor: pointer;
+		border: var(--bordo);
 	}
 
 	.avatar > img {
@@ -220,15 +220,12 @@
 	button {
 		padding: 0.3rem;
 		font-size: 1rem;
-		border: none;
 		border-radius: 0.3rem;
 		cursor: pointer;
-		color: white;
-		background-color: black;
 	}
 
 	.contenuto {
-		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+		box-shadow: var(--innerNeu);
 		border-radius: 10px;
 		padding: 0.5rem;
 		overflow-wrap: break-word;

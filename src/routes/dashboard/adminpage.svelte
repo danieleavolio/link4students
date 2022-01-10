@@ -275,11 +275,10 @@
 	}
 
 	.selezionato {
-		background-color: blue;
 		font-size: 2rem;
 		text-transform: uppercase;
 		font-weight: 800;
-		color: white;
+		color: var(--testo);
 		width: fit-content;
 		padding: 0.2rem;
 		border-radius: 4px;
@@ -301,6 +300,8 @@
 		gap: 1rem;
 		white-space: nowrap;
 	}
+
+	
 
 	.scegli-sezione {
 		display: flex;

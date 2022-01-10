@@ -79,9 +79,8 @@
 	.utente-dash {
 		border-radius: 0.5rem;
 		padding: 0.5rem;
-		background-color: grey;
-		max-width: 300px;
-		width: 100%;
+		box-shadow: var(--neumorphism);
+		margin: 1rem;
 	}
 	.immagine-nome {
 		display: flex;
@@ -92,6 +91,7 @@
 		width: 50px;
 		height: 50px;
 		border-radius: 100%;
+		border: var(--bordo);
 
 	}
 	.immagine > img {
@@ -103,12 +103,11 @@
 	}
 
 	.show-report {
-		border: black solid;
 		outline: none;
-		background: white;
 		padding: 0.5rem 0.2rem;
 		border-radius: 8px;
 		cursor: pointer;
+		font-weight: 600;
 	}
 
 	.div-sospensione {
@@ -119,6 +118,12 @@
 		text-align: end;
 		border-radius: 0.3rem;
 		outline: none;
-		border: none;
+		border: var(--bordo);
+		box-shadow: var(--neumorphism);
+	}
+
+	.sospendi{
+		border-radius: 0.3rem;
+		cursor: pointer;
 	}
 </style>

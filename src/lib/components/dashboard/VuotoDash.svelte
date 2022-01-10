@@ -14,7 +14,7 @@
 		gap: 1rem;
 		justify-content: center;
 		align-items: center;
-		box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
+		box-shadow: var(--innerNeu);
 		padding: 0.5rem;
 		border-radius: 10px;
 	}
@@ -22,6 +22,7 @@
 	.emoji {
 		font-size: 4rem;
 		margin: 0;
+		font-weight: 600;
 	}
 
 	.contenuto {

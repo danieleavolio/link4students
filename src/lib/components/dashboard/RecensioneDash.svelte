@@ -216,13 +216,10 @@
 
 <style>
 	.recensione {
-		display: inline-block;
-		background-color: rgb(199, 199, 199);
-		padding: 0.2rem 0;
-		border-radius: 20px;
-		max-width: 400px;
-		width: 400px;
+		border-radius: 0.5rem;
 		padding: 0.5rem;
+		box-shadow: var(--neumorphism);
+		margin: 1rem;
 	}
 	.up-part {
 		display: flex;
@@ -234,12 +231,10 @@
 		justify-content: center;
 		align-items: center;
 		align-self: center;
-		border: none;
-		background-color: rgba(41, 41, 41, 0.5);
 		border-radius: 100%;
 		font-weight: 600;
 		font-size: 1.3rem;
-		color: darkred;
+		color: var(--alert);
 		height: 50px;
 		width: 50px;
 		cursor: pointer;
@@ -247,23 +242,21 @@
 		position: absolute;
 		margin-left: -1.6rem;
 		margin-top: -3rem;
+		box-shadow: var(--innerNeu);
 	}
 
-	.delete-review:hover {
-		background-color: rgb(41, 41, 41);
-	}
+	
 
 	.avatar {
-		max-width: 40px;
-		max-height: 40px;
+		width: 50px;
+		height: 50px;
 		border-radius: 100%;
-		cursor: pointer;
-		border: black solid;
+		border: var(--bordo);
 	}
 
 	.avatar > img {
-		width: 40px;
-		height: 40px;
+		width: 50px;
+		height: 50px;
 		object-fit: cover;
 		border-radius: 100%;
 	}
@@ -283,7 +276,7 @@
 	}
 
 	.contenuto {
-		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+		box-shadow: var(--innerNeu);
 		border-radius: 10px;
 		padding: 0.5rem;
 		overflow-wrap: break-word;
@@ -296,12 +289,11 @@
 	}
 
 	.show-report {
-		border: black solid;
 		outline: none;
-		background: white;
 		padding: 0.5rem 0.2rem;
 		border-radius: 8px;
 		cursor: pointer;
+		font-weight: 600;
 	}
 
 	.bottoni {
@@ -320,9 +312,6 @@
 		border: none;
 	}
 	.sospendi {
-		border: none;
-		background-color: rgb(22, 22, 22);
-		color: white;
 		padding: 0.2rem;
 		border-radius: 0.3rem;
 		cursor: pointer;

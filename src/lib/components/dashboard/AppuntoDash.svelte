@@ -88,14 +88,13 @@
 
 <style>
 	.appunto {
-		width: 260px;
-		height: 200px;
-		background-color: #69188b;
 		padding: 0.5rem;
 		border-radius: 0.8rem;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-around;
+		box-shadow: var(--neumorphism);
+		margin: 1rem;
 	}
 	.nome-immagine {
 		display: flex;
@@ -118,7 +117,6 @@
 	}
 
 	.contenuto {
-		color: white;
 		white-space: normal;
 		overflow-wrap: break-word;
 	}
@@ -140,13 +138,19 @@
 
 	.download-button {
 		border-radius: 0.5rem;
-		border: none;
 		outline: none;
 		padding: 0.3rem;
-		background-color: rgb(0, 76, 121);
 		text-decoration: none;
-		color: white;
+		border: var(--bordo);
+		color: var(--submit);
 		font-weight: 600;
+		transition: var(--velocita);
+		box-shadow: var(--neumorphism);
+	}
+
+	.download-button:hover{
+		box-shadow: var(--submitHover);
+		color: var(--sfondo);
 	}
 	.delete-appunto {
 		display: flex;
@@ -154,23 +158,20 @@
 		align-items: center;
 		align-self: center;
 		border: none;
-		background-color: rgba(41, 41, 41, 0.5);
 		border-radius: 100%;
 		font-weight: 600;
 		font-size: 1.3rem;
-		color: darkred;
+		color: var(--alert);
 		height: 50px;
 		width: 50px;
 		cursor: pointer;
 		transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
 		position: absolute;
-		margin-left: -2rem;
-		margin-top: -6rem;
+		margin-left: -3rem;
+		margin-top: -7rem;
 	}
 
-	.delete-appunto:hover {
-		background-color: rgb(41, 41, 41);
-	}
+	
 
 	
 </style>

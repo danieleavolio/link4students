@@ -47,7 +47,6 @@
 		border-radius: 8px;
 		padding: 0.5rem;
 		margin: 0.5rem 0;
-		background-color: rgb(107, 238, 107);
 		border: none;
 		cursor: pointer;
 		width: 170px;
@@ -57,9 +56,7 @@
 		transition: all 1s ease;
 	}
 
-	.risolvi:hover {
-		background-color: rgb(15, 160, 59);
-	}
+	
 
 	.main-container {
 		display: flex;

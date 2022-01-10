@@ -20,6 +20,7 @@ button {
     transition: var(--velocita);
     border: var(--bordo);
     font-weight: 500;
+    font-size: 1rem;
 }
 
 button:hover {
@@ -27,13 +28,17 @@ button:hover {
     transform: var(--premuto);
 }
 
-input[type='text'] {
+input[type='text'],
+input[type='number'],
+input[type='url'],
+input[type='password'],
+input[type='email'] {
     outline: none;
     border: var(--bordo);
     border-radius: 0.5rem;
     background-color: var(--sfondo);
     color: var(--testo);
-    font-size: 1.2rem;
+    font-size: 1rem;
     padding: 0.2rem;
     box-shadow: var(--innerNeu);
 }
@@ -62,4 +67,41 @@ textarea {
     background-color: var(--sfondo)!important;
     box-shadow: var(--innerNeu)!important;
     padding: 2rem;
+}
+
+.risolvi {
+    box-shadow: var(--neumorphism);
+    background-color: var(--sfondo)!important;
+    color: var(--resolve);
+}
+
+.risolvi:hover {
+    background-color: var(--resolve);
+    color: var(--sfondo);
+    box-shadow: var(--resolveHover);
+}
+
+
+/* Works on Firefox */
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--testo) var(--sfondo);
+}
+
+
+/* Works on Chrome, Edge, and Safari */
+
+*::-webkit-scrollbar {
+    width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+    background: var(--sfondo);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: var(--testo);
+    border-radius: 20px;
+    border: 3px solid var(--sfondo);
 }

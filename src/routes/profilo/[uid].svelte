@@ -427,7 +427,6 @@
 
 	.container-libretto {
 		width: 80%;
-		box-shadow: var(--innerNeu);
 		padding: 1rem;
 		border-radius: 0.5rem;
 		display: grid;

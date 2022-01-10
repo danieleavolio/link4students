@@ -72,7 +72,6 @@
 							<input type="text" id="inputdomanda" bind:value={titoloDomanda} required />
 						</div>
 						<div class="domanda text-area">
-							<label for="area-recensione">Inserisci la tua domanda</label>
 							<textarea
 								bind:value={contenuto}
 								name="recensione"
@@ -104,12 +103,11 @@
 		display: flex;
 		align-self: center;
 		padding: 0.4rem;
-		background-color: blue;
 		border-radius: 6px;
-		color: white;
-		border: none;
+		color: var(--submit);
 		outline: none;
 		cursor: pointer;
+		font-size: 1rem;
 	}
 
 	.modal {
@@ -137,7 +135,8 @@
 		max-width: 70vw;
 		width: 50%;
 		border-radius: 0.3rem;
-		background-color: white;
+		background-color: var(--sfondo);
+		box-shadow: var(--innerNeu);
 		overflow: hidden;
 		padding: 2rem;
 	}
@@ -145,7 +144,6 @@
 	.close-button {
 		outline: none;
 		font-size: 1.2rem;
-		border: black solid;
 		border-radius: 50%;
 		width: 50px;
 		height: 50px;
@@ -153,6 +151,7 @@
 		position: absolute;
 		margin-left: -3rem;
 		margin-top: -3rem;
+		box-shadow: var(--innerNeu);
 	}
 	.titolo {
 		font-size: 1.3rem;
@@ -167,10 +166,7 @@
 		gap: 0.5rem;
 	}
 
-	.titolo-container > input {
-		padding: 0.4rem;
-		font-size: 1rem;
-	}
+	
 	.contenuto {
 		overflow: auto;
 	}
@@ -183,21 +179,24 @@
 	}
 
 	.domanda {
-		box-shadow: 0px 5px 3px 0px rgb(0 0 0 / 20%);
 		border-radius: 10px;
-		padding: 0.5rem;
-		background: lightcyan;
 		justify-content: left;
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+		margin: 1rem;
 	}
 
+	
 	textarea {
 		resize: none;
-		border: none;
-		width: 100%;
 		font-size: 1rem;
+		box-shadow: var(--innerNeu);
+		padding: 1rem;
+		border-radius: 0.5rem;
+		outline: none;
+		border: var(--bordo);
+		color: var(--testo);
 	}
 
 	.submit-box {
@@ -210,12 +209,10 @@
 	}
 
 	.submit-box > button {
-		background-color: blue;
 		font-size: 1rem;
 		border-radius: 8px;
-		border: none;
 		cursor: pointer;
 		padding: 5px 5px;
-		color: white;
+		color: var(--submit);
 	}
 </style>

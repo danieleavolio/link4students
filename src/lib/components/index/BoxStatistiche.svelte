@@ -20,7 +20,7 @@
 	.container {
 		text-align: center;
 		width: 80%;
-		box-shadow: var(--innerNeu);
+		box-shadow: var(--neumorphism);
 		margin: 1rem;
 		padding: 1rem;
 		border-radius: 1rem;

@@ -19,9 +19,47 @@ button {
     box-shadow: var(--neumorphism);
     transition: var(--velocita);
     border: var(--bordo);
+    font-weight: 500;
 }
 
 button:hover {
     box-shadow: var(--innerNeu);
     transform: var(--premuto);
+}
+
+input[type='text'] {
+    outline: none;
+    border: var(--bordo);
+    border-radius: 0.5rem;
+    background-color: var(--sfondo);
+    color: var(--testo);
+    font-size: 1.2rem;
+    padding: 0.2rem;
+    box-shadow: var(--innerNeu);
+}
+
+input[type='checkbox'] {
+    box-shadow: var(--neumorphism);
+    transform: scale(1.2);
+    outline: none;
+    border: var(--bordo);
+}
+
+textarea {
+    resize: none;
+    font-size: 1rem;
+    box-shadow: var(--innerNeu);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    outline: none;
+    border: var(--bordo);
+    color: var(--testo);
+}
+
+.content-wrapper {
+    z-index: 10;
+    border-radius: 0.5rem;
+    background-color: var(--sfondo)!important;
+    box-shadow: var(--innerNeu)!important;
+    padding: 2rem;
 }

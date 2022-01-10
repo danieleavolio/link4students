@@ -99,27 +99,29 @@
 
 <style>
 	.segnalazione {
-		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2), 5px 5px 5px rgba(255, 255, 255, 0.5);
-		border: none;
+		box-shadow: var(--neumorphism);
 		text-transform: uppercase;
 		outline: none;
 		padding: 0.5rem;
 		border-radius: 6px;
 		cursor: pointer;
-		background-color: darkred;
-		color: white;
+		background-color: var(--alert);
+		color: var(--sfondo);
 	}
 
 	.segnalato {
-		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.2), 5px 5px 5px rgba(255, 255, 255, 0.5);
-		border: none;
+		box-shadow: var(--neumorphism);
 		text-transform: uppercase;
 		outline: none;
 		padding: 0.5rem;
 		border-radius: 6px;
 		cursor: pointer;
-		background-color: blue;
-		color: white;
+		background-color: var(--submit);
+		color: var(--sfondo);
+	}
+
+	.segnalato:hover {
+		transform: none;
 	}
 	.modal {
 		position: fixed;
@@ -127,7 +129,6 @@
 		left: 0;
 		width: 100%;
 		height: 100vh;
-
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -153,7 +154,6 @@
 	.close-button {
 		outline: none;
 		font-size: 1.2rem;
-		border: black solid;
 		border-radius: 50%;
 		width: 50px;
 		height: 50px;
@@ -161,6 +161,7 @@
 		position: absolute;
 		margin-left: -3rem;
 		margin-top: -3rem;
+		box-shadow: var(--innerNeu);
 	}
 	.titolo {
 		font-size: 1.3rem;
@@ -179,10 +180,8 @@
 	}
 
 	.domanda {
-		box-shadow: 0px 5px 3px 0px rgb(0 0 0 / 20%);
 		border-radius: 10px;
 		padding: 0.5rem;
-		background: lightcyan;
 		justify-content: center;
 		display: flex;
 		flex-direction: column;
@@ -206,12 +205,17 @@
 	}
 
 	.submit-box > button {
-		background-color: blue;
 		font-size: 1rem;
 		border-radius: 8px;
 		border: none;
 		cursor: pointer;
 		padding: 5px 5px;
-		color: white;
+		color: var(--submit);
+	}
+
+	.submit-box > button:hover {
+		background-color: var(--submit);
+		box-shadow: var(--submitHover);
+		color: var(--sfondo);
 	}
 </style>

@@ -230,10 +230,8 @@
 	}
 
 	.domanda {
-		box-shadow: var(--innerNeu);
 		border-radius: 10px;
 		padding: 0.5rem;
-		background: lightcyan;
 		justify-content: left;
 		display: flex;
 		flex-direction: column;
@@ -243,7 +241,6 @@
 	textarea {
 		resize: none;
 		border: none;
-		width: 100%;
 		font-size: 1rem;
 	}
 
@@ -268,6 +265,13 @@
 		font-family: 'Roboto', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 		display: flex;
 		flex-direction: column;
+		font-size: 1rem;
+	}
+
+	input[type='file']{
+		font-size: 1rem;
+		border: none;
+		outline: none;
 	}
 
 	.loading-div {

@@ -238,11 +238,11 @@
 
 <style>
 	.domanda {
-		background-color: rgb(199, 199, 199);
 		padding: 0.2rem 0;
 		border-radius: 20px;
 		width: 100%;
-		padding: 0.5rem;
+		padding: 1rem;
+		box-shadow: var(--neumorphism);
 	}
 
 	.titolo-domanda {
@@ -262,12 +262,10 @@
 		justify-content: center;
 		align-items: center;
 		align-self: center;
-		border: none;
-		background-color: rgba(41, 41, 41, 0.5);
 		border-radius: 100%;
 		font-weight: 600;
 		font-size: 1.3rem;
-		color: darkred;
+		color: var(--alert);
 		height: 50px;
 		width: 50px;
 		cursor: pointer;
@@ -277,17 +275,15 @@
 		margin-top: -6rem;
 	}
 
-	.delete-domanda:hover {
-		background-color: rgb(41, 41, 41);
-	}
+	
 
 	.avatar {
 		max-width: 75px;
 		max-height: 75px;
-		background-color: brown;
 		border-radius: 100%;
-		border: black solid;
+		border: var(--bordo);
 		cursor: pointer;
+		box-shadow: var(--neumorphism);
 	}
 
 	.avatar > img {
@@ -324,33 +320,31 @@
 	}
 
 	.rispondi {
-		background-color: red;
+		color: var(--submit);
 	}
 	textarea {
 		resize: none;
 		width: 80%;
-		border-radius: 0.3rem;
-		font-size: 1rem;
+		border-radius: 0.5rem;
 	}
 
 	button {
 		padding: 0.3rem;
 		font-size: 1rem;
-		border: none;
 		border-radius: 0.3rem;
 		cursor: pointer;
-		color: white;
-		background-color: black;
 	}
 
 	form > button {
-		background-color: blueviolet;
+		color: var(--submit);
 	}
 
 	.contenuto {
-		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+		box-shadow: var(--innerNeu);
 		border-radius: 10px;
 		padding: 0.5rem;
+		font-size: 1.1rem;
+		color: var(--testo);
 		overflow-wrap: break-word;
 	}
 

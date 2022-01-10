@@ -39,5 +39,7 @@
 		--bordo: rgb(204, 204, 204) solid 2px;
 		--collegati: rgb(111, 4, 161);
 		--submit: rgb(45,76,200);
+		--submitHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5), inset 20px 20px 60px #2641aa, inset -20px -20px 60px #3457e6;
+		--alertHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5), inset 20px 20px 60px #c44b4b, inset -20px -20px 60px #ff6565;
 	}
 </style>

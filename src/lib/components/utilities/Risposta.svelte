@@ -48,12 +48,12 @@ import { goto } from '$app/navigation';
 
 <style>
 	.container-risposta {
-		background-color: rgb(94, 84, 84);
 		border-radius: 15px;
 		width: 80%;
 		padding: 0.5rem;
 		align-self: end;
 		margin: 1rem 0;
+		box-shadow: var(--neumorphism);
 	}
 
 	.up-part {
@@ -68,12 +68,10 @@ import { goto } from '$app/navigation';
 		justify-content: center;
 		align-items: center;
 		align-self: center;
-		border: none;
-		background-color: rgba(41, 41, 41, 0.5);
 		border-radius: 100%;
 		font-weight: 600;
 		font-size: 1.3rem;
-		color: darkred;
+		color: var(--alert);
 		height: 50px;
 		width: 50px;
 		cursor: pointer;
@@ -83,16 +81,13 @@ import { goto } from '$app/navigation';
 		margin-top: -6rem;
 	}
 
-	.delete-risposta:hover {
-		background-color: rgb(41, 41, 41);
-	}
+	
 
 	.avatar {
 		max-width: 50px;
 		max-height: 50px;
-		background-color: brown;
 		border-radius: 100%;
-		border: black solid;
+		border: var(--bordo);
 		cursor: pointer;
 	}
 
@@ -111,10 +106,12 @@ import { goto } from '$app/navigation';
 	}
 
 	.contenuto {
-		box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+		box-shadow: var(--innerNeu);
 		border-radius: 10px;
 		padding: 0.5rem;
 		overflow-wrap: break-word;
+		margin: 1rem;
+		font-size: 1rem;
 	}
 
 	.box-bottoni {

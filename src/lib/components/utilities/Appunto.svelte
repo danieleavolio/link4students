@@ -358,14 +358,14 @@
 
 <style>
 	.appunto {
-		width: 260px;
-		height: 200px;
-		background-color: #69188b;
+		width: 300px;
 		padding: 0.5rem;
 		border-radius: 0.8rem;
 		display: flex;
 		flex-direction: column;
-		justify-content: space-around;
+		justify-content: space-between;
+		box-shadow: var(--neumorphism);
+		
 	}
 	.nome-immagine {
 		display: flex;
@@ -378,6 +378,11 @@
 		height: 75px;
 		border-radius: 50%;
 		cursor: pointer;
+		transition: var(--velocita);
+	}
+
+	.avatar:hover{
+		transform: var(--premuto);
 	}
 
 	.avatar > img {
@@ -385,10 +390,11 @@
 		height: 100%;
 		object-fit: cover;
 		border-radius: 50%;
+		border: var(--bordo);
+		box-shadow: var(--neumorphism);
 	}
 
 	.contenuto {
-		color: white;
 		white-space: normal;
 		overflow-wrap: break-word;
 	}
@@ -410,25 +416,30 @@
 
 	.download-button {
 		border-radius: 0.5rem;
-		border: none;
 		outline: none;
 		padding: 0.3rem;
-		background-color: rgb(0, 76, 121);
 		text-decoration: none;
-		color: white;
+		color: var(--submit);
 		font-weight: 600;
+		box-shadow: var(--neumorphism);
+		transition: var(--velocita);
 	}
+	.download-button:hover{
+		color: var(--sfondo);
+		background-color: var(--submit);
+		box-shadow: var(--submitHover);
+	}
+
 	.delete-appunto {
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		align-self: center;
 		border: none;
-		background-color: rgba(41, 41, 41, 0.5);
 		border-radius: 100%;
 		font-weight: 600;
 		font-size: 1.3rem;
-		color: darkred;
+		color: var(--alert);
 		height: 50px;
 		width: 50px;
 		cursor: pointer;
@@ -436,15 +447,23 @@
 		position: absolute;
 		margin-left: -2rem;
 		margin-top: -6rem;
+		box-shadow: var(--innerNeu);
 	}
 
-	.delete-appunto:hover {
-		background-color: rgb(41, 41, 41);
-	}
+	
 
 	.like-dislike {
 		display: flex;
 		gap: 1rem;
+	}
+
+
+	.like:hover{
+		box-shadow: var(--submitHover);
+	}
+
+	.dislike:hover{
+		box-shadow: var(--alertHover);
 	}
 	.singolo-bottone {
 		display: flex;
@@ -454,13 +473,29 @@
 	}
 
 	.liked {
-		background-color: rgba(0, 255, 100, 0.5);
+		background-color: var(--submit)
 	}
 
 	.disliked {
-		background-color: rgba(255, 50, 50, 0.5);
+		background-color: var(--alert);
 	}
 
+
+	.non-disponibile{
+		opacity: 50%;
+	}
+
+	.non-disponibile:hover{
+		transform: none;
+		box-shadow: var(--neumorphism);
+		cursor: auto;
+	}
+
+	:disabled{
+		opacity: 50%;
+		box-shadow: var(--neumorphism);
+		cursor: auto;
+	}
 	.titolo-appunti{
 		font-weight: 600;
 	}

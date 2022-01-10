@@ -1,7 +1,7 @@
 <script>
 	import { db } from '$lib/firebaseConfig';
 	import { authStore } from '$lib/stores/authStore';
-import { domandeSegnalate } from '$lib/stores/domandeStore';
+	import { domandeSegnalate } from '$lib/stores/domandeStore';
 	import { collection, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 	import { onMount } from 'svelte';
 	import Domanda from '../utilities/Domanda.svelte';
@@ -64,12 +64,14 @@ import { domandeSegnalate } from '$lib/stores/domandeStore';
 				<Domanda {domanda} />
 			{/each}
 		</div>
-	{:else}
+	{:else if listaFiltrata.length > 0}
 		<div class="lista-domande">
 			{#each listaFiltrata as domanda (domanda.id)}
 				<Domanda {domanda} />
 			{/each}
 		</div>
+	{:else}
+		<Vuoto oggetti='domande con questo titolo'/>
 	{/if}
 </div>
 
@@ -79,8 +81,8 @@ import { domandeSegnalate } from '$lib/stores/domandeStore';
 	}
 	.container {
 		margin-bottom: 2rem;
-		max-width: 80vw;
-		width: 100%;
+		width: 80vw;
+		
 	}
 
 	.lista-domande {
@@ -102,7 +104,7 @@ import { domandeSegnalate } from '$lib/stores/domandeStore';
 		padding: 0.3rem;
 		display: flex;
 		align-items: center;
-		box-shadow: 0 5px 5px rgb(0 0 0 / 40%);
+		box-shadow: var(--neumorphism);
 	}
 
 	.filtro {

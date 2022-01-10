@@ -198,6 +198,7 @@
 		box-shadow: var(--neumorphism);
 		cursor: pointer;
 		transition: var(--velocita);
+		font-weight: 600;
 	}
 
 	.open-button:hover{

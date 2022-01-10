@@ -24,8 +24,6 @@
 		font-weight: 400;
 	}
 
-
-
 	:global(:root) {
 		--neumorphism: 5px 5px 10px rgb(197, 197, 197), -5px -5px 10px rgba(255, 255, 255),
 			inset 0 0 0 rgba(0, 0, 0, 0.2), inset 0 0 0 rgba(219, 255, 255, 0.5);
@@ -38,8 +36,15 @@
 		--premuto: scale(0.98);
 		--bordo: rgb(204, 204, 204) solid 2px;
 		--collegati: rgb(111, 4, 161);
-		--submit: rgb(45,76,200);
-		--submitHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5), inset 20px 20px 60px #2641aa, inset -20px -20px 60px #3457e6;
-		--alertHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5), inset 20px 20px 60px #c44b4b, inset -20px -20px 60px #ff6565;
+		--submit: rgb(45, 76, 200);
+		--resolve: rgb(72, 204, 36);
+		--submitHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
+			inset 20px 20px 60px #2641aa, inset -20px -20px 60px #3457e6;
+		--alertHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
+			inset 20px 20px 60px #c44b4b, inset -20px -20px 60px #ff6565;
+		--resolveHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
+			inset 20px 20px 60px #3dad1f, inset -20px -20px 60px #53eb29;
 	}
+
+
 </style>

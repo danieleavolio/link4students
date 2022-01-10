@@ -65,7 +65,6 @@
 		height: 50px;
 		border-radius: 100%;
 		cursor: pointer;
-		border: rgb(183, 0, 255) solid;
 	}
 
 	.avatar > img {

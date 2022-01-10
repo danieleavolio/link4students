@@ -50,8 +50,9 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		border-radius: 100%;
+		border-radius: 1rem;
 		box-shadow: var(--innerNeu);
+		margin: 0.3rem;
 	}
 
 

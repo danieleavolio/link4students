@@ -443,7 +443,7 @@
 		max-width: 400px;
 		width: 400px;
 		padding: 0.5rem;
-		box-shadow: var(--innerNeu);
+		box-shadow: var(--neumorphism);
 	}
 	.up-part {
 		display: flex;
@@ -455,7 +455,6 @@
 		justify-content: center;
 		align-items: center;
 		align-self: center;
-		border: none;
 		border-radius: 100%;
 		font-weight: 600;
 		font-size: 1.3rem;

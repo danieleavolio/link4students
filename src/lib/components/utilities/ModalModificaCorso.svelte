@@ -159,7 +159,6 @@
 		left: 0;
 		width: 100%;
 		height: 100vh;
-
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -178,7 +177,6 @@
 		max-width: 70vw;
 		width: 50%;
 		border-radius: 0.3rem;
-		background-color: white;
 		overflow: hidden;
 		padding: 2rem;
 		display: flex;
@@ -188,7 +186,6 @@
 	.close-button {
 		outline: none;
 		font-size: 1.2rem;
-		border: black solid;
 		border-radius: 50%;
 		width: 50px;
 		height: 50px;
@@ -196,6 +193,7 @@
 		position: absolute;
 		margin-left: -3rem;
 		margin-top: -3rem;
+		box-shadow: var(--innerNeu);
 	}
 	.titolo {
 		font-size: 1.3rem;
@@ -235,7 +233,7 @@
 	}
 
 	.submit-box > button {
-		background-color: blue;
+		background-color: var(--submit);
 		font-size: 1rem;
 		border-radius: 8px;
 		border: none;
@@ -282,8 +280,10 @@
 	}
 
 	span {
-		background-color: blue;
-		color: white;
+		background-color: var(--testo);
+		
+		color: var(--sfondo);
 		border-radius: 0.2rem;
+		padding: 0.2rem;
 	}
 </style>

@@ -1,6 +1,6 @@
 <script context="module">
 	import { db } from '$lib/firebaseConfig';
-	import { collection, getDocs, limit, query, startAfter } from 'firebase/firestore';
+	import { collection, getDocs, limit, query, startAfter, where } from 'firebase/firestore';
 	import { fly } from 'svelte/transition';
 
 	export async function load({ page }) {
@@ -66,14 +66,18 @@
 
 	let noMoreRes = false;
 
+	// Per fare una ricerca in modo preciso, firebase non offre nessun servizio. Siccome ci sono 45 cubi + 2 dipartimenti per cubo circa
+	// contando triennale e magistrale con 20 corsi ognuno, ci sono circa 3600 corsi
+	//Stimando le query, le eseguo.
+
 	let searchBar;
 	/**
 	 * La variabile aiuta a definire il range di risultati di query da analizzare, per evitare attese infinite
 	 * in caso di un numero di query eccessivamente grande.
 	 */
-	let limiteRicerca = 10;
+	let limiteRicerca;
 	const handleSearchBarRepetition = () => {
-		searchBar.style = 'outline: solid red';
+		searchBar.style = 'border: solid var(--alert)';
 	};
 
 	const resetSearchBar = () => {
@@ -88,7 +92,7 @@
 	 */
 	const handleRicerca = () => {
 		keyword = keyword.trim();
-		if (keyword.length > 3) {
+		if (keyword.length >= 3) {
 			noMoreRes = false;
 			switch (tipo) {
 				case 'utenti':
@@ -114,7 +118,7 @@
 	const ricercaByCorsi = async () => {
 		if (keyword != oldKeyword || oldTipo != 'corsi') {
 			// Limito il numero di risultati a 10
-			const queryCorsi = query(collection(db, 'corsidelcdl'), limit(limiteRicerca));
+			const queryCorsi = query(collection(db, 'corsidelcdl'), limit(limiteRicerca * 10));
 			await getDocs(queryCorsi).then((corsi) => {
 				listaCorsi = corsi.docs;
 				listaCorsi = listaCorsi.filter((elem) =>
@@ -128,7 +132,7 @@
 
 	const ricercaByUtenti = async () => {
 		if (keyword != oldKeyword || oldTipo != 'utenti') {
-			const q = query(collection(db, 'users'), limit(limiteRicerca));
+			const q = query(collection(db, 'users'), limit(limiteRicerca * 10));
 			await getDocs(q).then((results) => {
 				listaUtenti = results.docs.filter((utente) =>
 					utente.data().nome.toLowerCase().includes(keyword.toLowerCase())
@@ -141,7 +145,7 @@
 
 	const ricercaByAppunti = async () => {
 		if (keyword != oldKeyword || oldTipo != 'appunti') {
-			const queryCorsi = query(collection(db, 'appunti'), limit(limiteRicerca));
+			const queryCorsi = query(collection(db, 'appunti'), limit(limiteRicerca * 10));
 			await getDocs(queryCorsi).then((appunti) => {
 				listaAppunti = appunti.docs;
 				listaAppunti = listaAppunti.filter((elem) =>
@@ -161,42 +165,39 @@
 				await getDocs(more1).then((nuovi) => {
 					let nuovaLista = nuovi.docs;
 					nuovaLista = nuovaLista.filter((elem) =>
-						elem.data().nome.toLowerCase().includes(keyword.toLowerCase())
+						elem.data().nome.toLowerCase().includes(oldKeyword.toLowerCase())
 					);
 					// Copio ogni nuovo elemento 1 alla volta
 					nuovaLista.forEach((elem) => {
 						lista = [...lista, elem];
 					});
 				});
-				oldKeyword = keyword;
 				break;
 			case 'corsi':
 				const more2 = query(collection(db, 'corsidelcdl'), startAfter(lista[lista.length - 1]));
 				await getDocs(more2).then((nuovi) => {
 					let nuovaLista = nuovi.docs;
 					nuovaLista = nuovaLista.filter((elem) =>
-						elem.data().nome.toLowerCase().includes(keyword.toLowerCase())
+						elem.data().nome.toLowerCase().includes(oldKeyword.toLowerCase())
 					);
 					// Copio ogni nuovo elemento 1 alla volta
 					nuovaLista.forEach((elem) => {
 						lista = [...lista, elem];
 					});
 				});
-				oldKeyword = keyword;
 				break;
 			case 'appunti':
 				const more3 = query(collection(db, 'appunti'), startAfter(lista[lista.length - 1]));
 				await getDocs(more3).then((nuovi) => {
 					let nuovaLista = nuovi.docs;
 					nuovaLista = nuovaLista.filter((elem) =>
-						elem.data().titoloAppunti.toLowerCase().includes(keyword.toLowerCase())
+						elem.data().titoloAppunti.toLowerCase().includes(oldKeyword.toLowerCase())
 					);
 					// Copio ogni nuovo elemento 1 alla volta
 					nuovaLista.forEach((elem) => {
 						lista = [...lista, elem];
 					});
 				});
-				oldKeyword = keyword;
 
 				break;
 			default:
@@ -228,15 +229,24 @@
 <svelte:head>
 	<title>Pagina di ricerca</title>
 </svelte:head>
+<h1>Pagina ricerca</h1>
+
+{oldKeyword} old --- new {keyword}
 <div class="container-ricerca">
 	<div class="top-bar">
 		<form on:submit|preventDefault={handleRicerca} action="">
+			<select bind:value={limiteRicerca} name="range" id="range">
+				<option value="10">10</option>
+				<option value="50">50</option>
+				<option value="100">+100</option>
+			</select>
 			<span>🔎</span><input
 				bind:this={searchBar}
 				type="text"
 				bind:value={keyword}
 				on:input={resetSearchBar}
-				min="3"
+				min="2"
+				placeholder="Minimo 3 caratteri"
 				required
 			/>
 			<div class="filtro">
@@ -289,10 +299,11 @@
 		width: 90%;
 		display: flex;
 		flex-direction: column;
-		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+		box-shadow: var(--innerNeu);
 		justify-content: center;
 		align-items: center;
-		border-radius: 0.4rem;
+		border-radius: 1rem;
+		font-weight: 600;
 	}
 
 	.top-bar {
@@ -301,13 +312,26 @@
 		padding: 1rem;
 	}
 
+	select {
+		background-color: var(--sfondo);
+		outline: none;
+		border: var(--bordo);
+		border-radius: 0.5rem;
+		box-shadow: var(--innerNeu);
+	}
 	.selezione {
 		font-size: 1rem;
 		border: none;
-		background-color: rgb(207, 207, 207);
+		box-shadow: var(--neumorphism);
 		padding: 1rem;
 		border-radius: 0.5rem;
 		cursor: pointer;
+		transition: var(--velocita);
+		font-weight: 600;
+	}
+	.selezione:hover {
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
 	}
 
 	form {
@@ -317,12 +341,17 @@
 		padding: 1rem;
 	}
 
-	span{
+	span {
 		align-self: center;
 	}
 
 	.attiva {
-		background-color: blueviolet;
+		box-shadow: var(--innerNeu);
+	}
+
+	.filtro {
+		display: flex;
+		gap: 1rem;
 	}
 
 	.lista-risultati {
@@ -331,11 +360,15 @@
 		gap: 0.5rem;
 	}
 	.carica-altri {
-		background-color: blueviolet;
+		background-color: var(--submit);
 		font-size: 1.3rem;
 		padding: 0.2rem;
 		color: white;
 		margin: 1rem;
-		box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+		box-shadow: var(--neumorphism);
+	}
+
+	.carica-altri:hover {
+		box-shadow: var(--submitHover);
 	}
 </style>

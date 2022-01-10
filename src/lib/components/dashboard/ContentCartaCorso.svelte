@@ -43,10 +43,16 @@
 		gap: 1rem;
 		justify-content: space-between;
 		align-items: center;
-		box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.2);
+		box-shadow: var(--neumorphism);
 		border-radius: 0.4rem;
 		padding: 0.3rem;
 		cursor: pointer;
+		transition: var(--velocita);
+	}
+
+	.carta-corso:hover{
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
 	}
 	.modifica {
 		display: flex;
@@ -71,37 +77,11 @@
 		font-weight: 600;
 		height: 75px;
 		width: 75px;
-		background-color: red;
 		display: flex;
 		justify-content: center;
 		align-items: center;
 		border-radius: 0.5rem;
-	}
-
-	.anno1 {
-		background-color: greenyellow;
-	}
-
-	.anno2 {
-		background-color: yellow;
-	}
-
-	.anno3 {
-		background-color: red;
-	}
-
-	.anno4 {
-		background-color: darkred;
-	}
-
-	.anno5 {
-		background-color: rgb(29, 29, 29);
-		color: white;
-	}
-
-	.anno6 {
-		background-color: black;
-		color: white;
+		box-shadow: var(--innerNeu);
 	}
 
 	.nome {

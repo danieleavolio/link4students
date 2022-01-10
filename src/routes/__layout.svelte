@@ -21,7 +21,7 @@
 		align-items: center;
 		justify-self: center;
 		margin: 2rem 0;
-		font-weight: 400;
+		font-weight: 500;
 	}
 
 	:global(:root) {
@@ -39,11 +39,11 @@
 		--submit: rgb(45, 76, 200);
 		--resolve: rgb(72, 204, 36);
 		--submitHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
-			inset 20px 20px 60px #2641aa, inset -20px -20px 60px #3457e6;
+			inset 15px 15px 10px #2641aa, inset -15px -15px 10px #7792ff;
 		--alertHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
-			inset 20px 20px 60px #c44b4b, inset -20px -20px 60px #ff6565;
+			inset 15px 15px 15px #c44b4b, inset -15px -15px 15px #f07272;
 		--resolveHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
-			inset 20px 20px 60px #3dad1f, inset -20px -20px 60px #53eb29;
+			inset 15px 15px 15px #3dad1f, inset -15px -15px 15px #91f775;
 	}
 
 

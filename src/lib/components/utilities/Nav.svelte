@@ -193,7 +193,6 @@
 		border-radius: 100%;
 		width: 50px;
 		height: 50px;
-		border: none;
 		background-color: var(--sfondo);
 		box-shadow: var(--neumorphism);
 		cursor: pointer;
@@ -276,7 +275,7 @@
 	.logout {
 		border: none;
 		background-color: var(--sfondo);
-		color: darkred;
+		color: var(--alert);
 		border-radius: 8px;
 		padding: 6px;
 		cursor: pointer;
@@ -289,8 +288,10 @@
 	}
 
 	.logout:hover{
-		box-shadow: var(--innerNeu);
-		transform: var(--premuto)
+		box-shadow: var(--alertHover);
+		transform: var(--premuto);
+		color:var(--sfondo);
+		background-color: var(--alert);
 	}
 
 	.profilo {
@@ -328,7 +329,7 @@
 	img {
 		width: 75px;
 		height: 75px;
-		object-fit: contain;
+		object-fit: cover;
 		border-radius: 100%;
 		border: var(--bordo);
 	}

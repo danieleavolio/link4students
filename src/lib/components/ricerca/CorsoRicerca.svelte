@@ -6,7 +6,7 @@
         import { fly } from "svelte/transition";
     </script>
     
-    <div transition:fly class="corso-lista" on:click={() => goto(`/corsodilaurea/corso/${corso.id}`)}>
+    <div transition:fly={{y:100}} class="corso-lista" on:click={() => goto(`/corsodilaurea/corso/${corso.id}`)}>
         <div class="avatar">
             <p>{corso.data().nome[0]}</p>
         </div>
@@ -27,10 +27,18 @@
             gap: 1rem;
             justify-content: left;
             align-items: center;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            box-shadow: var(--neumorphism);
             margin: 1rem;
             cursor: pointer;
+            transition: var(--velocita);
         }
+
+        .corso-lista:hover{
+        box-shadow: var(--innerNeu);
+        transform: var(--premuto);
+    }
+
+    
     
         .avatar{
             width: 100px;
@@ -38,7 +46,13 @@
             border-radius: 100%;
             display: grid;
             place-items: center;
-            background-color: blueviolet;
+            box-shadow: var(--innerNeu);
             font-size: 2rem;
+            transition: var(--velocita);
         }
+
+        .corso-lista:hover > .avatar{
+        box-shadow: var(--neumorphism);
+        transform: var(--premuto);
+    }
     </style>

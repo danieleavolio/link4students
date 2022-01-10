@@ -242,12 +242,16 @@
 		display: flex;
 		align-self: center;
 		padding: 0.4rem;
-		background-color: blue;
 		border-radius: 6px;
-		color: white;
-		border: none;
+		color: var(--alert);
 		outline: none;
 		cursor: pointer;
+	}
+
+	.domanda-button:hover{
+		box-shadow: var(--alertHover);
+		color:var(--sfondo);
+		background-color: var(--alert);
 	}
 
 	.modal {
@@ -285,7 +289,6 @@
 	.close-button {
 		outline: none;
 		font-size: 1.2rem;
-		border: black solid;
 		border-radius: 50%;
 		width: 50px;
 		height: 50px;
@@ -293,6 +296,7 @@
 		position: absolute;
 		margin-left: -3rem;
 		margin-top: -3rem;
+		box-shadow: var(--innerNeu);
 	}
 	.titolo {
 		font-size: 1.3rem;
@@ -356,14 +360,16 @@
 		border: none;
 		outline: none;
 		width: 20%;
+		margin: 1rem;
 	}
 	.si {
-		background-color: darkred;
-		color: white;
+		background-color: var(--alert);
+		color: var(--sfondo);
 	}
 
-	.no {
-		background-color: white;
-		border: black solid;
+	.si:hover{
+		box-shadow: var(--alertHover);
 	}
+
+	
 </style>

@@ -57,7 +57,6 @@
 		let contenutoBio = profilo.bio != undefined ? profilo.bio : 'Bio vuota..';
 		let sommaVoti = 0;
 		let mediaUtente = 0;
-
 		if (esamiSuperati.length > 0) {
 			sommaVoti = 0;
 			esamiSuperati.forEach((elem) => (sommaVoti += elem.data().voto));
@@ -75,7 +74,8 @@
 				preferenza,
 				contenutoBio,
 				sommaVoti,
-				mediaUtente
+				mediaUtente,
+				collegati:false,
 			}
 		};
 	}
@@ -98,7 +98,7 @@
 	import { fade } from 'svelte/transition';
 	import { utentiSegnalati } from '$lib/stores/utentiStores';
 	import ModalAggLibretto from '$lib/components/profilo/ModalAggLibretto.svelte';
-	import { onMount } from 'svelte';
+	import { afterUpdate, beforeUpdate, onMount } from 'svelte';
 	import Libretto from '$lib/components/profilo/Libretto.svelte';
 	import LibrettoNascosto from '$lib/components/profilo/LibrettoNascosto.svelte';
 	let profilePicture;
@@ -140,15 +140,30 @@
 		}
 	};
 
-	let collegati = false;
+	export let collegati;
 	$: if (esamiSuperati.length > 0) {
 		sommaVoti = 0;
 		esamiSuperati.forEach((elem) => (sommaVoti += elem.data().voto));
 		mediaUtente = Math.round((sommaVoti / esamiSuperati.length) * 100) / 100;
 	}
 
+	afterUpdate(()=>{
+		if ($authStore.isLoggedIn) {
+			if (collegamentiUtente.find((elem) => elem.data().idCollegato == $authStore.user.uid)) {
+				collegati = true;
+			}
+		}
+	})
+
+
 	onMount(() => {
-		console.log('lol	');
+		console.log(collegati);
+		// Controllo per capire se devo mostrare o meno le informazioni
+		if ($authStore.isLoggedIn) {
+			if (collegamentiUtente.find((elem) => elem.data().idCollegato == $authStore.user.uid)) {
+				collegati = true;
+			}
+		}
 		// realtime updates
 		const queryEsamiSuperati = query(
 			collection(db, 'esamiLibretto'),
@@ -543,6 +558,7 @@
 		box-shadow: var(--neumorphism);
 		cursor: pointer;
 		transition: var(--velocita);
+		border: var(--bordo);
 	}
 
 	.bottone-file:hover {
@@ -644,12 +660,12 @@
 	}
 
 	.loading {
-		border: white solid;
-		border-top: black solid;
+		border: var(--testo) 10px solid;
+		border-top: var(--sfondo) 10px solid;
 		border-radius: 50%;
 		width: 100px;
 		height: 100px;
-		animation: loading 0.5s infinite;
+		animation: loading 1s linear infinite;
 		margin: auto;
 	}
 

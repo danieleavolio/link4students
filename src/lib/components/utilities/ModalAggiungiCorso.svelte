@@ -191,10 +191,8 @@
 		display: flex;
 		align-self: center;
 		padding: 0.4rem;
-		background-color: blue;
 		border-radius: 6px;
-		color: white;
-		border: none;
+		color: var(--submit);
 		outline: none;
 		cursor: pointer;
 		margin: auto;
@@ -226,7 +224,6 @@
 		max-width: 70vw;
 		width: 50%;
 		border-radius: 0.3rem;
-		background-color: white;
 		overflow: hidden;
 		padding: 2rem;
 		display: flex;
@@ -236,7 +233,6 @@
 	.close-button {
 		outline: none;
 		font-size: 1.2rem;
-		border: black solid;
 		border-radius: 50%;
 		width: 50px;
 		height: 50px;
@@ -244,6 +240,7 @@
 		position: absolute;
 		margin-left: -3rem;
 		margin-top: -3rem;
+		box-shadow: var(--innerNeu);
 	}
 	.titolo {
 		font-size: 1.3rem;
@@ -283,18 +280,19 @@
 	}
 
 	.submit-box > button {
-		background-color: blue;
 		font-size: 1rem;
 		border-radius: 8px;
-		border: none;
 		cursor: pointer;
 		padding: 5px 5px;
-		color: white;
 	}
-
+	.submit-box > button:hover{
+		box-shadow: var(--submitHover);
+		background-color: var(--submit);
+		color: var(--sfondo);
+	}
 	.loading-div {
-		border: white solid 10px;
-		border-top: solid black 10px;
+		border: var(--testo) solid 10px;
+		border-top: solid var(--sfondo) 10px;
 		width: 40px;
 		height: 40px;
 		border-radius: 50%;
@@ -321,17 +319,18 @@
 	.message-div > p {
 		font-family: 'Roboto', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 		text-align: center;
-		background-color: black;
+		background-color: var(--testo);
 		padding: 0;
 		border-radius: 4px;
 		font-weight: 700;
 		font-size: 2rem;
-		color: white;
+		color: var(--sfondo);
 	}
 
 	span {
-		background-color: blue;
-		color: white;
+		background-color: var(--testo);
+		color: var(--sfondo);
 		border-radius: 0.2rem;
+		padding: 0.2rem;
 	}
 </style>

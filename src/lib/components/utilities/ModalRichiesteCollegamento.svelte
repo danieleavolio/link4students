@@ -74,6 +74,12 @@
 		box-shadow: var(--neumorphism);
 	}
 
+	.domanda-button:hover{
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
+
+	}
+
 	.modal {
 		position: fixed;
 		top: 0;
@@ -99,7 +105,6 @@
 		max-width: 70vw;
 		width: 50%;
 		border-radius: 0.3rem;
-		background-color: white;
 		overflow: hidden;
 		padding: 2rem;
 		display: flex;
@@ -109,7 +114,6 @@
 	.close-button {
 		outline: none;
 		font-size: 1.2rem;
-		border: black solid;
 		border-radius: 50%;
 		width: 50px;
 		height: 50px;
@@ -117,6 +121,7 @@
 		position: absolute;
 		margin-left: -3rem;
 		margin-top: -3rem;
+		box-shadow: var(--innerNeu);
 	}
 	.titolo {
 		font-size: 1.3rem;
@@ -137,8 +142,8 @@
 	}
 
 	.loading-div {
-		border: white solid 10px;
-		border-top: solid black 10px;
+		border: var(--sfondo) solid 10px;
+		border-top: solid var(--testo) 10px;
 		width: 40px;
 		height: 40px;
 		border-radius: 50%;
@@ -176,5 +181,9 @@
 	.vuoto{
         font-size: 2rem;
         text-align: center;
+		box-shadow: var(--innerNeu);
+		padding: 1rem;
+		border-radius: 1rem;
+		font-weight: 600;
     }
 </style>

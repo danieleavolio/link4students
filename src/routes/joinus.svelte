@@ -108,7 +108,7 @@
 		await signInWithEmailAndPassword(auth, email, password)
 			.then(() => {
 				if ($authStore.isLoggedIn) {
-					console.log('entrato')
+					console.log('entrato');
 					if ($authStore.user.emailVerified == false) {
 						signOut(auth);
 						message = 'Email non verificata';
@@ -197,20 +197,22 @@
 		{/if}
 	{:else}
 		<p>Hai già effettuato l'accesso!</p>
-		<button class="torna-home" on:click={()=> goto('/')}>Torna alla home</button>
+		<button class="torna-home" on:click={() => goto('/')}>Torna alla home</button>
 	{/if}
 
-	<p class="message" transition:fade>{message}</p>
+	{#if message.length > 0}
+		<p class="message" transition:fade>{message}</p>
+	{/if}
 </main>
 
-<style>
+<style>				
 	main {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		margin-top: 30px;
-		background-color: #bdd8e7;
+		box-shadow: var(--innerNeu);
 		width: 80%;
 		margin: auto;
 		border-radius: 10px;
@@ -232,47 +234,58 @@
 	}
 	form > input {
 		width: 80%;
-		border: none;
-		border-bottom: #c300ff solid;
 		outline: none;
 		font-size: 1.1rem;
 	}
 
 	button {
 		border-radius: 10px;
-		border: none;
-		background-color: white;
 		cursor: pointer;
 		padding: 0.5rem;
 		max-width: 100px;
 		width: 100%;
-		color: white;
 	}
 
 	.accedi {
-		background-color: black;
+		color: var(--submit);
 		align-self: center;
 	}
 
+	.accedi:hover {
+		box-shadow: var(--submitHover);
+		color: var(--sfondo);
+		background-color: var(--submit);
+	}
+
 	.registrati {
-		background-color: white;
-		border: black solid;
-		color: black;
 		align-self: center;
 	}
 
 	.message {
-		background-color: #c300ff;
+		padding: 1rem;
+		margin: 1rem;
+		box-shadow: var(--innerNeu);
+		border-radius: 0.5rem;
+		color: var(--sfondo);
+		box-shadow: var(--alertHover);
+		background-color: var(--alert);
 	}
 
-	.torna-home{
+	.torna-home {
 		font-size: 1.3rem;
 		box-shadow: var(--neumorphism);
 		padding: 1rem;
 		border-radius: 0.5rem;
-		border:none;
-		color:var(--testo);
+		border: none;
+		color: var(--testo);
 		background-color: var(--sfondo);
 		max-width: 200px;
+	}
+	select {
+		border-radius: 0.5rem;
+		box-shadow: var(--neumorphism);
+		font-size: 1rem;
+		outline: none;
+		border: var(--bordo);
 	}
 </style>

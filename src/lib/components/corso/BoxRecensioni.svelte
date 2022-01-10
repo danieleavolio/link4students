@@ -54,7 +54,6 @@
 	.container {
 		margin-bottom: 2rem;
 		width: 90vw;
-		box-shadow: var(--innerNeu);
 		border-radius: 1rem;
 		padding: 1rem;
 	}

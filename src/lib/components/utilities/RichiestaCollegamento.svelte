@@ -1,4 +1,6 @@
 <script>
+import { goto } from '$app/navigation';
+
 	import { db } from '$lib/firebaseConfig';
 	import { authStore } from '$lib/stores/authStore';
 
@@ -42,7 +44,7 @@
 
 <div class="richiesta">
 	<div class="dati">
-		<div class="avatar">
+		<div class="avatar" on:click={() => goto(`/profilo/${richiesta.data().uidMittente}`)}>
 			<img src={richiesta.data().avatarMittente} alt="" />
 		</div>
 		<div class="nome-cognome">
@@ -63,10 +65,11 @@
 		align-items: center;
 		gap: 1rem;
 		padding: 1rem;
-		box-shadow: 0 8px 10px rgba(0, 0, 0, 0.3);
+		box-shadow: var(--neumorphism);
 		padding: 1rem;
 		border-radius: 0.4rem;
 		margin: 1rem;
+		font-weight: 500;
 	}
 
 	.dati {
@@ -80,6 +83,8 @@
 		width: 75px;
 		height: 75px;
 		border-radius: 100%;
+		cursor: pointer;
+		transition: var(--velocita);
 	}
 
 	.avatar > img {
@@ -87,6 +92,12 @@
 		height: 75px;
 		object-fit: cover;
 		border-radius: 100%;
+		border: var(--bordo);
+		box-shadow: var(--neumorphism);
+	}
+
+	.avatar:hover{
+		transform: var(--premuto);
 	}
 
 	.scelte {
@@ -103,10 +114,22 @@
 	}
 
 	.accetta {
-		background-color: rgb(85, 85, 243);
+		color: var(--submit);
+	}
+
+	.accetta:hover{
+		color: var(--sfondo);
+		background-color: var(--submit);
+		box-shadow: var(--submitHover);
 	}
 
 	.rifiuta {
-		background-color: rgb(187, 42, 42);
+		color: var(--alert);
+	}
+
+	.rifiuta:hover{
+		color: var(--sfondo);
+		background-color: var(--alert);
+		box-shadow: var(--alertHover);
 	}
 </style>

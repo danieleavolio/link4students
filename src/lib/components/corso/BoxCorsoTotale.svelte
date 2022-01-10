@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { db } from '$lib/firebaseConfig';
 	import { authStore } from '$lib/stores/authStore';
+	import { esamiLibretto } from '$lib/stores/esamiLibretto';
 
 	import { doc, onSnapshot } from 'firebase/firestore';
 
@@ -22,7 +23,6 @@
 	// Variabili dinamiche
 	$: difficoltaMancante = 5 - corso.data().mediaDifficolta;
 	$: utilitaMancante = 5 - corso.data().mediaUtilita;
-	
 
 	let mediaVoti = corso.data().mediaVoti == null ? '❌' : corso.data().mediaVoti;
 
@@ -100,12 +100,15 @@
 </div>
 <div class="recensione-box">
 	{#if $authStore.isLoggedIn}
-		{#if !recensito}
-			<p>Hai superato l'esame?</p>
-			<p>Lascia una recensione!</p>
-			<ModalRecensione idCorso={corso.data().codiceCorso} nome={corso.data().nome} />
-		{:else}
-			<p>Hai recensito questo esame! ☑️</p>
+	<!-- Se hai aggiunto l'esame al libretto, puoi lasciare una recensione -->
+		{#if $esamiLibretto.find((elem) => elem.data().codiceCorso == corso.data().codiceCorso)}
+			{#if !recensito}
+				<p>Hai superato l'esame?</p>
+				<p>Lascia una recensione!</p>
+				<ModalRecensione idCorso={corso.data().codiceCorso} nome={corso.data().nome} />
+			{:else}
+				<p>Hai recensito questo esame! ☑️</p>
+			{/if}
 		{/if}
 	{/if}
 </div>
@@ -128,8 +131,6 @@
 </div>
 
 <style>
-
-	
 	.container {
 		max-width: 90vw;
 		width: 100%;
@@ -148,7 +149,6 @@
 		justify-content: center;
 	}
 
-	
 	.left {
 		display: flex;
 		gap: 1rem;
@@ -217,12 +217,12 @@
 		outline: none;
 		padding: 10px;
 		cursor: pointer;
-		background-color: var(--sfondo)
+		background-color: var(--sfondo);
 	}
 
-	.singola-diff{
+	.singola-diff {
 		box-shadow: var(--innerNeu);
-		padding: 1rem ;
-		border-radius: 1rem;	
+		padding: 1rem;
+		border-radius: 1rem;
 	}
 </style>

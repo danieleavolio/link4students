@@ -29,8 +29,15 @@
 		gap: 1rem;
 		justify-content: center;
 		align-items: center;
-		box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+		box-shadow: var(--neumorphism);
 		padding: 1rem;
+		transition: var(--velocita);
+		cursor: pointer;
+	}
+
+	.container:hover{
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
 	}
 
 	.left {
@@ -38,10 +45,11 @@
 		font-size: 3rem;
 		width: 100px;
 		height: 100px;
-		background-color: blueviolet;
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		box-shadow: var(--innerNeu);
+		font-weight: 600;
 	}
 
 	.right {

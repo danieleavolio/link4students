@@ -78,9 +78,9 @@
 <style>
 	.sezione-cdl {
 		width: 100%;
-		border-radius: 0.3rem;
+		border-radius: 1rem;
 		padding: 0.8rem;
-		box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
+		box-shadow: var(--innerNeu);
 		margin: 1.5rem 0;
 	}
 	.sezione-bottoni {
@@ -96,16 +96,20 @@
 	.titolo-lista {
 		font-weight: 600;
 		padding: 0 0.5rem;
+		font-size: 1.5rem;
 	}
 
 	.indietro {
-		background-color: blue;
-		color: white;
+		background-color: var(--submit);
 		font-size: 1.2rem;
-		border: none;
 		outline: none;
 		border-radius: 0.5rem;
 		cursor: pointer;
+		color: var(--sfondo);
+	}
+
+	.indietro:hover{
+		box-shadow: var(--submitHover);
 	}
 
 	.lista-corsi {
@@ -114,7 +118,6 @@
 		grid-template-columns: auto auto;
 		flex-wrap: wrap;
 		gap: 2rem;
-		box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
 		padding: 1rem;
 	}
 

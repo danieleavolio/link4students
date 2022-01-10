@@ -89,12 +89,17 @@
 		display: flex;
 		align-self: center;
 		padding: 0.4rem;
-		background-color: blue;
 		border-radius: 6px;
-		color: white;
-		border: none;
 		outline: none;
 		cursor: pointer;
+		color: var(--submit);
+	}
+
+	.domanda-button:hover{
+		color: var(--sfondo);
+		box-shadow: var(--submitHover);
+		background-color: var(--submit);
+
 	}
 
 	.modal {
@@ -122,7 +127,6 @@
 		max-width: 70vw;
 		width: 50%;
 		border-radius: 0.3rem;
-		background-color: white;
 		overflow: hidden;
 		padding: 2rem;
 		display: flex;
@@ -132,7 +136,6 @@
 	.close-button {
 		outline: none;
 		font-size: 1.2rem;
-		border: black solid;
 		border-radius: 50%;
 		width: 50px;
 		height: 50px;
@@ -140,6 +143,7 @@
 		position: absolute;
 		margin-left: -3rem;
 		margin-top: -3rem;
+		box-shadow: var(--innerNeu);
 	}
 	.titolo {
 		font-size: 1.3rem;
@@ -179,13 +183,17 @@
 	}
 
 	.submit-box > button {
-		background-color: blue;
 		font-size: 1rem;
 		border-radius: 8px;
-		border: none;
 		cursor: pointer;
 		padding: 5px 5px;
-		color: white;
+		color: var(--submit);
+	}
+
+	.submit-box > button:hover{
+		box-shadow: var(--submitHover);
+		background-color: var(--submit);
+		color: var(--sfondo);
 	}
 
 	.loading-div {

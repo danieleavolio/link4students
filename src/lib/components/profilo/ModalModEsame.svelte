@@ -3,7 +3,8 @@
 
 	import { authStore } from '$lib/stores/authStore';
 	import { esamiLibretto } from '$lib/stores/esamiLibretto';
-	import { deleteDoc, doc, getDoc, increment, setDoc } from 'firebase/firestore';
+import { esamiRecensiti } from '$lib/stores/recensioniStore';
+	import { collection, deleteDoc, doc, getDoc, getDocs, increment, query, setDoc, where } from 'firebase/firestore';
 
 	let isOpen;
 	let caricamento = false;
@@ -77,9 +78,111 @@
 			messaggio = 'Esame modificato!';
 		});
 	};
+	const calcolaNuovaMedia = (esame, difficolta, utilita) => {
+		let datiMedia = {};
+		if (esame.numRecensioni != 1) {
+			let totDiffVecchia = esame.mediaDifficolta * esame.numRecensioni;
+			let nuovaMediaDifficolta = (totDiffVecchia - difficolta) / (esame.numRecensioni - 1);
 
+			let totUtilVecchia = esame.mediaUtilita * esame.numRecensioni;
+			let nuovaMediaUtilita = (totUtilVecchia - utilita) / (esame.numRecensioni - 1);
+
+			let nuovoNumeroRecensioni = esame.numRecensioni - 1;
+			datiMedia = {
+				numRecensioni: nuovoNumeroRecensioni,
+				mediaDifficolta: nuovaMediaDifficolta,
+				mediaUtilita: nuovaMediaUtilita
+			};
+		} else {
+			datiMedia = {
+				numRecensioni: 0,
+				mediaDifficolta: 0,
+				mediaUtilita: 0
+			};
+		}
+
+		return datiMedia;
+	};
+	const handleRecensione = async() =>{
+		let queryRecensione = query(collection(db,'recensioni'),where('idAutore','==',$authStore.user.uid), where('idCorso','==',esame.data().codiceCorso));
+		await getDocs(queryRecensione).then((res)=>{
+			if (!res.empty){
+				eliminaRecensione(res.docs[0])
+			}
+		})
+	}
+
+	const eliminaRecensione = (recensione) => {
+		// Eliminare tutte le interazioni con la recnesione ( like e dislike)
+		const queryInterazioni = query(
+			collection(db, 'votiRecensioni'),
+			where('idRecensione', '==', recensione.id)
+		);
+		getDocs(queryInterazioni).then((data) => {
+			data.docs.forEach((toDelete) => {
+				let docRef = toDelete.ref;
+				deleteDoc(docRef);
+			});
+		});
+		// Elimino le segnalazioni alla recensione quando eliminata
+
+		const querySegnalazioni = query(
+			collection(db, 'segnalazioniRecensioni'),
+			where('idRecensione', '==', recensione.id)
+		);
+
+		// Elimino le segnalazioni 1 alla volta
+		getDocs(querySegnalazioni).then((data) => {
+			data.docs.forEach((toDelete) => {
+				let docRef = toDelete.ref;
+				deleteDoc(docRef);
+			});
+		});
+
+		// Modifica la media dell'esame di cui la recensione fa parte
+		const q = query(
+			collection(db, 'corsidelcdl'),
+			where('codiceCorso', '==', recensione.data().idCorso)
+		);
+		getDocs(q).then((snapshot) => {
+			const dati = calcolaNuovaMedia(
+				snapshot.docs[0].data(),
+				recensione.data().votoDifficolta,
+				recensione.data().votoUtilita
+			);
+			setDoc(snapshot.docs[0].ref, dati, { merge: true })
+				.then(() => {
+					deleteDoc(doc(db, 'recensioni', recensione.id))
+						.then(() => {
+							esamiRecensiti.update(
+								(oldEsami) =>
+									(oldEsami = oldEsami.filter((item) => item != recensione.data().idCorso))
+							);
+							alert('Recensione eliminata!');
+							// Decremento il contatore del numero di recensioni
+							setDoc(
+								doc(db, 'statistiche', 'infoSito'),
+								{
+									numRecensioni: increment(-1)
+								},
+								{ merge: true }
+							);
+						})
+						.catch((error) => {
+							alert(error);
+						});
+				})
+				.catch((error) => {
+					alert(error);
+				});
+			// Elimina la recensione dalla collection recensioni
+		});
+	};
+
+	// Quando elimino dal libretto, devo anche eliminare la recensione per un fatto di pulizia
 	const eliminaDalLibretto = () => {
 		modificaVotiPreElimina();
+		handleRecensione();
 		deleteDoc(doc(db, 'esamiLibretto', esame.id));
 		close();
 	};

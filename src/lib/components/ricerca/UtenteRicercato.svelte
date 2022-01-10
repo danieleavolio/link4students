@@ -3,9 +3,10 @@ import { goto } from "$app/navigation";
 
 
     export let utente;
+    import { fly } from "svelte/transition";
 </script>
 
-<div class="utente-lista" on:click={() => goto(`/profilo/${utente.id}`)}>
+<div transition:fly={{y:100}} class="utente-lista" on:click={() => goto(`/profilo/${utente.id}`)}>
     <div class="avatar">
         <img src={utente.data().avatar} alt="">
     </div>
@@ -25,9 +26,15 @@ import { goto } from "$app/navigation";
         gap: 1rem;
         justify-content: left;
         align-items: center;
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        box-shadow: var(--neumorphism);
         margin: 1rem;
         cursor: pointer;
+        transition: var(--velocita)
+    }
+
+    .utente-lista:hover{
+        box-shadow: var(--innerNeu);
+        transform: var(--premuto);
     }
 
     .avatar,img{

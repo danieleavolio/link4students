@@ -35,6 +35,8 @@
 		}
 	});
 
+
+
 	const clickDomande = () => {
 		schermata = 'domande';
 		if (listaDomande.length == 0) {
@@ -337,6 +339,7 @@
 		margin: auto;
 	}
 
+	
 	@keyframes loading {
 		0% {
 			width: 10px;
@@ -345,4 +348,6 @@
 			width: 100px;
 		}
 	}
+
+	
 </style>

@@ -3,7 +3,7 @@
 </script>
 
 
-<div transition:fly class="vuoto">
+<div transition:fly={{y:100}} class="vuoto">
     <div class="emoji">
         <p>📁</p>
     </div>

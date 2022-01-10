@@ -27,8 +27,6 @@
 </script>
 
 <div class="sezione-cdl">
-	<p class="titolo">Aggiungi Corso di Laurea</p>
-
 	<div class="sezione-bottoni">
 		<ModalAggiungiCdl {listaCorsi} />
 		<div class="ricerca">
@@ -79,9 +77,9 @@
 <style>
 	.sezione-cdl {
 		width: 100%;
-		border-radius: 0.3rem;
+		border-radius: 0.5rem;
 		padding: 0.8rem;
-		box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
+		box-shadow: var(--innerNeu);
 	}
 	.sezione-bottoni {
 		display: flex;
@@ -104,7 +102,6 @@
 		grid-template-columns: auto auto;
 		flex-wrap: wrap;
 		gap: 2rem;
-		box-shadow: 0 5px 5px rgba(0, 0, 0, 0.4);
 		padding: 1rem;
 	}
 

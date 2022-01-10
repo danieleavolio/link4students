@@ -17,8 +17,6 @@
 
 	export let appunto;
 
-
-
 	const redirectProfilo = (id) => {
 		goto(`/profilo/${id}`);
 	};
@@ -55,7 +53,6 @@
 			alert(error.message);
 		});
 	};
-
 </script>
 
 <div in:fly={{ y: 100, duration: 1000 }} out:fade class="appunto">
@@ -148,9 +145,10 @@
 		box-shadow: var(--neumorphism);
 	}
 
-	.download-button:hover{
+	.download-button:hover {
 		box-shadow: var(--submitHover);
 		color: var(--sfondo);
+		background-color: var(--submit);
 	}
 	.delete-appunto {
 		display: flex;
@@ -170,8 +168,4 @@
 		margin-left: -3rem;
 		margin-top: -7rem;
 	}
-
-	
-
-	
 </style>

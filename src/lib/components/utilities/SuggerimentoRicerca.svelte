@@ -12,19 +12,18 @@
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 <div transition:fly={{ y: -200, duration: 400 }} class="suggerimento">
 	<p on:click={() => handleRicerca('utenti')}>
-		Cerca <span>{ricerca}</span> in Utenti <span>👤</span>
+		Cerca <span>{ricerca}</span> in Utenti <span class="emoji">👤</span>
 	</p>
 	<p on:click={() => handleRicerca('corsi')}>
-		Cerca <span>{ricerca}</span> in Corsi <span>🎓</span>
+		Cerca <span>{ricerca}</span> in Corsi <span class="emoji">🎓</span>
 	</p>
 	<p on:click={() => handleRicerca('appunti')}>
-		Cerca <span>{ricerca}</span> in Appunti <span> ✒️</span>
+		Cerca <span>{ricerca}</span> in Appunti <span class="emoji">✒️</span>
 	</p>
 </div>
 
 <style>
 	.suggerimento {
-
 		background-color: var(--sfondo);
 		color: var(--testo);
 		border-radius: 0.5rem;
@@ -36,9 +35,17 @@
 
 	
 	span {
-		background-color: rgba(225, 0, 255, 0.329);
-		padding: 0.1rem;
+		background-color: var(--testo);
+		padding: 0.2rem;
 		border-radius: 0.3rem;
+		color: var(--sfondo);
+		font-weight: 600;
+	}
+
+	.emoji{
+		font-weight: 600;
+		background-color: transparent;
+		color: var(--testo);
 	}
 
 	p {

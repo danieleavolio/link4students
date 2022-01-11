@@ -148,7 +148,7 @@
 		<a on:click={handleOpen} href="/"> <span class="icona">🏚️</span> Home</a>
 		<a on:click={handleOpen} href="/corsi"> <span class="icona">🎓</span> Corsi</a>
 		<a on:click={handleOpen} href="/info"> <span class="icona">📄</span> Info</a>
-		<a on:click={handleOpen} href="/info"> <span class="icona">✉️</span> Contattaci</a>
+		<a on:click={handleOpen} href="/contattaci"> <span class="icona">✉️</span> Contattaci</a>
 		{#if datiUtente != null}
 			{#if datiUtente.data().superuser}
 				<a on:click={handleOpen} href="/dashboard/adminpage"> <span class="icona">🔒</span> Admin</a>

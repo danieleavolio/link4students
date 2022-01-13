@@ -1,21 +1,38 @@
+<script context="module">
+	export async function load() {
+		// Prendo la lista di utenti
+
+		let utentiGenerali = [];
+		const queryUtenti = query(collection(db, 'users'));
+
+		await getDocs(queryUtenti).then((utenti) => {
+			utentiGenerali = utenti.docs;
+		});
+
+		return {
+			props: { utentiGenerali }
+		};
+	}
+</script>
+
 <script>
 	import AppuntoDash from '$lib/components/dashboard/AppuntoDash.svelte';
 	import BoxSelezioneAzione from '$lib/components/dashboard/BoxSelezioneAzione.svelte';
 	import DomandaDash from '$lib/components/dashboard/DomandaDash.svelte';
 	import RecensioneDash from '$lib/components/dashboard/RecensioneDash.svelte';
-	import SezioneCdl from '$lib/components/dashboard/SezioneCDL.svelte';
 	import UtenteDash from '$lib/components/dashboard/UtenteDash.svelte';
 	import VuotoDash from '$lib/components/dashboard/VuotoDash.svelte';
-	import SezioneCorso from '$lib/components/dashboard/SezioneCorso.svelte';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/stores/authStore';
 	import { db } from '$lib/firebaseConfig';
-	import { collection, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore';
+	import { collection, doc, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
+	import ListaUtentiDash from '$lib/components/dashboard/stats/ListaUtentiDash.svelte';
+	import UltimeAttivita from '$lib/components/dashboard/stats/UltimeAttivita.svelte';
 
 	let user;
-	let sezione;
 	let schermata;
+	export let utentiGenerali;
 
 	// Tutto quello che va mostrato qui
 	let listaDomande = [];
@@ -23,7 +40,6 @@
 	let listaRecensioni = [];
 	let listaAppunti = [];
 
-	let azione;
 	onMount(async () => {
 		if ($authStore.isLoggedIn) {
 			await getDoc(doc(db, 'users', $authStore.user.uid)).then((doc) => {
@@ -34,8 +50,6 @@
 			goto('/');
 		}
 	});
-
-
 
 	const clickDomande = () => {
 		schermata = 'domande';
@@ -107,9 +121,6 @@
 		}
 	};
 
-	const clickAzione = (action) => {
-		azione = action;
-	};
 	// Insicuro sul funzionamento
 	const cambiaRecensioniSegnalate = (idRecensione) => {
 		// Quando elimino una recensione, tolgo dalla lista locale tutte le segnalazioni di quella recensione
@@ -148,102 +159,92 @@
 	{#if $authStore.isLoggedIn}
 		{#if user != null && user.data().superuser}
 			<h2>Benvenuto amministratore</h2>
-
-			<div class="scegli-sezione">
-				<button on:click={() => ((sezione = 'segnalazioni'), (azione = ''))} class="bottone"
-					>Segnalazioni</button
-				>
-				<button on:click={() => ((sezione = 'gestione-corsi'), (azione = ''))} class="bottone"
-					>Gestione Corsi</button
-				>
-			</div>
-			{#if sezione == 'segnalazioni'}
-				<div class="prima-sezione">
-					<div class="prima-sinistra">
-						<div class="lista-schermate">
-							<p>Lista schermate</p>
-							<button on:click={clickUtenti} class="bottone">Utenti</button>
-							<button on:click={clickRecensioni} class="bottone">Recensioni</button>
-							<button on:click={clickDomande} class="bottone">Domande</button>
-							<button on:click={clickAppunti} class="bottone">Appunti</button>
-						</div>
+			<div class="prima-sezione">
+				<div class="prima-sinistra">
+					<div class="lista-schermate">
+						<p>Lista schermate</p>
+						<button on:click={clickUtenti} class="bottone">Utenti</button>
+						<button on:click={clickRecensioni} class="bottone">Recensioni</button>
+						<button on:click={clickDomande} class="bottone">Domande</button>
+						<button on:click={clickAppunti} class="bottone">Appunti</button>
 					</div>
-					<div class="prima-destra">
-						<div class="schermata-selezionata">
-							{#if schermata == 'utenti'}
-								<p class="selezionato">Segnalazioni {schermata}</p>
-								{#if listaUtenti.length == 0}
-									<VuotoDash oggetti="utenti" />
-								{:else}
-									<div class="lista-generica">
-										{#each listaUtenti as oggettoSegnalazione (oggettoSegnalazione.segnalazione.id)}
-											<UtenteDash
-												{oggettoSegnalazione}
-												{cambiaUtentiSegnalati}
-												{risolviSegnalazioneUtente}
-											/>
-										{/each}
-									</div>
-								{/if}
-							{:else if schermata == 'recensioni'}
-								<p class="selezionato">Segnalazioni {schermata}</p>
-								{#if listaRecensioni.length == 0}
-									<VuotoDash oggetti="recensioni" />
-								{:else}
-									<div class="lista-generica">
-										{#each listaRecensioni as oggettoSegnalazione (oggettoSegnalazione.segnalazione.id)}
-											<RecensioneDash
-												{oggettoSegnalazione}
-												{cambiaRecensioniSegnalate}
-												{risolviRecensione}
-											/>{/each}
-									</div>
-								{/if}
-							{:else if schermata == 'domande'}
-								<p class="selezionato">{schermata} da visionare</p>
-								{#if listaDomande.length == 0}
-									<VuotoDash oggetti="domande" />
-								{:else}
-									<div class="lista-generica">
-										{#each listaDomande as oggettoSegnalazione (oggettoSegnalazione.domanda.id)}
-											<DomandaDash
-												{oggettoSegnalazione}
-												{risolviSegnalazioneDomanda}
-												{cambiaDomandeSegnalate}
-											/>
-										{/each}
-									</div>
-								{/if}
-							{:else if schermata == 'appunti'}
-								<p class="selezionato">{schermata} da visionare</p>
-								{#if listaAppunti.length == 0}
-									<VuotoDash oggetti="appunti" />
-								{:else}
-									<div class="lista-generica">
-										{#each listaAppunti as appunto (appunto.id)}
-											<AppuntoDash {appunto} />
-										{/each}
-									</div>
-								{/if}
+				</div>
+				<div class="prima-destra">
+					<div class="schermata-selezionata">
+						{#if schermata == 'utenti'}
+							<p class="selezionato">Segnalazioni {schermata}</p>
+							{#if listaUtenti.length == 0}
+								<VuotoDash oggetti="utenti" />
+							{:else}
+								<div class="lista-generica">
+									{#each listaUtenti as oggettoSegnalazione (oggettoSegnalazione.segnalazione.id)}
+										<UtenteDash
+											{oggettoSegnalazione}
+											{cambiaUtentiSegnalati}
+											{risolviSegnalazioneUtente}
+										/>
+									{/each}
+								</div>
 							{/if}
-						</div>
+						{:else if schermata == 'recensioni'}
+							<p class="selezionato">Segnalazioni {schermata}</p>
+							{#if listaRecensioni.length == 0}
+								<VuotoDash oggetti="recensioni" />
+							{:else}
+								<div class="lista-generica">
+									{#each listaRecensioni as oggettoSegnalazione (oggettoSegnalazione.segnalazione.id)}
+										<RecensioneDash
+											{oggettoSegnalazione}
+											{cambiaRecensioniSegnalate}
+											{risolviRecensione}
+										/>{/each}
+								</div>
+							{/if}
+						{:else if schermata == 'domande'}
+							<p class="selezionato">{schermata} da visionare</p>
+							{#if listaDomande.length == 0}
+								<VuotoDash oggetti="domande" />
+							{:else}
+								<div class="lista-generica">
+									{#each listaDomande as oggettoSegnalazione (oggettoSegnalazione.domanda.id)}
+										<DomandaDash
+											{oggettoSegnalazione}
+											{risolviSegnalazioneDomanda}
+											{cambiaDomandeSegnalate}
+										/>
+									{/each}
+								</div>
+							{/if}
+						{:else if schermata == 'appunti'}
+							<p class="selezionato">{schermata} da visionare</p>
+							{#if listaAppunti.length == 0}
+								<VuotoDash oggetti="appunti" />
+							{:else}
+								<div class="lista-generica">
+									{#each listaAppunti as appunto (appunto.id)}
+										<AppuntoDash {appunto} />
+									{/each}
+								</div>
+							{/if}
+						{/if}
 					</div>
 				</div>
-			{:else if sezione == 'gestione-corsi'}
-				<div class="gestione-corsi">
-					<h1>Gestione dei corsi</h1>
-					{#if azione == 'addCdl'}
-						<SezioneCdl />
-					{:else if azione == 'addCorso'}
-						<SezioneCorso />
-					{:else}
-						<div class="pagina-azioni">
-							<BoxSelezioneAzione {clickAzione} emoji={'🎓'} azione="Gestisci Corsi di Laurea" />
-							<BoxSelezioneAzione {clickAzione} emoji={'📜'} azione="Gestisci Singoli Corsi" />
-						</div>
-					{/if}
+			</div>
+			<div class="gestione-corsi">
+				<h1>Gestione dei corsi</h1>
+				<div class="pagina-azioni">
+					<BoxSelezioneAzione emoji={'🎓'} azione="Gestisci Corsi di Laurea" />
+					<BoxSelezioneAzione emoji={'📜'} azione="Gestisci Singoli Corsi" />
 				</div>
-			{/if}
+			</div>
+
+			<div class="statistiche-sito">
+				<h1>Statistiche del sito</h1>
+				<div class="box-statistiche">
+					<ListaUtentiDash {utentiGenerali} />
+					<UltimeAttivita />
+				</div>
+			</div>
 		{:else}
 			<div class="loading" />
 		{/if}
@@ -303,14 +304,6 @@
 		white-space: nowrap;
 	}
 
-	
-
-	.scegli-sezione {
-		display: flex;
-		justify-content: space-around;
-		gap: 1rem;
-	}
-
 	.gestione-corsi {
 		width: 90vw;
 		display: flex;
@@ -323,7 +316,6 @@
 		width: 80%;
 		height: 80%;
 		display: flex;
-		flex-direction: column;
 		align-items: center;
 		justify-content: center;
 		gap: 1rem;
@@ -339,7 +331,6 @@
 		margin: auto;
 	}
 
-	
 	@keyframes loading {
 		0% {
 			width: 10px;
@@ -349,5 +340,8 @@
 		}
 	}
 
-	
+	.box-statistiche {
+		display: grid;
+		grid-template-columns: 1fr 2fr;
+	}
 </style>

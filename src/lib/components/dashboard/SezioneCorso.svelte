@@ -77,7 +77,7 @@
 
 <style>
 	.sezione-cdl {
-		width: 100%;
+		width: 90%;
 		border-radius: 1rem;
 		padding: 0.8rem;
 		box-shadow: var(--innerNeu);

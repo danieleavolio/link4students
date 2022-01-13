@@ -1,13 +1,15 @@
 <script>
+import { goto } from "$app/navigation";
+
+
 	export let emoji;
 	export let azione;
-	export let clickAzione;
 
 	const chooseAzione = () => {
 		if (emoji == '🎓') {
-			clickAzione('addCdl');
+			goto('/dashboard/sezioni/gestiscicdl');
 		} else if (emoji == '📜') {
-			clickAzione('addCorso');
+			goto('/dashboard/sezioni/gestiscicorso');
 		}
 	};
 </script>

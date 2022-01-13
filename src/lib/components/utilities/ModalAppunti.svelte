@@ -2,7 +2,7 @@
 	import { db, storage } from '$lib/firebaseConfig';
 
 	import { authStore } from '$lib/stores/authStore';
-	import { collection, doc, getDoc, increment, setDoc } from 'firebase/firestore';
+	import { collection, doc, getDoc, increment, serverTimestamp, setDoc } from 'firebase/firestore';
 	import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 
 	let isOpen = false;
@@ -23,7 +23,6 @@
 
 	const mandaAppunti = () => {
 		if (fileAppunti) {
-			console.log(corso);
 			caricamento = true;
 			// Faccio un file con il nome e l'id dello studente per non avere sovrascritture
 			let appuntiRef = ref(storage, `appunti/${fileAppunti.name}${$authStore.user.uid}`);
@@ -42,7 +41,8 @@
 							contenuto: contenuto,
 							revisionato: false,
 							likes: 0,
-							dislikes: 0
+							dislikes: 0,
+							data: serverTimestamp()
 						};
 						// Aumento il numero di appunti nel sito di 1
 						setDoc(doc(collection(db, 'appunti')), data)

@@ -35,7 +35,6 @@
 				isLoggedIn: true,
 				user: fbUser
 			};
-			authStore.update((oldStore) => data);
 
 			// Se per qualche motivo tu fossi bannato
 			await getDoc(doc(db, 'users', fbUser.uid)).then((user) => {
@@ -49,6 +48,11 @@
 					}
 				}
 			});
+			// Passo le info allo store dopo che carico le info utente
+			// Altrimenti non potrebbe aspettare l'AWAIT del getDoc delle info
+			// E se si aprisse la Nav appena renderizzata, non ci sarebbero le info utili per andare al profilo
+			authStore.update((oldStore) => data);
+
 			// Quando loggo prendo l'id degli esami e li passo allo store apposito
 			let idEsami = [];
 			let queryIdEsami = query(

@@ -6,13 +6,14 @@
 	export async function load({ page }) {
 		let tipo = page.query.get('tipo');
 		let keyword = page.query.get('keyword');
+		let oldTipo = tipo;
 
-		// NON RIESCO A TROVARE UN MODO PER FARE DELLE QUERY LEGGERE OK?
+		// NON RIESCO A TROVARE UN MODO PER FARE DELLE QUERY LEGGERE
 		let lista = [];
-
+		console.log('im here');
 		switch (tipo) {
 			case 'utenti':
-				const q = query(collection(db, 'users'), limit(10));
+				const q = query(collection(db, 'users'), limit(10 * 10));
 				await getDocs(q).then((results) => {
 					lista = results.docs.filter((utente) =>
 						utente.data().nome.toLowerCase().includes(keyword.toLowerCase())
@@ -20,20 +21,23 @@
 				});
 				break;
 			case 'corsi':
-				const q2 = query(collection(db, 'corsidelcdl'), limit(10));
+				const q2 = query(collection(db, 'corsidelcdl'), limit(10 * 10));
 				await getDocs(q2).then((results) => {
 					lista = results.docs.filter((corso) =>
 						corso.data().nome.toLowerCase().includes(keyword.toLowerCase())
 					);
 				});
+
 				break;
 			case 'appunti':
-				const q3 = query(collection(db, 'appunti'), limit(10));
+				const q3 = query(collection(db, 'appunti'), limit(10 * 10));
 				await getDocs(q3).then((results) => {
 					lista = results.docs.filter((appunto) =>
 						appunto.data().titoloAppunti.toLowerCase().includes(keyword.toLowerCase())
 					);
 				});
+				break;
+			default:
 				break;
 		}
 
@@ -41,7 +45,8 @@
 			props: {
 				tipo,
 				keyword,
-				lista
+				lista,
+				oldTipo,
 			}
 		};
 	}
@@ -56,13 +61,13 @@
 	export let tipo;
 	export let keyword;
 	export let lista;
+	export let oldTipo;
 
 	let listaAppunti;
 	let listaUtenti;
 	let listaCorsi;
 	let oldKeyword = keyword;
 	let messaggio = '';
-	let oldTipo = tipo;
 
 	let noMoreRes = false;
 
@@ -107,7 +112,6 @@
 				case 'appunti':
 					ricercaByAppunti();
 					oldKeyword = keyword;
-
 					break;
 				default:
 					break;
@@ -230,8 +234,7 @@
 	<title>Pagina di ricerca</title>
 </svelte:head>
 <h1>Pagina ricerca</h1>
-
-{oldKeyword} old --- new {keyword}
+{tipo} {keyword} {oldTipo}
 <div class="container-ricerca">
 	<div class="top-bar">
 		<form on:submit|preventDefault={handleRicerca} action="">
@@ -262,7 +265,6 @@
 			</div>
 		</form>
 	</div>
-
 	<!-- Lista risultati -->
 	<div class="lista-risultati">
 		{#if lista.length > 0}

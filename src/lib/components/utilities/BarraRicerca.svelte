@@ -15,7 +15,7 @@
 	<form on:submit|preventDefault={() => gotoRicerca('utenti')} action="">
 		<span>🔎</span><input bind:value={ricerca} type="text" required min="2" />
 	</form>
-	{#if ricerca.length >= 4}
+	{#if ricerca.length >= 3}
 		<SuggerimentoRicerca bind:ricerca {gotoRicerca} />
 	{/if}
 </div>

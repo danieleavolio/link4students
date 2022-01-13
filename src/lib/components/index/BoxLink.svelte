@@ -2,7 +2,7 @@
 	import { goto } from '$app/navigation';
 
 	export let nome;
-	export let image;
+	export let emoji;
 	export let linkto;
 
 	const redirectTo = (linkto) => {
@@ -11,9 +11,7 @@
 </script>
 
 <div on:click={() => redirectTo(linkto)} class="container">
-	<div class="image-div">
-		<img src="/images/{image}.png" alt="" />
-	</div>
+	<p class="emoji">{emoji}</p>
 	<p>{nome}</p>
 </div>
 
@@ -37,13 +35,14 @@
 	   transform: var(--premuto);
 	   
     }
-	.image-div {
+	.emoji{
+		justify-self: center;
+		align-self: center;
+		font-size: 4rem;
+		margin: 0;
 		width: 100px;
-		height: 100px;
+		text-align: center;
 	}
 
-	.image-div > img {
-		width: 100%;
-		height: 100%;
-	}
+	
 </style>

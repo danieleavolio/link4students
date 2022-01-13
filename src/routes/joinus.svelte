@@ -46,6 +46,12 @@
 	let corsoDiLaurea: number;
 	let annoDiCorso: number;
 
+
+	$: if ($authStore.isLoggedIn){
+		if ($authStore.user.emailVerified){
+			goto('/')
+		}
+	}
 	const randomAvatar = (min, max) => {
 		return Math.floor(Math.random() * (max - min + 1) + min);
 	};

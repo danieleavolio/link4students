@@ -10,11 +10,11 @@
 	import ModalAppunti from '../utilities/ModalAppunti.svelte';
 	import Vuoto from '../utilities/Vuoto.svelte';
 
-	export let idCorso;
+	export let corso;
 	let appunti = [];
 
 	onMount(() => {
-		const queryAppunti = query(collection(db, 'appunti'), where('idCorso', '==', idCorso));
+		const queryAppunti = query(collection(db, 'appunti'), where('idCorso', '==', corso.data().codiceCorso));
 		onSnapshot(queryAppunti, (snapshot) => {
 			appunti = snapshot.docs;
 		});
@@ -24,7 +24,7 @@
 <div class="container">
 	<h1>Lista degli appunti</h1>
 	<div class="utilities">
-		<ModalAppunti {idCorso} />
+		<ModalAppunti {corso} />
 	</div>
 	{#if appunti.length == 0}
 		<Vuoto oggetti={'appunti'} />

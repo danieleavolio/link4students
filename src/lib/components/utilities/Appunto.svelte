@@ -307,7 +307,11 @@
 			</div>
 			<p>{appunto.data().nome}</p>
 		</div>
-		<button on:click={eliminaAppunto} class="delete-appunto">🗑️</button>
+		{#if $authStore.isLoggedIn}
+			{#if $authStore.user.uid == appunto.data().idUtente}
+				<button on:click={eliminaAppunto} class="delete-appunto">🗑️</button>
+			{/if}
+		{/if}
 	</div>
 
 	<div class="contenuto">
@@ -365,7 +369,6 @@
 		flex-direction: column;
 		justify-content: space-between;
 		box-shadow: var(--neumorphism);
-		
 	}
 	.nome-immagine {
 		display: flex;
@@ -381,7 +384,7 @@
 		transition: var(--velocita);
 	}
 
-	.avatar:hover{
+	.avatar:hover {
 		transform: var(--premuto);
 	}
 
@@ -424,7 +427,7 @@
 		box-shadow: var(--neumorphism);
 		transition: var(--velocita);
 	}
-	.download-button:hover{
+	.download-button:hover {
 		color: var(--sfondo);
 		background-color: var(--submit);
 		box-shadow: var(--submitHover);
@@ -450,19 +453,16 @@
 		box-shadow: var(--innerNeu);
 	}
 
-	
-
 	.like-dislike {
 		display: flex;
 		gap: 1rem;
 	}
 
-
-	.like:hover{
+	.like:hover {
 		box-shadow: var(--submitHover);
 	}
 
-	.dislike:hover{
+	.dislike:hover {
 		box-shadow: var(--alertHover);
 	}
 	.singolo-bottone {
@@ -473,30 +473,29 @@
 	}
 
 	.liked {
-		background-color: var(--submit)
+		background-color: var(--submit);
 	}
 
 	.disliked {
 		background-color: var(--alert);
 	}
 
-
-	.non-disponibile{
+	.non-disponibile {
 		opacity: 50%;
 	}
 
-	.non-disponibile:hover{
+	.non-disponibile:hover {
 		transform: none;
 		box-shadow: var(--neumorphism);
 		cursor: auto;
 	}
 
-	:disabled{
+	:disabled {
 		opacity: 50%;
 		box-shadow: var(--neumorphism);
 		cursor: auto;
 	}
-	.titolo-appunti{
+	.titolo-appunti {
 		font-weight: 600;
 	}
 </style>

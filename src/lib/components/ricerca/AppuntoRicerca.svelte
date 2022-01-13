@@ -1,15 +1,32 @@
 <script>
+	import { goto } from '$app/navigation';
 
 	export let appunto;
 	import { fly } from 'svelte/transition';
+
+
+	let showName = false;
+
+
+
 </script>
 
-<div transition:fly={{y:100}} class="appunto-lista">
+<div transition:fly={{ y: 100 }} class="appunto-lista">
 	<div class="avatar">
-		<p>{appunto.data().titoloAppunti[0]}</p>
+		<p>{appunto.data().titoloAppunti[0].toUpperCase()}</p>
 	</div>
 	<div class="nome">
-		<p>{appunto.data().titoloAppunti}</p>
+		<p class="titolo">{appunto.data().titoloAppunti}</p>
+		<div class="info">
+			<p class="autore" on:click={() => goto(`profilo/${appunto.data().idUtente}`)}>
+				{appunto.data().nome}
+			</p>
+			<!-- svelte-ignore a11y-mouse-events-have-key-events -->
+			{#if showName}
+				<p transition:fly={{y:-100}} class="comparsa">{appunto.data().idCorso}</p>
+			{/if}
+			<p on:click={() => goto(`/corsodilaurea/corso/${appunto.data().corsoUid}`)} class="corso" on:mouseleave={() => showName = false} on:mouseenter={() => showName = true}>Corso</p>
+		</div>
 	</div>
 	{#if appunto.data().revisionato}
 		<a href={appunto.data().urlAppunti} download={appunto.data().titoloAppunti} target="_blank"
@@ -22,45 +39,104 @@
 
 <style>
 	.appunto-lista {
-		width: 300px;
-		height: 100px;
+		width: 400px;
+		height: 150px;
 		border-radius: 0.5rem;
 		padding: 1rem;
-		display: flex;
-		gap: 1rem;
-		justify-content: left;
-		align-items: center;
+		display: grid;
+		grid-template-columns: 1fr 2fr 1fr;
+		place-items: center;
 		box-shadow: var(--neumorphism);
 		margin: 1rem;
 	}
 
 	.avatar {
-		width: 100px;
-		height: 100px;
+		width: 80px;
+		height: 80px;
 		border-radius: 100%;
 		display: grid;
 		place-items: center;
-		font-size: 2rem;
+		font-size: 1.5rem;
 		font-weight: 600;
-        box-shadow: var(--innerNeu);
+		box-shadow: var(--innerNeu);
 	}
 
+	.autore {
+		cursor: pointer;
+		transition: var(--velocita);
+		width: fit-content;
+		padding: 0.1rem;
+		border-radius: 0.2rem;
+	}
+
+	.autore:hover {
+		background-color: var(--testo);
+		color: var(--sfondo);
+	}
+
+	.titolo {
+		font-size: 1.3rem;
+		font-weight: 900;
+		text-transform: uppercase;
+	}
+
+	.info{
+		display: flex;
+		gap: 1rem;
+		align-items: center;
+	}
 	a {
 		text-decoration: none;
 		padding: 0.3rem;
-		font-size: 1.2rem;
+		font-size: 1rem;
 		border-radius: 0.5rem;
 		transition: all 0.5s ease;
-        color: var(--testo);
-        box-shadow: var(--neumorphism);
-        transition: var(--velocita)
+		color: var(--testo);
+		box-shadow: var(--neumorphism);
+		transition: var(--velocita);
 	}
 
-    a:hover{
-        box-shadow: var(--innerNeu);
-        transform: var(--premuto);
-    
-    }
+	a:hover {
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
+	}
+
+	button {
+		border-radius: 1rem;
+	}
+
+	button:disabled {
+		opacity: 50%;
+	}
+
+	button:disabled:hover {
+		transform: none;
+		box-shadow: var(--neumorphism);
+	}
+
+	.comparsa{
+		position: fixed;
+		box-shadow: var(--innerNeu);
+		padding: 0.3rem;
+		border-radius: 0.5rem;
+		margin-bottom: 5rem;
+		margin-left: 3.5rem;
+		cursor: pointer;
+	}
+
+	.corso{
+		cursor: pointer;
+		transition: var(--velocita);
+		width: fit-content;
+		padding: 0.1rem;
+		border-radius: 0.2rem;
+	}
+	.corso:hover {
+		background-color: var(--testo);
+		color: var(--sfondo);
+	}
 
 	
+
+
 </style>

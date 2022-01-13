@@ -15,7 +15,7 @@
 	let caricamento = false;
 	let messaggio = '';
 
-	export let idCorso;
+	export let corso;
 
 	const onChange = () => {
 		fileAppunti = bottoneFile.files[0];
@@ -23,6 +23,7 @@
 
 	const mandaAppunti = () => {
 		if (fileAppunti) {
+			console.log(corso);
 			caricamento = true;
 			// Faccio un file con il nome e l'id dello studente per non avere sovrascritture
 			let appuntiRef = ref(storage, `appunti/${fileAppunti.name}${$authStore.user.uid}`);
@@ -32,7 +33,8 @@
 					getDownloadURL(appuntiRef).then((url) => {
 						let data = {
 							idUtente: $authStore.user.uid,
-							idCorso: idCorso,
+							idCorso: corso.data().codiceCorso,
+							corsoUid: corso.id,
 							urlAppunti: url,
 							avatar: user.data().avatar,
 							nome: user.data().nome,

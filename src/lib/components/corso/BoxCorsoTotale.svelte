@@ -126,7 +126,7 @@
 	{:else if scelta == 'Domande'}
 		<BoxDomande idCorso={corso.data().codiceCorso} />
 	{:else if scelta == 'Appunti'}
-		<BoxAppunti idCorso={corso.data().codiceCorso} />
+		<BoxAppunti corso={corso} />
 	{/if}
 </div>
 

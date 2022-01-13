@@ -15,7 +15,7 @@
 		});
 
 		// Prova per realtime updates
-		const cambiamenti = onSnapshot(doc(db, 'corsidelcdl', idcorso), (documento) => {
+		onSnapshot(doc(db, 'corsidelcdl', idcorso), (documento) => {
 			corso = documento;
 		});
 

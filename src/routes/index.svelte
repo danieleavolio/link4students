@@ -27,6 +27,7 @@
 	import { db, storage } from '$lib/firebaseConfig';
 	import BoxStatistiche from '$lib/components/index/BoxStatistiche.svelte';
 	import { doc, getDoc, onSnapshot } from 'firebase/firestore';
+import Footer from '$lib/components/utilities/Footer.svelte';
 	let imagesLinks = [];
 
 	// onMount(() => {
@@ -54,18 +55,21 @@
 
 <div class="main-links">
 	{#if !$authStore.isLoggedIn}
-		<BoxLink nome="Unisciti a noi!" image="highfive" linkto="joinus" />
+		<BoxLink nome="Unisciti a noi!" emoji="👏" linkto="joinus" />
 	{:else}
-		<BoxLink nome="Profilo" image="userPic" linkto="profilo/{$authStore.user.uid}" />
+		<BoxLink nome="Profilo" emoji="👥" linkto="profilo/{$authStore.user.uid}" />
 	{/if}
 
-	<BoxLink nome="Corsi" image="corsi" linkto="corsi" />
-	<BoxLink nome="Portale" image="unical" linkto="www.unical.it" />
+	<BoxLink nome="Corsi" emoji="🎓	" linkto="corsi" />
+	<BoxLink nome="Ricerca" emoji="🔎" linkto="ricerca" />
 </div>
 
 <BoxStatistiche {statistiche} />
 
+
 <style>
+	
+	
 	h1 {
 		font-weight: 900;
 		font-size: 3rem;

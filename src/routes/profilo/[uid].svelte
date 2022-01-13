@@ -21,6 +21,8 @@
 		let esamiCdl = [];
 		let esamiSuperati = [];
 		let collegamentiUtente = [];
+		let appuntiCaricati = [];
+
 		await getDocs(queryToDo).then(async (document) => {
 			let docs = document.docs;
 			profilo = docs[0].data();
@@ -51,6 +53,11 @@
 			});
 		});
 
+		let queryAppunti = query(collection(db, 'appunti'), where('idUtente', '==', uid));
+		await getDocs(queryAppunti).then((lista) => {
+			appuntiCaricati = lista.docs;
+		});
+
 		// Controlli fatti quando faccio il load della pagina per avere tutto pronto
 		let isVotiMostrati = profilo.votiMostrati == undefined ? true : profilo.votiMostrati;
 		let preferenza = profilo.preferenzaLibretto == undefined ? 'tutti' : profilo.preferenzaLibretto;
@@ -75,7 +82,8 @@
 				contenutoBio,
 				sommaVoti,
 				mediaUtente,
-				collegati:false,
+				collegati: false,
+				appunti: appuntiCaricati
 			}
 		};
 	}
@@ -91,10 +99,11 @@
 	export let contenutoBio;
 	export let sommaVoti;
 	export let mediaUtente;
+	export let appunti;
 
 	import SegnalazioneUtente from '$lib/components/utilities/SegnalazioneUtente.svelte';
 	import { authStore } from '$lib/stores/authStore';
-	import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+	import { getDownloadURL, listAll, ref, uploadBytes } from 'firebase/storage';
 	import { fade } from 'svelte/transition';
 	import { utentiSegnalati } from '$lib/stores/utentiStores';
 	import ModalAggLibretto from '$lib/components/profilo/ModalAggLibretto.svelte';
@@ -104,6 +113,7 @@
 	let profilePicture;
 	let file;
 	import { fly } from 'svelte/transition';
+	import Appunto from '$lib/components/utilities/Appunto.svelte';
 
 	const onChange = () => {
 		// Quando scelgo l'immagine viene assegnato a questo file
@@ -147,14 +157,13 @@
 		mediaUtente = Math.round((sommaVoti / esamiSuperati.length) * 100) / 100;
 	}
 
-	afterUpdate(()=>{
+	afterUpdate(() => {
 		if ($authStore.isLoggedIn) {
 			if (collegamentiUtente.find((elem) => elem.data().idCollegato == $authStore.user.uid)) {
 				collegati = true;
 			}
 		}
-	})
-
+	});
 
 	onMount(() => {
 		console.log(collegati);
@@ -248,6 +257,13 @@
 			});
 		}
 	};
+
+	// Se gli appunti vengono eliminati aggiorno la UI tramite questo
+	let queryAppunti = query(collection(db, 'appunti'), where('idUtente', '==', profilo.uid));
+	onSnapshot(queryAppunti, (lista) =>{
+		appunti = lista.docs;
+	})
+
 </script>
 
 <svelte:head>
@@ -418,6 +434,19 @@
 {:else}
 	<div class="loading" />
 {/if}
+
+<p class="titolo-appunti">Appunti di {profilo.nome}</p>
+<div class="appunti">
+	<div class="lista-appunti">
+		{#if appunti.length > 0}
+			{#each appunti as appunto}
+				<Appunto {appunto} />
+			{/each}
+			{:else}
+			<p class="nessuno">Nessun appunto caricato</p>
+		{/if}
+	</div>
+</div>
 
 <style>
 	button {
@@ -680,5 +709,26 @@
 
 	.collegati {
 		color: var(--collegati);
+	}
+
+	.titolo-appunti {
+		font-size: 1.5rem;
+		text-align: center;
+	}
+
+	.appunti {
+		margin: 2rem;
+		box-shadow: var(--innerNeu);
+		padding: 2rem;
+		border-radius: 1rem;
+		width: 80vw;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.nessuno{
+		font-size: 1.5rem;
 	}
 </style>

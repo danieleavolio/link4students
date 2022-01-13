@@ -5,7 +5,6 @@
 
 	const handleRicerca = (tipo) => {
 		gotoRicerca(tipo);
-		ricerca = '';
 	};
 </script>
 

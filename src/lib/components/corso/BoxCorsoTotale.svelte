@@ -85,11 +85,11 @@
 				<div class="difficolta">
 					<p class="singola-diff">
 						Difficolta: <span> {stampaEmoji(corso.data().mediaDifficolta, '🧠')} </span>
-						<span class="mancanti"> {stampaEmoji(difficoltaMancante, '🧠')} </span>
+						<span class="mancanti"> {stampaEmoji(difficoltaMancante, '⚫')} </span>
 					</p>
 					<p class="singola-diff">
 						Utilita: <span>{stampaEmoji(corso.data().mediaUtilita, '🎓')}</span>
-						<span class="mancanti"> {stampaEmoji(utilitaMancante, '🎓')} </span>
+						<span class="mancanti"> {stampaEmoji(utilitaMancante, '⚫')} </span>
 					</p>
 				</div>
 			{:else}

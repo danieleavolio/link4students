@@ -1,10 +1,10 @@
 <script>
-import { goto } from '$app/navigation';
+	import { goto } from '$app/navigation';
 
 	import { db } from '$lib/firebaseConfig';
 	import { authStore } from '$lib/stores/authStore';
 
-	import { addDoc, collection, deleteDoc, doc, getDoc } from 'firebase/firestore';
+	import { addDoc, collection, deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
 
 	export let richiesta;
 
@@ -16,23 +16,25 @@ import { goto } from '$app/navigation';
 			nomeCognomeCollegato: richiesta.data().nomeCognomeMittente,
 			avatarCollegato: richiesta.data().avatarMittente
 		};
+
+		// Devo creare l'id del collegamento per poterlo trovare con le regole del db, altrimenti sarebbe impossibile.
+
+		let idDocumento1 = $authStore.user.uid + richiesta.data().uidMittente;
+
 		// Bisogna creare 2 collegamenti per ogni collegamento, perchè ci dev'essere per entrambi
+
 		getDoc(doc(db, 'users', $authStore.user.uid)).then((utente) => {
 			let dati2 = {
 				idUtente: richiesta.data().uidMittente,
 				idCollegato: $authStore.user.uid,
 				nomeCognomeCollegato: utente.data().nome + ' ' + utente.data().cognome,
-                avatarCollegato: utente.data().avatar
+				avatarCollegato: utente.data().avatar
 			};
-			addDoc(collection(db, 'collegamenti'), dati)
-				.then(() => {
-					addDoc(collection(db, 'collegamenti'), dati2);
-					// una volta creato il documento, cancello la richiesta
-					deleteDoc(doc(db, 'richiesteCollegamento', richiesta.id));
-				})
-				.catch((error) => {
-					alert(error.message);
-				});
+			let idDocumento2 = richiesta.data().uidMittente + $authStore.user.uid;
+			setDoc(doc(db, 'collegamenti', idDocumento1), dati).then(() => {
+				setDoc(doc(db, 'collegamenti', idDocumento2), dati2);
+				deleteDoc(doc(db, 'richiesteCollegamento', richiesta.id));
+			});
 		});
 	};
 
@@ -96,7 +98,7 @@ import { goto } from '$app/navigation';
 		box-shadow: var(--neumorphism);
 	}
 
-	.avatar:hover{
+	.avatar:hover {
 		transform: var(--premuto);
 	}
 
@@ -117,7 +119,7 @@ import { goto } from '$app/navigation';
 		color: var(--submit);
 	}
 
-	.accetta:hover{
+	.accetta:hover {
 		color: var(--sfondo);
 		background-color: var(--submit);
 		box-shadow: var(--submitHover);
@@ -127,7 +129,7 @@ import { goto } from '$app/navigation';
 		color: var(--alert);
 	}
 
-	.rifiuta:hover{
+	.rifiuta:hover {
 		color: var(--sfondo);
 		background-color: var(--alert);
 		box-shadow: var(--alertHover);

@@ -24,7 +24,7 @@
 	$: difficoltaMancante = 5 - corso.data().mediaDifficolta;
 	$: utilitaMancante = 5 - corso.data().mediaUtilita;
 
-	let mediaVoti = corso.data().mediaVoti == null ? '❌' : corso.data().mediaVoti;
+	let mediaVoti = corso.data().mediaVoti == null ? '❌' : Math.round(corso.data().mediaVoti);
 
 	// Real-time updates per le info date dagli studenti
 	onSnapshot(doc(db, 'corsidelcdl', corso.id), (documento) => {

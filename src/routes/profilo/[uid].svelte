@@ -11,6 +11,7 @@
 		where
 	} from 'firebase/firestore';
 	export async function load({ page }) {
+		console.log('caricato on load');
 		// Prendere da Firebase le informazioni dell'utente come singolo documento
 		// per utilizzarlo all'interno della pagina per scegliere cosa mostrare.
 
@@ -22,35 +23,127 @@
 		let esamiSuperati = [];
 		let collegamentiUtente = [];
 		let appuntiCaricati = [];
+		let collegati = false;
+		let isDatiAccessibili = false;
 
 		await getDocs(queryToDo).then(async (document) => {
 			let docs = document.docs;
 			profilo = docs[0].data();
 
-			// SET PREFERENZA SE NON SETTATA
-			profilo.preferenzaLibretto =
-				profilo.preferenzaLibretto != undefined ? profilo.preferenzaLibretto : 'tutti';
-			let queryEsamiCDL = query(
-				collection(db, 'corsidelcdl'),
-				where('cdl', '==', profilo.corsoDiLaurea)
-			);
-			// await altrimenti ritorna fuori dalla funzione prima della fine
-			await getDocs(queryEsamiCDL).then((esami) => {
-				esamiCdl = esami.docs;
-			});
-			const queryEsamiSuperati = query(
-				collection(db, 'esamiLibretto'),
-				where('uidUtente', '==', uid)
-			);
-			await getDocs(queryEsamiSuperati).then((esami2) => {
-				esamiSuperati = esami2.docs;
-			});
+			// Se sto visitando il mio stesso profilo
+			if (getAuth().currentUser != null) {
+				if (getAuth().currentUser.uid == uid) {
+					collegati = true;
+					isDatiAccessibili = true;
+					console.log('caricato on same profile');
+					// SET PREFERENZA SE NON SETTATA
+					profilo.preferenzaLibretto =
+						profilo.preferenzaLibretto != undefined ? profilo.preferenzaLibretto : 'tutti';
+					let queryEsamiCDL = query(
+						collection(db, 'corsidelcdl'),
+						where('cdl', '==', profilo.corsoDiLaurea)
+					);
+					// await altrimenti ritorna fuori dalla funzione prima della fine
+					await getDocs(queryEsamiCDL).then((esami) => {
+						esamiCdl = esami.docs;
+					});
+					const queryEsamiSuperati = query(
+						collection(db, 'esamiLibretto'),
+						where('uidUtente', '==', uid)
+					);
+					await getDocs(queryEsamiSuperati).then((esami2) => {
+						esamiSuperati = esami2.docs;
+					});
 
-			// Prendo i collegamenti dell'utente
-			const queryCollegamenti = query(collection(db, 'collegamenti'), where('idUtente', '==', uid));
-			await getDocs(queryCollegamenti).then((collegamenti) => {
-				collegamentiUtente = collegamenti.docs;
-			});
+					// Prendo i collegamenti dell'utente
+					const queryCollegamenti = query(
+						collection(db, 'collegamenti'),
+						where('idUtente', '==', uid)
+					);
+					await getDocs(queryCollegamenti).then((collegamenti) => {
+						collegamentiUtente = collegamenti.docs;
+					});
+				} else if (
+					profilo.preferenzaLibretto != undefined &&
+					profilo.preferenzaLibretto != 'nessuno'
+				) {
+					// Se ha la preferenza su 'tutti' oppure siamo collegati
+					await getDoc(doc(db, 'collegamenti', getAuth().currentUser.uid + uid)).then(
+						async (res) => {
+							console.log('ho la preferenza non nessuno');
+							if (res.exists()) {
+								collegati = true;
+								isDatiAccessibili = true;
+								console.log('siamo collegati');
+								// SET PREFERENZA SE NON SETTATA
+								profilo.preferenzaLibretto =
+									profilo.preferenzaLibretto != undefined ? profilo.preferenzaLibretto : 'tutti';
+								let queryEsamiCDL = query(
+									collection(db, 'corsidelcdl'),
+									where('cdl', '==', profilo.corsoDiLaurea)
+								);
+
+								const queryEsamiSuperati = query(
+									collection(db, 'esamiLibretto'),
+									where('uidUtente', '==', uid)
+								);
+								// Prendo i collegamenti dell'utente
+								const queryCollegamenti = query(
+									collection(db, 'collegamenti'),
+									where('idUtente', '==', uid)
+								);
+
+								console.log('carico')
+								// await altrimenti ritorna fuori dalla funzione prima della fine
+								await getDocs(queryEsamiCDL).then(async(esami) => {
+									esamiCdl = esami.docs;
+									await getDocs(queryEsamiSuperati).then(async (esami2) => {
+										esamiSuperati = esami2.docs;
+										await getDocs(queryCollegamenti).then((collegamenti) => {
+											collegamentiUtente = collegamenti.docs;
+										});
+									});
+								});
+							} else {
+								collegati = false;
+								console.log('sono bastardo');
+							}
+						}
+					);
+				}
+			} else {
+				if (profilo.preferenzaLibretto == 'tutti') {
+					isDatiAccessibili = true;
+					console.log('caricato on not logged');
+					// SET PREFERENZA SE NON SETTATA
+					profilo.preferenzaLibretto =
+						profilo.preferenzaLibretto != undefined ? profilo.preferenzaLibretto : 'tutti';
+					let queryEsamiCDL = query(
+						collection(db, 'corsidelcdl'),
+						where('cdl', '==', profilo.corsoDiLaurea)
+					);
+					// await altrimenti ritorna fuori dalla funzione prima della fine
+					await getDocs(queryEsamiCDL).then((esami) => {
+						esamiCdl = esami.docs;
+					});
+					const queryEsamiSuperati = query(
+						collection(db, 'esamiLibretto'),
+						where('uidUtente', '==', uid)
+					);
+					await getDocs(queryEsamiSuperati).then((esami2) => {
+						esamiSuperati = esami2.docs;
+					});
+
+					// Prendo i collegamenti dell'utente
+					const queryCollegamenti = query(
+						collection(db, 'collegamenti'),
+						where('idUtente', '==', uid)
+					);
+					await getDocs(queryCollegamenti).then((collegamenti) => {
+						collegamentiUtente = collegamenti.docs;
+					});
+				}
+			}
 		});
 
 		let queryAppunti = query(collection(db, 'appunti'), where('idUtente', '==', uid));
@@ -82,8 +175,9 @@
 				contenutoBio,
 				sommaVoti,
 				mediaUtente,
-				collegati: false,
-				appunti: appuntiCaricati
+				collegati,
+				appunti: appuntiCaricati,
+				isDatiAccessibili
 			}
 		};
 	}
@@ -100,21 +194,23 @@
 	export let sommaVoti;
 	export let mediaUtente;
 	export let appunti;
+	export let isDatiAccessibili;
 
 	import SegnalazioneUtente from '$lib/components/utilities/SegnalazioneUtente.svelte';
 	import { authStore } from '$lib/stores/authStore';
-	import { getDownloadURL, listAll, ref, uploadBytes } from 'firebase/storage';
+	import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 	import { fade } from 'svelte/transition';
 	import { utentiSegnalati } from '$lib/stores/utentiStores';
 	import ModalAggLibretto from '$lib/components/profilo/ModalAggLibretto.svelte';
-	import { afterUpdate, beforeUpdate, onMount } from 'svelte';
+	import { afterUpdate, onMount } from 'svelte';
 	import Libretto from '$lib/components/profilo/Libretto.svelte';
 	import LibrettoNascosto from '$lib/components/profilo/LibrettoNascosto.svelte';
-	let profilePicture;
-	let file;
 	import { fly } from 'svelte/transition';
 	import Appunto from '$lib/components/utilities/Appunto.svelte';
+	import { getAuth } from 'firebase/auth';
 
+	let profilePicture;
+	let file;
 	const onChange = () => {
 		// Quando scelgo l'immagine viene assegnato a questo file
 		file = profilePicture.files[0];
@@ -166,31 +262,33 @@
 	});
 
 	onMount(() => {
-		console.log(collegati);
+		console.log('sono entrato');
 		// Controllo per capire se devo mostrare o meno le informazioni
-		if ($authStore.isLoggedIn) {
-			if (collegamentiUtente.find((elem) => elem.data().idCollegato == $authStore.user.uid)) {
-				collegati = true;
+		if (isDatiAccessibili) {
+			if ($authStore.isLoggedIn) {
+				if (collegamentiUtente.find((elem) => elem.data().idCollegato == $authStore.user.uid)) {
+					collegati = true;
+				}
 			}
-		}
-		// realtime updates
-		const queryEsamiSuperati = query(
-			collection(db, 'esamiLibretto'),
-			where('uidUtente', '==', profilo.uid)
-		);
-		// Realtime-esami
-		onSnapshot(queryEsamiSuperati, (snapshot) => {
-			esamiSuperati = snapshot.docs;
-		});
+			// realtime updates
+			const queryEsamiSuperati = query(
+				collection(db, 'esamiLibretto'),
+				where('uidUtente', '==', profilo.uid)
+			);
+			// Realtime-esami
+			onSnapshot(queryEsamiSuperati, (snapshot) => {
+				esamiSuperati = snapshot.docs;
+			});
 
-		// Realtime collegamenti
-		const queryCollegamenti = query(
-			collection(db, 'collegamenti'),
-			where('idUtente', '==', profilo.uid)
-		);
-		onSnapshot(queryCollegamenti, (collegamenti) => {
-			collegamentiUtente = collegamenti.docs;
-		});
+			// Realtime collegamenti
+			const queryCollegamenti = query(
+				collection(db, 'collegamenti'),
+				where('idUtente', '==', profilo.uid)
+			);
+			onSnapshot(queryCollegamenti, (collegamenti) => {
+				collegamentiUtente = collegamenti.docs;
+			});
+		}
 		loading = false;
 	});
 
@@ -260,16 +358,16 @@
 
 	// Se gli appunti vengono eliminati aggiorno la UI tramite questo
 	let queryAppunti = query(collection(db, 'appunti'), where('idUtente', '==', profilo.uid));
-	onSnapshot(queryAppunti, (lista) =>{
+	onSnapshot(queryAppunti, (lista) => {
 		appunti = lista.docs;
-	})
-
+	});
 </script>
 
 <svelte:head>
 	<title>Profilo</title>
 </svelte:head>
 <h1>Profilo</h1>
+{collegati}
 <div class="container-profilo">
 	<div class="avatar">
 		<div class="image-div">
@@ -442,7 +540,7 @@
 			{#each appunti as appunto}
 				<Appunto {appunto} />
 			{/each}
-			{:else}
+		{:else}
 			<p class="nessuno">Nessun appunto caricato</p>
 		{/if}
 	</div>
@@ -728,7 +826,7 @@
 		gap: 1rem;
 	}
 
-	.nessuno{
+	.nessuno {
 		font-size: 1.5rem;
 	}
 </style>

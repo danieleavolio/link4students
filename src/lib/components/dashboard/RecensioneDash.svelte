@@ -19,7 +19,7 @@
 	export let oggettoSegnalazione;
 
 	export let cambiaRecensioniSegnalate;
-	
+
 	// Quando una recensione viene risolta, viene rimossa dalla UI
 	export let risolviRecensione;
 
@@ -160,59 +160,59 @@
 	};
 </script>
 
-<div transition:fly class="recensione">
-	<div class="up-part">
-		<!-- Se non sei loggato, allora vedi la recensione -->
-		<div
-			class="avatar"
-			on:click={() => redirectProfilo(oggettoSegnalazione.recensione.data().idAutore)}
-		>
-			<img src={oggettoSegnalazione.recensione.data().avatar} alt="" />
-		</div>
-		<div class="nome">
-			<p>{oggettoSegnalazione.recensione.data().nome}</p>
-		</div>
-		<button on:click={eliminaRecensione} class="delete-review">🗑️</button>
-	</div>
-
-	<div class="down-part">
-		<div class="contenuto">
-			<p>{oggettoSegnalazione.recensione.data().contenuto}</p>
-			<div class="voti">
-				<p>{tornaDato(oggettoSegnalazione.recensione.data().votoDifficolta, '🧠')}</p>
-				<p>{tornaDato(oggettoSegnalazione.recensione.data().votoUtilita, '🎓')}</p>
+	<div transition:fly class="recensione">
+		<div class="up-part">
+			<!-- Se non sei loggato, allora vedi la recensione -->
+			<div
+				class="avatar"
+				on:click={() => redirectProfilo(oggettoSegnalazione.recensione.data().idAutore)}
+			>
+				<img src={oggettoSegnalazione.recensione.data().avatar} alt="" />
 			</div>
+			<div class="nome">
+				<p>{oggettoSegnalazione.recensione.data().nome}</p>
+			</div>
+			<button on:click={eliminaRecensione} class="delete-review">🗑️</button>
 		</div>
-		<div class="segnalazione">
-			<div class="bottoni">
-				<button class="show-report" on:click={displayReport}>Mostra report 🛑</button>
-				<div class="div-sospensione">
-					<!-- Form per la sospensione -->
-					<form
-						action=""
-						on:submit|preventDefault={() =>
-							setBanTime(oggettoSegnalazione.recensione.data().idAutore)}
-					>
-						<input
-							class="input-giorni"
-							required
-							bind:value={giorniSospensione}
-							min="1"
-							type="number"
-							name="giorni"
-							id="giorni-sospensione"
-							placeholder="Giorni di sospensione"
-						/>
-						<button class="sospendi">Sospendi</button>
-					</form>
+
+		<div class="down-part">
+			<div class="contenuto">
+				<p>{oggettoSegnalazione.recensione.data().contenuto}</p>
+				<div class="voti">
+					<p>{tornaDato(oggettoSegnalazione.recensione.data().votoDifficolta, '🧠')}</p>
+					<p>{tornaDato(oggettoSegnalazione.recensione.data().votoUtilita, '🎓')}</p>
 				</div>
 			</div>
-			{#if segnalazioneMostrata}
-				<Segnalazione segnalazione={oggettoSegnalazione.segnalazione} {risolviRecensione} />
-			{/if}
+			<div class="segnalazione">
+				<div class="bottoni">
+					<button class="show-report" on:click={displayReport}>Mostra report 🛑</button>
+					<div class="div-sospensione">
+						<!-- Form per la sospensione -->
+						<form
+							action=""
+							on:submit|preventDefault={() =>
+								setBanTime(oggettoSegnalazione.recensione.data().idAutore)}
+						>
+							<input
+								class="input-giorni"
+								required
+								bind:value={giorniSospensione}
+								min="1"
+								type="number"
+								name="giorni"
+								id="giorni-sospensione"
+								placeholder="Giorni di sospensione"
+							/>
+							<button class="sospendi">Sospendi</button>
+						</form>
+					</div>
+				</div>
+				{#if segnalazioneMostrata}
+					<Segnalazione segnalazione={oggettoSegnalazione.segnalazione} {risolviRecensione} />
+				{/if}
+			</div>
 		</div>
 	</div>
-</div>
 
 <style>
 	.recensione {
@@ -244,8 +244,6 @@
 		margin-top: -3rem;
 		box-shadow: var(--innerNeu);
 	}
-
-	
 
 	.avatar {
 		width: 50px;

@@ -98,10 +98,13 @@
 				let tempList = [];
 				querySnapshot.docs.forEach((elem) => {
 					getDoc(doc(db, 'recensioni', elem.data().idRecensione)).then((docum) => {
-						tempList.push({
-							segnalazione: elem,
-							recensione: docum
-						});
+						if (docum.exists()) {
+							console.log(docum);
+							tempList.push({
+								segnalazione: elem,
+								recensione: docum
+							});
+						}
 						listaRecensioni = tempList;
 					});
 				});

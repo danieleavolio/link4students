@@ -72,7 +72,6 @@
 			const data = {
 				nome: nome,
 				idCorso: idCorso,
-				idAutore: $authStore.user.uid,
 				data: serverTimestamp(),
 				contenuto: contenuto,
 				votoDifficolta: difficolta,
@@ -81,7 +80,8 @@
 				// Mi salvo l'immagine per evitare di farmi moltissime query
 				autore: {
 					nome,
-					avatar: profilePic
+					avatar: profilePic,
+					idAutore: $authStore.user.uid
 				},
 				likes: 0,
 				dislikes: 0

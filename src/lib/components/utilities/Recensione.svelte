@@ -363,7 +363,7 @@
 		<!-- Se non sei loggato, allora vedi la recensione -->
 		{#if !$authStore.isLoggedIn}
 			{#if !recensione.data().anonimo}
-				<div class="avatar" on:click={() => redirectProfilo(recensione.data().idAutore)}>
+				<div class="avatar" on:click={() => redirectProfilo(recensione.data().autore.idAutore)}>
 					<img src={recensione.data().autore.avatar} alt="" />
 				</div>
 				<div class="nome">
@@ -378,16 +378,16 @@
 				</div>
 			{/if}
 		{:else if !recensione.data().anonimo}
-			<div class="avatar" on:click={() => redirectProfilo(recensione.data().idAutore)}>
+			<div class="avatar" on:click={() => redirectProfilo(recensione.data().autore.idAutore)}>
 				<img src={recensione.data().autore.avatar} alt="" />
 			</div>
 			<div class="nome">
 				<p>{recensione.data().autore.nome}</p>
 			</div>
-			{#if recensione.data().idAutore == $authStore.user.uid}
+			{#if recensione.data().autore.idAutore == $authStore.user.uid}
 				<button on:click={eliminaRecensione} class="delete-review">🗑️</button>
 			{/if}
-		{:else if recensione.data().idAutore != $authStore.user.uid}
+		{:else if recensione.data().autore.idAutore != $authStore.user.uid}
 			<div class="avatar anonimo">
 				<img src="/images/anonimo.png" alt="" />
 			</div>

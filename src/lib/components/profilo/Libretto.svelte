@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { authStore } from '$lib/stores/authStore';
 
-	import EsamePriv from './EsamePriv.svelte';
 	import EsamePub from './EsamePub.svelte';
 	import ListaCollegamenti from './ListaCollegamenti.svelte';
 	import NoExams from './NoExams.svelte';
@@ -9,7 +7,6 @@
 	export let esamiSuperati;
 	export let esamiCdl;
 	export let mediaUtente;
-	export let isVotiMostrati;
 	export let collegamentiUtente;
 </script>
 
@@ -24,19 +21,7 @@
 	<p>Lista esami</p>
 	{#if esamiSuperati.length > 0}
 		{#each esamiSuperati as esame (esame.id)}
-			{#if $authStore.isLoggedIn}
-				{#if esame.data().uidUtente == $authStore.user.uid}
-					<EsamePub {esame} />
-				{:else if isVotiMostrati}
-					<EsamePub {esame} />
-				{:else}
-					<EsamePriv nome={esame.data().nomeCorso} uidCorso={esame.data().uidCorso} />
-				{/if}
-			{:else if isVotiMostrati}
-				<EsamePub {esame} />
-			{:else}
-				<EsamePriv nome={esame.data().nomeCorso} uidCorso={esame.data().uidCorso} />
-			{/if}
+			<EsamePub {esame} />
 		{/each}
 	{:else}
 		<NoExams />

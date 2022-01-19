@@ -27,7 +27,6 @@
 	let contenuto;
 	let anonimo = false;
 
-
 	const open = () => {
 		isOpen = true;
 	};
@@ -80,7 +79,10 @@
 				votoUtilita: utilita,
 				anonimo: anonimo,
 				// Mi salvo l'immagine per evitare di farmi moltissime query
-				avatar: profilePic,
+				autore: {
+					nome,
+					avatar: profilePic
+				},
 				likes: 0,
 				dislikes: 0
 			};
@@ -171,7 +173,6 @@
 
 <style>
 	.recensione {
-		
 		text-transform: uppercase;
 		outline: none;
 		padding: 0.5rem;
@@ -277,6 +278,6 @@
 		border-radius: 8px;
 		cursor: pointer;
 		padding: 5px 5px;
-		color:var(--submit)
+		color: var(--submit);
 	}
 </style>

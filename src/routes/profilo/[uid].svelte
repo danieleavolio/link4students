@@ -30,6 +30,8 @@
 			let docs = document.docs;
 			profilo = docs[0].data();
 
+			console.log('Entrato in funzione');
+
 			// Se sto visitando il mio stesso profilo
 			if (getAuth().currentUser != null) {
 				if (getAuth().currentUser.uid == uid) {
@@ -63,53 +65,88 @@
 					await getDocs(queryCollegamenti).then((collegamenti) => {
 						collegamentiUtente = collegamenti.docs;
 					});
-				} else if (
-					profilo.preferenzaLibretto != undefined &&
-					profilo.preferenzaLibretto != 'nessuno'
-				) {
-					// Se ha la preferenza su 'tutti' oppure siamo collegati
-					await getDoc(doc(db, 'collegamenti', getAuth().currentUser.uid + uid)).then(
-						async (res) => {
-							console.log('ho la preferenza non nessuno');
-							if (res.exists()) {
-								collegati = true;
-								isDatiAccessibili = true;
-								console.log('siamo collegati');
-								// SET PREFERENZA SE NON SETTATA
-								profilo.preferenzaLibretto =
-									profilo.preferenzaLibretto != undefined ? profilo.preferenzaLibretto : 'tutti';
-								let queryEsamiCDL = query(
-									collection(db, 'corsidelcdl'),
-									where('cdl', '==', profilo.corsoDiLaurea)
-								);
+				} else if (profilo.preferenzaLibretto != 'nessuno') {
+					if (profilo.preferenzaLibretto == 'connessi') {
+						// Se ha la preferenza su 'tutti' oppure siamo collegati
+						await getDoc(doc(db, 'collegamenti', getAuth().currentUser.uid + uid)).then(
+							async (res) => {
+								console.log('ho la preferenza non nessuno');
+								if (res.exists()) {
+									collegati = true;
+									isDatiAccessibili = true;
+									console.log('siamo collegati');
+									let queryEsamiCDL = query(
+										collection(db, 'corsidelcdl'),
+										where('cdl', '==', profilo.corsoDiLaurea)
+									);
 
-								const queryEsamiSuperati = query(
-									collection(db, 'esamiLibretto'),
-									where('uidUtente', '==', uid)
-								);
-								// Prendo i collegamenti dell'utente
-								const queryCollegamenti = query(
-									collection(db, 'collegamenti'),
-									where('idUtente', '==', uid)
-								);
+									const queryEsamiSuperati = query(
+										collection(db, 'esamiLibretto'),
+										where('uidUtente', '==', uid)
+									);
+									// Prendo i collegamenti dell'utente
+									const queryCollegamenti = query(
+										collection(db, 'collegamenti'),
+										where('idUtente', '==', uid)
+									);
 
-								console.log('carico')
-								// await altrimenti ritorna fuori dalla funzione prima della fine
-								await getDocs(queryEsamiCDL).then(async(esami) => {
-									esamiCdl = esami.docs;
-									await getDocs(queryEsamiSuperati).then(async (esami2) => {
-										esamiSuperati = esami2.docs;
-										await getDocs(queryCollegamenti).then((collegamenti) => {
-											collegamentiUtente = collegamenti.docs;
+									console.log('carico');
+									// await altrimenti ritorna fuori dalla funzione prima della fine
+									await getDocs(queryEsamiCDL).then(async (esami) => {
+										esamiCdl = esami.docs;
+										await getDocs(queryEsamiSuperati).then(async (esami2) => {
+											esamiSuperati = esami2.docs;
+											await getDocs(queryCollegamenti).then((collegamenti) => {
+												collegamentiUtente = collegamenti.docs;
+											});
 										});
 									});
-								});
-							} else {
-								collegati = false;
-								console.log('sono bastardo');
+								} else {
+									console.log('Non siamo collegati.');
+									collegati = false;
+								}
 							}
+						);
+					} else {
+						isDatiAccessibili = true;
+						let queryEsamiCDL = query(
+							collection(db, 'corsidelcdl'),
+							where('cdl', '==', profilo.corsoDiLaurea)
+						);
+
+						const queryEsamiSuperati = query(
+							collection(db, 'esamiLibretto'),
+							where('uidUtente', '==', uid)
+						);
+						// Prendo i collegamenti dell'utente
+						const queryCollegamenti = query(
+							collection(db, 'collegamenti'),
+							where('idUtente', '==', uid)
+						);
+
+						console.log('carico');
+						// await altrimenti ritorna fuori dalla funzione prima della fine
+						await getDocs(queryEsamiCDL).then(async (esami) => {
+							esamiCdl = esami.docs;
+							await getDocs(queryEsamiSuperati).then(async (esami2) => {
+								esamiSuperati = esami2.docs;
+								await getDocs(queryCollegamenti).then((collegamenti) => {
+									collegamentiUtente = collegamenti.docs;
+								});
+							});
+						});
+					}
+				} else if (
+					profilo.preferenzaLibretto == 'nessuno' ||
+					profilo.preferenzaLibretto == undefined
+				) {
+					await getDoc(doc(db, 'collegamenti', getAuth().currentUser.uid + uid)).then((res) => {
+						if (res.exists()) {
+							console.log('Preferenza NESSUNO e siamo collegati');
+							isDatiAccessibili = false;
+							collegati = true;
 						}
-					);
+					});
 				}
 			} else {
 				if (profilo.preferenzaLibretto == 'tutti') {
@@ -152,7 +189,6 @@
 		});
 
 		// Controlli fatti quando faccio il load della pagina per avere tutto pronto
-		let isVotiMostrati = profilo.votiMostrati == undefined ? true : profilo.votiMostrati;
 		let preferenza = profilo.preferenzaLibretto == undefined ? 'tutti' : profilo.preferenzaLibretto;
 		let contenutoBio = profilo.bio != undefined ? profilo.bio : 'Bio vuota..';
 		let sommaVoti = 0;
@@ -169,8 +205,7 @@
 				profilo,
 				esamiCdl,
 				esamiSuperati,
-				collegamentiUtente,
-				isVotiMostrati,
+				collegamentiProfilo: collegamentiUtente,
 				preferenza,
 				contenutoBio,
 				sommaVoti,
@@ -187,8 +222,7 @@
 	export let profilo;
 	export let esamiCdl;
 	export let esamiSuperati;
-	export let collegamentiUtente;
-	export let isVotiMostrati;
+	export let collegamentiProfilo;
 	export let preferenza;
 	export let contenutoBio;
 	export let sommaVoti;
@@ -208,6 +242,8 @@
 	import { fly } from 'svelte/transition';
 	import Appunto from '$lib/components/utilities/Appunto.svelte';
 	import { getAuth } from 'firebase/auth';
+	import { richiesteMandate, richiesteUtente } from '$lib/stores/richiesteStore';
+import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 
 	let profilePicture;
 	let file;
@@ -255,18 +291,26 @@
 
 	afterUpdate(() => {
 		if ($authStore.isLoggedIn) {
-			if (collegamentiUtente.find((elem) => elem.data().idCollegato == $authStore.user.uid)) {
+			if (collegamentiProfilo.find((elem) => elem.data().idCollegato == $authStore.user.uid)) {
 				collegati = true;
 			}
 		}
 	});
+
+	// Controllo per vedere se siamo collegati quando cambia la lista dei collegamenti
+	$: if (
+		$authStore.isLoggedIn &&
+		$collegamentiUtente.find((elem) => elem.data().idCollegato == profilo.uid)
+	) {
+		collegati = true;
+	}
 
 	onMount(() => {
 		console.log('sono entrato');
 		// Controllo per capire se devo mostrare o meno le informazioni
 		if (isDatiAccessibili) {
 			if ($authStore.isLoggedIn) {
-				if (collegamentiUtente.find((elem) => elem.data().idCollegato == $authStore.user.uid)) {
+				if (collegamentiProfilo.find((elem) => elem.data().idCollegato == $authStore.user.uid)) {
 					collegati = true;
 				}
 			}
@@ -286,7 +330,7 @@
 				where('idUtente', '==', profilo.uid)
 			);
 			onSnapshot(queryCollegamenti, (collegamenti) => {
-				collegamentiUtente = collegamenti.docs;
+				collegamentiProfilo = collegamenti.docs;
 			});
 		}
 		loading = false;
@@ -296,7 +340,7 @@
 	// Quando refreshi --> sei sloggato per controllo da firebase
 	// Quando torni riloggato --> si esegue la funzione
 	$: if ($authStore.isLoggedIn) {
-		if (collegamentiUtente.find((elem) => elem.data().idCollegato == $authStore.user.uid)) {
+		if (collegamentiProfilo.find((elem) => elem.data().idCollegato == $authStore.user.uid)) {
 			collegati = true;
 		}
 	}
@@ -326,8 +370,7 @@
 		setDoc(
 			doc(db, 'users', profilo.uid),
 			{
-				preferenzaLibretto: preferenza,
-				votiMostrati: isVotiMostrati
+				preferenzaLibretto: preferenza
 			},
 			{ merge: true }
 		)
@@ -400,12 +443,21 @@
 		<p>Corso di Laurea: {profilo.nomeCorsoLaurea}</p>
 		<p>Anno di corso: {profilo.annoDiCorso}</p>
 		{#if $authStore.isLoggedIn}
+			<!-- DEBUG -->
+			
 			{#if $authStore.user.uid != profilo.uid}
 				<div class="connect-report-buttons">
 					{#if !collegati}
-						<button on:click={mandaRichiestaCollegamento} class="bottone collegati"
-							>Collegati</button
-						>
+						<!-- Se non gli ho mandato una richiesta e lui non l'ha mandata a me -->
+						{#if !$richiesteMandate.find((elem) => elem.data().uidDestinatario == profilo.uid) && !$richiesteUtente.find((elem) => elem.data().uidMittente == profilo.uid)}
+							<button on:click={mandaRichiestaCollegamento} class="bottone collegati"
+								>Collegati</button
+							>
+						{:else if $richiesteUtente.find((elem) => elem.data().uidMittente == profilo.uid) && !$richiesteMandate.find((elem) => elem.data().uidDestinatario == profilo.uid)}
+							<button class="bottone controlla-collegamento">Controlla richieste</button>
+						{:else}
+							<button class="bottone mandato">Richiesta Mandata</button>
+						{/if}
 					{/if}
 					<div class="report">
 						{#if $utentiSegnalati.find((elem) => elem.idSegnalato == profilo.uid)}
@@ -429,15 +481,6 @@
 								<option value="connessi">Solo connessi</option>
 								<option value="nessuno">Nessuno</option>
 							</select>
-							<div class="pref-voti">
-								<label for="mostra-voti">Mostra voti?</label>
-								<input
-									bind:checked={isVotiMostrati}
-									type="checkbox"
-									name="mostravoti"
-									id="mostra-voti"
-								/>
-							</div>
 						</div>
 						<button class="salva" type="submit">Salva</button>
 						<button class="annulla" type="reset" on:click={() => (modificaPreferenze = false)}
@@ -502,17 +545,26 @@
 		<!-- Separo le due viste -->
 		{#if $authStore.isLoggedIn}
 			{#if $authStore.user.uid == profilo.uid}
-				<Libretto {mediaUtente} {esamiSuperati} {esamiCdl} {isVotiMostrati} {collegamentiUtente} />
+				<Libretto
+					{mediaUtente}
+					{esamiSuperati}
+					{esamiCdl}
+					collegamentiUtente={collegamentiProfilo}
+				/>
 			{:else if profilo.preferenzaLibretto == 'tutti'}
-				<Libretto {mediaUtente} {esamiSuperati} {esamiCdl} {isVotiMostrati} {collegamentiUtente} />
+				<Libretto
+					{mediaUtente}
+					{esamiSuperati}
+					{esamiCdl}
+					collegamentiUtente={collegamentiProfilo}
+				/>
 			{:else if profilo.preferenzaLibretto == 'connessi'}
 				{#if collegati}
 					<Libretto
 						{mediaUtente}
 						{esamiSuperati}
 						{esamiCdl}
-						{isVotiMostrati}
-						{collegamentiUtente}
+						collegamentiUtente={collegamentiProfilo}
 					/>
 				{:else}
 					<LibrettoNascosto />
@@ -522,7 +574,7 @@
 			{/if}
 			<!-- SE NON SEI LOGGATO -->
 		{:else if profilo.preferenzaLibretto == 'tutti'}
-			<Libretto {mediaUtente} {esamiSuperati} {esamiCdl} {isVotiMostrati} {collegamentiUtente} />
+			<Libretto {mediaUtente} {esamiSuperati} {esamiCdl} collegamentiUtente={collegamentiProfilo} />
 		{:else if profilo.preferenzaLibretto == 'connessi'}
 			<LibrettoNascosto />
 		{:else if profilo.preferenzaLibretto == 'nessuno'}
@@ -828,5 +880,24 @@
 
 	.nessuno {
 		font-size: 1.5rem;
+	}
+
+	.mandato {
+		color: var(--submit);
+		cursor: inherit;
+	}
+	.mandato:hover {
+		transform: scale(1);
+		box-shadow: var(--neumorphism);
+	}
+
+	.controlla-collegamento {
+		cursor: inherit;
+		background-color: rgb(255, 255, 137);
+	}
+
+	.controlla-collegamento:hover {
+		box-shadow: var(--neumorphism);
+		transform: scale(1);
 	}
 </style>

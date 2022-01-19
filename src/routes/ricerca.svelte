@@ -71,6 +71,10 @@
 
 	let noMoreRes = false;
 
+	// Controllino
+	if (tipo == null)
+		tipo = 'utenti';
+
 	// Per fare una ricerca in modo preciso, firebase non offre nessun servizio. Siccome ci sono 45 cubi + 2 dipartimenti per cubo circa
 	// contando triennale e magistrale con 20 corsi ognuno, ci sono circa 3600 corsi
 	//Stimando le query, le eseguo.
@@ -234,7 +238,6 @@
 	<title>Pagina di ricerca</title>
 </svelte:head>
 <h1>Pagina ricerca</h1>
-{tipo} {keyword} {oldTipo}
 <div class="container-ricerca">
 	<div class="top-bar">
 		<form on:submit|preventDefault={handleRicerca} action="">

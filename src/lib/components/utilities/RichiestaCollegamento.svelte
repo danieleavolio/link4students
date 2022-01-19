@@ -4,7 +4,7 @@
 	import { db } from '$lib/firebaseConfig';
 	import { authStore } from '$lib/stores/authStore';
 
-	import { addDoc, collection, deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
+	import {deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
 
 	export let richiesta;
 

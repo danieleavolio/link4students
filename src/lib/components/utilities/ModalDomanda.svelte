@@ -24,15 +24,17 @@
 			let nome = ref.data().nome;
 			let avatar = ref.data().avatar;
 			const data = {
-				nome: nome,
 				// salvo l'avatar per non fare le query successivamente
-				avatar: avatar,
 				idCorso: idCorso,
-				idAutore: $authStore.user.uid,
 				data: serverTimestamp(),
 				titolo: titoloDomanda,
 				contenuto: contenuto,
-				anonimo: anonimo
+				anonimo: anonimo,
+				autore:{
+					avatar,
+					nome,
+					idAutore: $authStore.user.uid
+				}
 			};
 			addDoc(collection(db, 'domande'), data)
 				.then(() => {
@@ -166,7 +168,6 @@
 		gap: 0.5rem;
 	}
 
-	
 	.contenuto {
 		overflow: auto;
 	}
@@ -187,7 +188,6 @@
 		margin: 1rem;
 	}
 
-	
 	textarea {
 		resize: none;
 		font-size: 1rem;

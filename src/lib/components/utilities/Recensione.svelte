@@ -67,70 +67,74 @@
 	};
 
 	const eliminaRecensione = () => {
-		// Eliminare tutte le interazioni con la recnesione ( like e dislike)
-		const queryInterazioni = query(
-			collection(db, 'votiRecensioni'),
-			where('idRecensione', '==', recensione.id)
-		);
-		getDocs(queryInterazioni).then((data) => {
-			data.docs.forEach((toDelete) => {
-				let docRef = toDelete.ref;
-				deleteDoc(docRef);
-			});
-		});
-		// Elimino le segnalazioni alla recensione quando eliminata
-
-		const querySegnalazioni = query(
-			collection(db, 'segnalazioniRecensioni'),
-			where('idRecensione', '==', recensione.id)
-		);
-
-		// Elimino le segnalazioni 1 alla volta
-		getDocs(querySegnalazioni).then((data) => {
-			data.docs.forEach((toDelete) => {
-				let docRef = toDelete.ref;
-				deleteDoc(docRef);
-			});
-		});
-
-		// Modifica la media dell'esame di cui la recensione fa parte
-		const q = query(
-			collection(db, 'corsidelcdl'),
-			where('codiceCorso', '==', recensione.data().idCorso)
-		);
-		getDocs(q).then((snapshot) => {
-			const dati = calcolaNuovaMedia(
-				snapshot.docs[0].data(),
-				recensione.data().votoDifficolta,
-				recensione.data().votoUtilita
+		if (statoVoto == 0) {
+			statoVoto = 2;
+			// Eliminare tutte le interazioni con la recnesione ( like e dislike)
+			const queryInterazioni = query(
+				collection(db, 'votiRecensioni'),
+				where('idRecensione', '==', recensione.id)
 			);
-			setDoc(snapshot.docs[0].ref, dati, { merge: true })
-				.then(() => {
-					deleteDoc(doc(db, 'recensioni', recensione.id))
-						.then(() => {
-							esamiRecensiti.update(
-								(oldEsami) =>
-									(oldEsami = oldEsami.filter((item) => item != recensione.data().idCorso))
-							);
-							alert('Recensione eliminata!');
-							// Decremento il contatore del numero di recensioni
-							setDoc(
-								doc(db, 'statistiche', 'infoSito'),
-								{
-									numRecensioni: increment(-1)
-								},
-								{ merge: true }
-							);
-						})
-						.catch((error) => {
-							alert(error);
-						});
-				})
-				.catch((error) => {
-					alert(error);
+			getDocs(queryInterazioni).then((data) => {
+				data.docs.forEach((toDelete) => {
+					let docRef = toDelete.ref;
+					deleteDoc(docRef);
 				});
-			// Elimina la recensione dalla collection recensioni
-		});
+			});
+			// Elimino le segnalazioni alla recensione quando eliminata
+
+			const querySegnalazioni = query(
+				collection(db, 'segnalazioniRecensioni'),
+				where('idRecensione', '==', recensione.id)
+			);
+
+			// Elimino le segnalazioni 1 alla volta
+			getDocs(querySegnalazioni).then((data) => {
+				data.docs.forEach((toDelete) => {
+					let docRef = toDelete.ref;
+					deleteDoc(docRef);
+				});
+			});
+
+			// Modifica la media dell'esame di cui la recensione fa parte
+			const q = query(
+				collection(db, 'corsidelcdl'),
+				where('codiceCorso', '==', recensione.data().idCorso)
+			);
+			getDocs(q).then((snapshot) => {
+				const dati = calcolaNuovaMedia(
+					snapshot.docs[0].data(),
+					recensione.data().votoDifficolta,
+					recensione.data().votoUtilita
+				);
+				setDoc(snapshot.docs[0].ref, dati, { merge: true })
+					.then(() => {
+						deleteDoc(doc(db, 'recensioni', recensione.id))
+							.then(() => {
+								esamiRecensiti.update(
+									(oldEsami) =>
+										(oldEsami = oldEsami.filter((item) => item != recensione.data().idCorso))
+								);
+								alert('Recensione eliminata!');
+								statoVoto = 0;
+								// Decremento il contatore del numero di recensioni
+								setDoc(
+									doc(db, 'statistiche', 'infoSito'),
+									{
+										numRecensioni: increment(-1)
+									},
+									{ merge: true }
+								);
+							})
+							.catch((error) => {
+								alert(error);
+							});
+					})
+					.catch((error) => {
+						alert(error);
+					});
+				// Elimina la recensione dalla collection recensioni
+			});
+		}
 	};
 
 	// Variabile locale per gestirmi i cambiamenti di UI per i like senza dover fare troppi giri inutili
@@ -360,10 +364,10 @@
 		{#if !$authStore.isLoggedIn}
 			{#if !recensione.data().anonimo}
 				<div class="avatar" on:click={() => redirectProfilo(recensione.data().idAutore)}>
-					<img src={recensione.data().avatar} alt="" />
+					<img src={recensione.data().autore.avatar} alt="" />
 				</div>
 				<div class="nome">
-					<p>{recensione.data().nome}</p>
+					<p>{recensione.data().autore.nome}</p>
 				</div>
 			{:else}
 				<div class="avatar anonimo">
@@ -375,10 +379,10 @@
 			{/if}
 		{:else if !recensione.data().anonimo}
 			<div class="avatar" on:click={() => redirectProfilo(recensione.data().idAutore)}>
-				<img src={recensione.data().avatar} alt="" />
+				<img src={recensione.data().autore.avatar} alt="" />
 			</div>
 			<div class="nome">
-				<p>{recensione.data().nome}</p>
+				<p>{recensione.data().autore.nome}</p>
 			</div>
 			{#if recensione.data().idAutore == $authStore.user.uid}
 				<button on:click={eliminaRecensione} class="delete-review">🗑️</button>
@@ -465,10 +469,8 @@
 		position: absolute;
 		margin-left: -2rem;
 		margin-top: -6rem;
-		box-shadow: var(--innerNeu)
+		box-shadow: var(--innerNeu);
 	}
-
-	
 
 	.avatar {
 		max-width: 75px;
@@ -544,7 +546,7 @@
 	}
 
 	.liked {
-		background-color: var(--submit)
+		background-color: var(--submit);
 	}
 
 	.disliked {

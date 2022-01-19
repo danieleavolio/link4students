@@ -15,11 +15,12 @@
 	import { esamiReagiti, esamiRecensiti } from '$lib/stores/recensioniStore';
 	import { utentiSegnalati } from '$lib/stores/utentiStores';
 	import { esamiLibretto } from '$lib/stores/esamiLibretto';
-	import { richiesteUtente } from '$lib/stores/richiesteStore';
+	import { richiesteMandate, richiesteUtente } from '$lib/stores/richiesteStore';
 	import ModalRichiesteCollegamento from './ModalRichiesteCollegamento.svelte';
 	import BarraRicerca from './BarraRicerca.svelte';
 	import { fly } from 'svelte/transition';
 	import { goto } from '$app/navigation';
+	import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 	const logout = async () => {
 		await auth.signOut().then(() => {
 			location.reload();
@@ -122,6 +123,32 @@
 				richiesteList = richiesteSnap.docs;
 				richiesteUtente.update((oldRichieste) => richiesteList);
 			});
+
+			// Gestione richieste mandate
+			let mandateList = [];
+			const queryRicMandate = query(
+				collection(db, 'richiesteCollegamento'),
+				where('uidMittente', '==', fbUser.uid)
+			);
+			onSnapshot(queryRicMandate, (mandateSnap) => {
+				mandateList = mandateSnap.docs;
+				richiesteMandate.update((oldRichieste) => mandateList);
+				$richiesteMandate.forEach((element) => {
+					console.log(element.data());
+				});
+			});
+
+			//Collegamenti utente che sono in tempo reale
+			const queryCollegamentiUtente = query(
+				collection(db, 'collegamenti'),
+				where('idUtente', '==', fbUser.uid)
+			);
+			let collegamentiList = [];
+			onSnapshot(queryCollegamentiUtente, (snapshot) => {
+				collegamentiList = snapshot.docs;
+				collegamentiUtente.update((oldCollegamenti) => collegamentiList);
+				console.log(collegamentiUtente)
+			});
 		} else {
 			let data = {
 				isLoggedIn: false,
@@ -155,7 +182,9 @@
 		<a on:click={handleOpen} href="/contattaci"> <span class="icona">✉️</span> Contattaci</a>
 		{#if datiUtente != null}
 			{#if datiUtente.data().superuser}
-				<a on:click={handleOpen} href="/dashboard/adminpage"> <span class="icona">🔒</span> Admin</a>
+				<a on:click={handleOpen} href="/dashboard/adminpage">
+					<span class="icona">🔒</span> Admin</a
+				>
 			{/if}
 		{/if}
 		<div class="profilo">
@@ -174,7 +203,9 @@
 					<button class="logout" on:click={logout}>Logout</button>
 				</div>
 			{:else if !$authStore.isLoggedIn}
-				<a on:click={handleOpen}  class="unisciti" href="/joinus"> <span class="icona">🙏</span> Unisciti</a>
+				<a on:click={handleOpen} class="unisciti" href="/joinus">
+					<span class="icona">🙏</span> Unisciti</a
+				>
 			{/if}
 		</div>
 	</nav>
@@ -204,7 +235,7 @@
 		font-weight: 600;
 	}
 
-	.open-button:hover{
+	.open-button:hover {
 		box-shadow: var(--innerNeu);
 		transform: var(--premuto);
 	}
@@ -223,7 +254,7 @@
 		transition: all 0.5s ease;
 	}
 
-	.close-button:hover{
+	.close-button:hover {
 		box-shadow: var(--innerNeu);
 	}
 
@@ -257,23 +288,21 @@
 		outline: none;
 		margin: 0 auto;
 		width: 80%;
-		transition:all 0.2s ease;
+		transition: all 0.2s ease;
 		font-size: 1.5rem;
 	}
 
-	a:hover{
+	a:hover {
 		box-shadow: var(--innerNeu);
 		transform: var(--premuto);
 	}
 
-	span{
+	span {
 		color: var(--testo);
-
 	}
 
-	.icona{
+	.icona {
 		font-weight: 600;
-
 	}
 
 	.logout {
@@ -291,10 +320,10 @@
 		font-weight: 600;
 	}
 
-	.logout:hover{
+	.logout:hover {
 		box-shadow: var(--alertHover);
 		transform: var(--premuto);
-		color:var(--sfondo);
+		color: var(--sfondo);
 		background-color: var(--alert);
 	}
 
@@ -320,12 +349,12 @@
 		transition: var(--velocita);
 	}
 
-	.info:hover{
+	.info:hover {
 		box-shadow: var(--innerNeu);
 		transform: var(--premuto);
 	}
 
-	.info > a{
+	.info > a {
 		box-shadow: none;
 	}
 
@@ -344,7 +373,6 @@
 	}
 
 	.unisciti {
-		
 		text-align: center;
 	}
 

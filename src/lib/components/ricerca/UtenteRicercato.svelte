@@ -41,5 +41,6 @@ import { goto } from "$app/navigation";
         width: 100px;
         height: 100px;
         border-radius: 100%;
+        object-fit: cover;
     }
 </style>

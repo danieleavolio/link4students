@@ -135,12 +135,12 @@
 		<!-- Se non sei loggato, allora vedi la domanda -->
 		{#if !$authStore.isLoggedIn}
 			{#if !domanda.data().anonimo}
-				<div class="avatar" on:click={() => redirectProfilo(domanda.data().idAutore)}>
-					<img src={domanda.data().avatar} alt="" />
+				<div class="avatar" on:click={() => redirectProfilo(domanda.data().autore.idAutore)}>
+					<img src={domanda.data().autore.avatar} alt="" />
 				</div>
 				<div class="titolo-nome">
 					<p class="titolo-domanda">{domanda.data().titolo}</p>
-					<p>{domanda.data().nome}</p>
+					<p>{domanda.data().autore.nome}</p>
 				</div>
 			{:else}
 				<div class="avatar anonimo">
@@ -152,17 +152,17 @@
 				</div>
 			{/if}
 		{:else if !domanda.data().anonimo}
-			<div class="avatar" on:click={() => redirectProfilo(domanda.data().idAutore)}>
-				<img src={domanda.data().avatar} alt="" />
+			<div class="avatar" on:click={() => redirectProfilo(domanda.data().autore.idAutore)}>
+				<img src={domanda.data().autore.avatar} alt="" />
 			</div>
 			<div class="titolo-nome">
 				<p class="titolo-domanda">{domanda.data().titolo}</p>
-				<p>{domanda.data().nome}</p>
+				<p>{domanda.data().autore.nome}</p>
 			</div>
-			{#if domanda.data().idAutore == $authStore.user.uid}
+			{#if domanda.data().autore.idAutore == $authStore.user.uid}
 				<button on:click={eliminaDomanda} class="delete-domanda">🗑️</button>
 			{/if}
-		{:else if domanda.data().idAutore != $authStore.user.uid}
+		{:else if domanda.data().autore.idAutore != $authStore.user.uid}
 			<div class="avatar anonimo">
 				<img src="/images/anonimo.png" alt="" />
 			</div>

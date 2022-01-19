@@ -46,10 +46,12 @@
 	let corsoDiLaurea: number;
 	let annoDiCorso: number;
 
-
-	$: if ($authStore.isLoggedIn){
-		if ($authStore.user.emailVerified){
-			goto('/')
+	$: if ($authStore.isLoggedIn) {
+		if ($authStore.user.emailVerified) {
+			goto('/');
+		} else {
+			auth.signOut();
+			alert('Email non verificata');
 		}
 	}
 	const randomAvatar = (min, max) => {
@@ -81,7 +83,8 @@
 							nomeCorsoLaurea: nomeCorsoLaurea,
 							annoDiCorso: annoDiCorso,
 							uid: auth.currentUser.uid,
-							avatar: $avatars[randomAvatar(0, 6)]
+							avatar: $avatars[randomAvatar(0, 6)],
+							preferenzaLibretto: 'tutti'
 							// Sopra viene generato un numero da 0 a 6 che equivale al link di un immagine su storage
 						},
 						{ merge: true }
@@ -211,7 +214,7 @@
 	{/if}
 </main>
 
-<style>				
+<style>
 	main {
 		display: flex;
 		flex-direction: column;

@@ -6,10 +6,20 @@ import { goto } from "$app/navigation";
 	export let azione;
 
 	const chooseAzione = () => {
-		if (emoji == '🎓') {
+		switch(emoji){
+			case '🎓':
 			goto('/dashboard/sezioni/gestiscicdl');
-		} else if (emoji == '📜') {
+			break;
+			case '📜':
 			goto('/dashboard/sezioni/gestiscicorso');
+			break;
+			case '📢':
+			goto('/dashboard/sezioni/gestisciannunci');
+			
+			break;
+		}
+		if (emoji == '🎓') {
+		} else if (emoji == '📜') {
 		}
 	};
 </script>

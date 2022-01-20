@@ -31,7 +31,7 @@
 	import UltimeAttivita from '$lib/components/dashboard/stats/UltimeAttivita.svelte';
 
 	let user;
-	let schermata;
+	let schermata = 'utenti';
 	export let utentiGenerali;
 
 	// Tutto quello che va mostrato qui
@@ -234,10 +234,11 @@
 				</div>
 			</div>
 			<div class="gestione-corsi">
-				<h1>Gestione dei corsi</h1>
+				<h1>Gestione</h1>
 				<div class="pagina-azioni">
 					<BoxSelezioneAzione emoji={'🎓'} azione="Gestisci Corsi di Laurea" />
 					<BoxSelezioneAzione emoji={'📜'} azione="Gestisci Singoli Corsi" />
+					<BoxSelezioneAzione emoji={'📢'} azione="Gestisci Annunci" />
 				</div>
 			</div>
 

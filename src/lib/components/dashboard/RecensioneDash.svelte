@@ -147,9 +147,9 @@
 		let giorniInSecondi = giorniSospensione * 86400;
 		let tempo = Timestamp.now().seconds + giorniInSecondi;
 		setDoc(
-			doc(db, 'users', uid),
+			doc(db, 'banTimes', uid),
 			{
-				banTime: tempo
+				time: tempo
 			},
 			{ merge: true }
 		).then(() => {
@@ -167,10 +167,10 @@
 				class="avatar"
 				on:click={() => redirectProfilo(oggettoSegnalazione.recensione.data().idAutore)}
 			>
-				<img src={oggettoSegnalazione.recensione.data().avatar} alt="" />
+				<img src={oggettoSegnalazione.recensione.data().autore.avatar} alt="" />
 			</div>
 			<div class="nome">
-				<p>{oggettoSegnalazione.recensione.data().nome}</p>
+				<p>{oggettoSegnalazione.recensione.data().autore.nome}</p>
 			</div>
 			<button on:click={eliminaRecensione} class="delete-review">🗑️</button>
 		</div>
@@ -191,7 +191,7 @@
 						<form
 							action=""
 							on:submit|preventDefault={() =>
-								setBanTime(oggettoSegnalazione.recensione.data().idAutore)}
+								setBanTime(oggettoSegnalazione.recensione.data().autore.idAutore)}
 						>
 							<input
 								class="input-giorni"

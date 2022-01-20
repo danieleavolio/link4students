@@ -38,16 +38,17 @@
 			};
 
 			// Se per qualche motivo tu fossi bannato
-			await getDoc(doc(db, 'users', fbUser.uid)).then((user) => {
+			await getDoc(doc(db, 'users', fbUser.uid)).then(async (user) => {
 				datiUtente = user;
-				if (user.data().banTime) {
-					// Se il tempo di ban è ancora maggiore rispetto a ora
-					// Ancora non è passato abbastanza tempo dal ban (in giorni)
-					if (user.data().banTime < Timestamp.now()) {
-						alert('Sei ancora bannato');
-						logout();
+				await getDoc(doc(db,'banTimes',fbUser.uid)).then((ban)=>{
+					if (ban.exists()){
+						if (ban.data().time < Timestamp.now()){
+							alert('Still banned');
+							logout();
+						}
 					}
-				}
+				})
+				
 			});
 			// Passo le info allo store dopo che carico le info utente
 			// Altrimenti non potrebbe aspettare l'AWAIT del getDoc delle info
@@ -58,7 +59,7 @@
 			let idEsami = [];
 			let queryIdEsami = query(
 				collection(db, 'recensioni'),
-				where('idAutore', '==', auth.currentUser.uid)
+				where('autore.idAutore', '==', auth.currentUser.uid)
 			);
 			getDocs(queryIdEsami).then((res) => {
 				res.docs.forEach((doc) => {

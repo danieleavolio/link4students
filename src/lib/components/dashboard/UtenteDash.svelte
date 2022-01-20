@@ -23,9 +23,9 @@
 		let giorniInSecondi = giorniSospensione * 86400;
 		let tempo = Timestamp.now().seconds + giorniInSecondi;
 		setDoc(
-			doc(db, 'users', uid),
+			doc(db, 'banTimes', uid),
 			{
-				banTime: tempo
+				time: tempo
 			},
 			{ merge: true }
 		).then(() => {

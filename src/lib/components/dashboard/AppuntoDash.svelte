@@ -75,7 +75,7 @@
 			<a
 				class="download-button"
 				target="_blank"
-				href={appunto.data().urlAppunti}
+				href={appunto.data().urlAppunti.url}
 				download={appunto.data().titoloAppunti}>⬇️ SCARICA</a
 			>
 			<ModalRevisione {appunto} {eliminaAppunto} />

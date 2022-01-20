@@ -4,7 +4,7 @@
 </script>
 
 <div in:fly={{ y: 100, duration: 1000 }} out:fade class="box">
-	<p class="emoji">⚠️</p>
+	<p class="emoji">☁️</p>
 	<p class="contenuto">Non ci sono <span>{oggetti}</span> da controllare</p>
 </div>
 

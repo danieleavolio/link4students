@@ -26,7 +26,7 @@
 			doc(db, 'appunti', appunto.id),
 			{
 				revisionato: true,
-				urlAppunti: urlNuovo
+				urlAppunti: { url: urlNuovo }
 			},
 			{ merge: true }
 		)
@@ -261,7 +261,7 @@
 		cursor: pointer;
 	}
 
-	.elimina:hover{
+	.elimina:hover {
 		color: var(--sfondo);
 		box-shadow: var(--alertHover);
 	}

@@ -34,7 +34,9 @@
 							idUtente: $authStore.user.uid,
 							idCorso: corso.data().codiceCorso,
 							corsoUid: corso.id,
-							urlAppunti: url,
+							urlAppunti: {
+								url
+							},
 							avatar: user.data().avatar,
 							nome: user.data().nome,
 							titoloAppunti: titoloAppunti,

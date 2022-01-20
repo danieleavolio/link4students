@@ -80,9 +80,9 @@
 		let giorniInSecondi = giorniSospensione * 86400;
 		let tempo = Timestamp.now().seconds + giorniInSecondi;
 		setDoc(
-			doc(db, 'users', uid),
+			doc(db, 'banTimes', uid),
 			{
-				banTime: tempo
+				time: tempo
 			},
 			{ merge: true }
 		).then(() => {
@@ -103,11 +103,11 @@
 			class="avatar"
 			on:click={() => redirectProfilo(oggettoSegnalazione.domanda.data().idAutore)}
 		>
-			<img src={oggettoSegnalazione.domanda.data().avatar} alt="" />
+			<img src={oggettoSegnalazione.domanda.data().autore.avatar} alt="" />
 		</div>
 		<div class="titolo-nome">
 			<p class="titolo-domanda">{oggettoSegnalazione.domanda.data().titolo}</p>
-			<p>{oggettoSegnalazione.domanda.data().nome}</p>
+			<p>{oggettoSegnalazione.domanda.data().autore.nome}</p>
 		</div>
 
 		<button on:click={eliminaDomanda} class="delete-domanda">🗑️</button>
@@ -123,7 +123,7 @@
 				<!-- Form per la sospensione -->
 				<form
 					action=""
-					on:submit|preventDefault={() => setBanTime(oggettoSegnalazione.domanda.data().idAutore)}
+					on:submit|preventDefault={() => setBanTime(oggettoSegnalazione.domanda.data().autore.idAutore)}
 				>
 					<input
 						class="input-giorni"

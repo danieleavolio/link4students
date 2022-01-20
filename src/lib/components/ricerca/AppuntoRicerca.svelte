@@ -29,7 +29,7 @@
 		</div>
 	</div>
 	{#if appunto.data().revisionato}
-		<a href={appunto.data().urlAppunti} download={appunto.data().titoloAppunti} target="_blank"
+		<a href={appunto.data().urlAppunti.url} download={appunto.data().titoloAppunti} target="_blank"
 			>Download</a
 		>
 	{:else}

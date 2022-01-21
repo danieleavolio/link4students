@@ -59,6 +59,16 @@ textarea {
     outline: none;
     border: var(--bordo);
     color: var(--testo);
+    background-color: var(--sfondo);
+}
+
+select {
+    color: var(--testo);
+    background-color: var(--sfondo);
+}
+
+.emoji {
+    font-family: -webkit-pictograph
 }
 
 .content-wrapper {

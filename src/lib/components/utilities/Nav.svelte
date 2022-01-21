@@ -204,7 +204,7 @@
 					<button class="logout" on:click={logout}>Logout</button>
 				</div>
 			{:else if !$authStore.isLoggedIn}
-				<a on:click={handleOpen} class="unisciti" href="/joinus">
+				<a on:click={handleOpen} class="unisciti" href="/reg/joinus">
 					<span class="icona">🙏</span> Unisciti</a
 				>
 			{/if}
@@ -281,7 +281,7 @@
 	}
 
 	a {
-		color: rgb(27, 27, 27);
+		color: var(--testo);
 		padding: 1rem;
 		box-shadow: var(--neumorphism);
 		padding: 0.5rem;

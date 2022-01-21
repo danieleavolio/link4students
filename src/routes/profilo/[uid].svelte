@@ -410,7 +410,6 @@ import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 	<title>Profilo</title>
 </svelte:head>
 <h1>Profilo</h1>
-{collegati}
 <div class="container-profilo">
 	<div class="avatar">
 		<div class="image-div">
@@ -426,7 +425,7 @@ import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 							type="file"
 							bind:this={profilePicture}
 							on:change={onChange}
-							accept="images/*"
+							accept="images/pmg, images/jpg "
 							id="file"
 						/>
 						{#if file}

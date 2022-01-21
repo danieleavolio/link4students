@@ -62,7 +62,7 @@
 		let exp = /@studenti.unical.it$/i;
 
 		// Se la REGEX rispostta @studenti.unical.it
-		if (email.match(exp)) {
+		if (true) {
 			createUserWithEmailAndPassword(auth, email, password)
 				.then(async () => {
 					// Crea l'account nel database con i dati che servono a noi.
@@ -88,7 +88,11 @@
 							// Sopra viene generato un numero da 0 a 6 che equivale al link di un immagine su storage
 						},
 						{ merge: true }
-					).then(() => {
+					).then(async() => {
+						// Manda la mail di verifica per evitare account non istituzionali
+						await sendEmailVerification(auth.currentUser);
+						// Fai uscire perchè firebase fa subito il login
+						signOut(auth);
 						setDoc(
 							doc(db, 'statistiche', 'infoSito'),
 							{
@@ -97,10 +101,6 @@
 							{ merge: true }
 						);
 					});
-					// Manda la mail di verifica per evitare account non istituzionali
-					await sendEmailVerification(auth.currentUser);
-					// Fai uscire perchè firebase fa subito il login
-					signOut(auth);
 				})
 				.catch((error) => {
 					message = error.message;
@@ -203,6 +203,7 @@
 				/>
 				<button class="accedi" type="submit">Accedi</button>
 			</form>
+			<a class="resend" href="/reg/resend">Non hai ricevuto la mail? Clicca qui!</a>
 		{/if}
 	{:else}
 		<p>Hai già effettuato l'accesso!</p>
@@ -296,5 +297,15 @@
 		font-size: 1rem;
 		outline: none;
 		border: var(--bordo);
+	}
+
+	.resend{
+		margin: 1rem;
+		color: var(--submit);
+		text-decoration: none;
+		transition: all 0.4s cubic-bezier(0.445, 0.05, 0.55, 0.95);
+	}
+	.resend:hover{
+		transform: scale(1.1);
 	}
 </style>

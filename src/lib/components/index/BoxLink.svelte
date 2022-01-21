@@ -24,7 +24,7 @@
 		align-items: center;
 		padding: 1rem;
 		border-radius: 1rem;
-		background-color: var(--sfondo);
+		background: var(--sfondoComp);
         cursor: pointer;
         transition: var(--velocita);
 		border: var(--bordo);
@@ -42,6 +42,7 @@
 		margin: 0;
 		width: 100px;
 		text-align: center;
+		font-family: -webkit-pictograph
 	}
 
 	

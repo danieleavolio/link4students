@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Footer from '$lib/components/utilities/Footer.svelte';
-import Nav from '$lib/components/utilities/Nav.svelte';
+	import Nav from '$lib/components/utilities/Nav.svelte';
 	import '../app.css';
 </script>
 
@@ -12,7 +12,7 @@ import Nav from '$lib/components/utilities/Nav.svelte';
 	</div>
 </main>
 
-<Footer></Footer>
+<Footer />
 
 <style>
 	.main-container {
@@ -25,27 +25,56 @@ import Nav from '$lib/components/utilities/Nav.svelte';
 		font-weight: 500;
 	}
 
-	:global(:root) {
-		--neumorphism: 5px 5px 10px rgb(197, 197, 197), -5px -5px 10px rgba(255, 255, 255),
-			inset 0 0 0 rgba(0, 0, 0, 0.2), inset 0 0 0 rgba(219, 255, 255, 0.5);
-		--sfondo: rgb(237, 237, 237);
-		--alert: rgb(231, 88, 88);
-		--testo: #31344b;
-		--innerNeu: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
-			inset 5px 5px 10px rgb(196, 196, 196), inset -5px -5px 10px rgba(255, 255, 255);
-		--velocita: 0.2s ease;
-		--premuto: scale(0.98);
-		--bordo: rgb(204, 204, 204) solid 2px;
-		--collegati: rgb(111, 4, 161);
-		--submit: rgb(45, 76, 200);
-		--resolve: rgb(72, 204, 36);
-		--submitHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
-			inset 15px 15px 10px #2641aa, inset -15px -15px 10px #7792ff;
-		--alertHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
-			inset 15px 15px 15px #c44b4b, inset -15px -15px 15px #f07272;
-		--resolveHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
-			inset 15px 15px 15px #3dad1f, inset -15px -15px 15px #91f775;
+	
+	@media (prefers-color-scheme: dark) {
+		:global(:root) {
+			--neumorphism: 5px 5px 5px #050505, -5px -5px 10px rgb(20, 20, 20),
+				inset 0 0 0 rgba(0, 0, 0, 0.2), inset 0 0 0 rgba(0, 0, 0, 0.5);
+			--sfondo: rgb(15, 15, 15);
+			--sfondoComposfondonent:linear-gradient(145deg, #131313, #101010);
+			--alert: rgb(230, 68, 68);
+			--testo: rgb(240, 240, 240);
+			--innerNeu: 0 0 0 rgb(15, 15, 15), 0 0 0 rgba(22, 22, 22, 0.5),
+				inset 5px 5px 10px rgb(5, 5, 5), inset -5px -5px 10px rgb(20, 20, 20);
+			--velocita: 0.2s ease;
+			--premuto: scale(0.98);
+			--bordo: rgb(15, 15, 15) solid 2px;
+			--collegati: rgb(167, 63, 216);
+			--submit: rgb(58, 97, 255);
+			--resolve: rgb(248, 252, 32);
+			--discreto: rgb(255, 241, 50);
+			--ottimo: rgb(28, 255, 77);
+			--buono: rgb(82, 37, 245);
+			--submitHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(0, 0, 0, 0.5),
+				inset 15px 15px 10px rgb(58, 97, 255), inset -15px -15px 10px #30459b;
+			--alertHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(0, 0, 0, 0.5),
+				inset 15px 15px 15px rgb(218, 60, 60), inset -15px -15px 15px #e93a3a;
+			--resolveHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(0, 0, 0, 0.5),
+				inset 15px 15px 15px rgb(242, 255, 58), inset -15px -15px 15px #d0ff00;
+		}
+		
 	}
-
-
+	@media (prefers-color-scheme: light) {
+		:global(:root) {
+			--neumorphism: 5px 5px 10px rgb(197, 197, 197), -5px -5px 10px rgba(255, 255, 255),
+				inset 0 0 0 rgba(0, 0, 0, 0.2), inset 0 0 0 rgba(219, 255, 255, 0.5);
+			--sfondo: rgb(237, 237, 237);
+			--alert: rgb(231, 88, 88);
+			--testo: #31344b;
+			--innerNeu: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
+				inset 5px 5px 10px rgb(196, 196, 196), inset -5px -5px 10px rgba(255, 255, 255);
+			--velocita: 0.2s ease;
+			--premuto: scale(0.98);
+			--bordo: rgb(204, 204, 204) solid 2px;
+			--collegati: rgb(111, 4, 161);
+			--submit: rgb(45, 76, 200);
+			--resolve: rgb(72, 204, 36);
+			--submitHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
+				inset 15px 15px 10px #2641aa, inset -15px -15px 10px #7792ff;
+			--alertHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
+				inset 15px 15px 15px #c44b4b, inset -15px -15px 15px #f07272;
+			--resolveHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
+				inset 15px 15px 15px #3dad1f, inset -15px -15px 15px #91f775;
+		}
+	}
 </style>

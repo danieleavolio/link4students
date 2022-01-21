@@ -55,7 +55,7 @@
 
 <div class="main-links">
 	{#if !$authStore.isLoggedIn}
-		<BoxLink nome="Unisciti a noi!" emoji="👏" linkto="joinus" />
+		<BoxLink nome="Unisciti a noi!" emoji="👏" linkto="reg/joinus" />
 	{:else}
 		<BoxLink nome="Profilo" emoji="👥" linkto="profilo/{$authStore.user.uid}" />
 	{/if}
@@ -92,9 +92,9 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		box-shadow: var(--innerNeu);
-		padding: 1rem;
-		border-radius: 0.3rem;
+		box-shadow: var(--neumorphism);
+		padding: 2rem;
+		border-radius: 1rem;
 	}
 
 	.ref-annunci {

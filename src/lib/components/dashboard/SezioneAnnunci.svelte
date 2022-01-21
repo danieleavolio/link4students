@@ -18,19 +18,20 @@
 		serverTimestamp
 	} from 'firebase/firestore';
 	import { onMount } from 'svelte';
-
-	import AnnuncioDash from './AnnuncioDash.svelte';
+	import ListaAnnunci from '../utilities/ListaAnnunci.svelte';
 
 	let titolo;
 	let contenuto;
 	let tipo = 'message';
 
 	const pubblicaAnnuncio = () => {
+		let data = serverTimestamp();
+
 		const dati = {
 			titolo,
 			contenuto,
 			tipo,
-			data: serverTimestamp()
+			data,
 		};
 
 		addDoc(collection(db, 'annunci'), dati).then(() => {
@@ -42,11 +43,7 @@
 
 <div class="sezione-annunci">
 	<h1>Gestione degli annunci</h1>
-	<div class="lista-annunci">
-		{#each annunci as annuncio}
-			<AnnuncioDash {annuncio} />
-		{/each}
-	</div>
+	<ListaAnnunci {annunci} />
 
 	<div class="sezione-aggiunta">
 		<h3>Aggiungi un nuovo annuncio</h3>
@@ -79,13 +76,6 @@
 		box-shadow: var(--neumorphism);
 		padding: 1rem;
 		border-radius: 1rem;
-	}
-	.lista-annunci {
-		display: flex;
-		gap: 1rem;
-		flex-wrap: wrap;
-		justify-content: center;
-		align-items: center;
 	}
 
 	h1,

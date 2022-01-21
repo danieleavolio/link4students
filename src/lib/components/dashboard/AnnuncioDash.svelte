@@ -1,14 +1,14 @@
 <script lang="ts">
-	import ContentCartaCorso from './ContentCartaCorso.svelte';
 
-
-    export let annuncio;
-
+	export let annuncio;
 
 	let showMore = false;
 	let mostrando = false;
 
-	let contenutoTroncato = annuncio.data().contenuto.length >= 200 ? annuncio.data().contenuto.substring(0, 200) : annuncio.data().contenuto;
+	let contenutoTroncato =
+		annuncio.data().contenuto.length >= 200
+			? annuncio.data().contenuto.substring(0, 200)
+			: annuncio.data().contenuto;
 	$: if (annuncio.data().contenuto.length >= 200) {
 		showMore = true;
 	} else {
@@ -26,7 +26,7 @@
 	};
 </script>
 
-<div  class="annuncio {mostrando ? 'mostrando' : ''}">
+<div class="annuncio {mostrando ? 'mostrando' : ''}">
 	<div class="cover">
 		<img class={annuncio.data().tipo} src="/images/{annuncio.data().tipo}.png" alt="" />
 	</div>
@@ -34,14 +34,15 @@
 		<p class="data">{annuncio.data().data.toDate()}</p>
 		<p class="titolo">{annuncio.data().titolo}</p>
 		<p class="contenuto">
-			{contenutoTroncato}{#if showMore && annuncio.data().contenuto.length >= 300 && !mostrando}
-				<span class="show-more" on:click={mostraAltro}> Mostra altro..</span>
-			{/if}
-			{#if mostrando}
-				<span class="show-less" on:click={mostraMeno}> Comprimi..</span>
-			{/if}
+			{contenutoTroncato}
 		</p>
 	</div>
+	{#if showMore && annuncio.data().contenuto.length >= 300 && !mostrando}
+		<button class="show-more" on:click={mostraAltro}> Mostra altro..</button>
+	{/if}
+	{#if mostrando}
+		<button class="show-less" on:click={mostraMeno}> Comprimi..</button>
+	{/if}
 </div>
 
 <style>
@@ -54,9 +55,10 @@
 		display: grid;
 		grid-template-rows: auto 1fr;
 		width: 400px;
-        height: 400px;
+		height: 430px;
 		box-shadow: var(--neumorphism);
-        border-radius: 0.6rem;
+		border-radius: 0.6rem;
+		transition: all 0.5s cubic-bezier(0.39, 0.575, 0.565, 1)
 	}
 
 	.cover {
@@ -74,6 +76,8 @@
 		padding: 0 1rem;
 		display: flex;
 		flex-direction: column;
+		font-size: 1rem;
+		overflow-wrap: anywhere;
 	}
 
 	.data {
@@ -88,13 +92,38 @@
 		background-color: var(--submit);
 	}
 
-	.show-more, .show-less {
+	.show-more,
+	.show-less {
 		color: var(--submit);
 		cursor: pointer;
+		border-radius: 0.3rem;
+		width: fit-content;
+		place-self: center;
+		position: relative;
+		top: 0.8rem;
+		padding: 0.3rem;
 	}
 
-    .mostrando{
-        width: 90%;
-        height: fit-content;
-    }
+	.show-more:hover{
+		box-shadow: var(--submitHover);
+		background-color: var(--submit);
+		color: var(--sfondo);
+	}
+	
+
+
+	.show-less {
+		color: var(--alert);
+	}
+
+	.show-less:hover{
+		box-shadow: var(--alertHover);
+		background-color: var(--alert);
+		color: var(--sfondo);
+	}
+
+	.mostrando {
+		width: 90%;
+		height: fit-content;
+	}
 </style>

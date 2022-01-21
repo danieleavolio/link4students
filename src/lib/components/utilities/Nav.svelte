@@ -271,6 +271,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
+		z-index: 10;
 	}
 	.backdrop {
 		position: absolute;
@@ -329,8 +330,7 @@
 	}
 
 	.profilo {
-		position: absolute;
-		bottom: 3rem;
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		gap: 0.2rem;

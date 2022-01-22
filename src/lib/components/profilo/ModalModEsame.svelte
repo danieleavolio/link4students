@@ -3,8 +3,18 @@
 
 	import { authStore } from '$lib/stores/authStore';
 	import { esamiLibretto } from '$lib/stores/esamiLibretto';
-import { esamiRecensiti } from '$lib/stores/recensioniStore';
-	import { collection, deleteDoc, doc, getDoc, getDocs, increment, query, setDoc, where } from 'firebase/firestore';
+	import { esamiRecensiti } from '$lib/stores/recensioniStore';
+	import {
+		collection,
+		deleteDoc,
+		doc,
+		getDoc,
+		getDocs,
+		increment,
+		query,
+		setDoc,
+		where
+	} from 'firebase/firestore';
 
 	let isOpen;
 	let caricamento = false;
@@ -49,8 +59,7 @@ import { esamiRecensiti } from '$lib/stores/recensioniStore';
 					},
 					{ merge: true }
 				);
-			}
-			else{
+			} else {
 				setDoc(
 					doc(db, 'corsidelcdl', esame.data().uidCorso),
 					{
@@ -103,14 +112,18 @@ import { esamiRecensiti } from '$lib/stores/recensioniStore';
 
 		return datiMedia;
 	};
-	const handleRecensione = async() =>{
-		let queryRecensione = query(collection(db,'recensioni'),where('idAutore','==',$authStore.user.uid), where('idCorso','==',esame.data().codiceCorso));
-		await getDocs(queryRecensione).then((res)=>{
-			if (!res.empty){
-				eliminaRecensione(res.docs[0])
+	const handleRecensione = async () => {
+		let queryRecensione = query(
+			collection(db, 'recensioni'),
+			where('idAutore', '==', $authStore.user.uid),
+			where('idCorso', '==', esame.data().codiceCorso)
+		);
+		await getDocs(queryRecensione).then((res) => {
+			if (!res.empty) {
+				eliminaRecensione(res.docs[0]);
 			}
-		})
-	}
+		});
+	};
 
 	const eliminaRecensione = (recensione) => {
 		// Eliminare tutte le interazioni con la recnesione ( like e dislike)
@@ -211,7 +224,9 @@ import { esamiRecensiti } from '$lib/stores/recensioniStore';
 
 {#if $authStore.isLoggedIn}
 	<slot name="trigger" {open}>
-		<button class="domanda-button" on:click={open}>✒️</button>
+		<button class="domanda-button" on:click={open}
+			><span class="material-icons"> mode_edit </span></button
+		>
 	</slot>
 {/if}
 
@@ -222,7 +237,7 @@ import { esamiRecensiti } from '$lib/stores/recensioniStore';
 			<button class="close-button" on:click={close}> ❌ </button>
 			<slot name="header">
 				<div class="titolo">
-					<p>Modifica <span>{esame.data().nomeCorso}</span></p>
+					<p>Modifica voto di <span>{esame.data().nomeCorso}</span></p>
 				</div>
 			</slot>
 			{#if caricamento}
@@ -233,18 +248,18 @@ import { esamiRecensiti } from '$lib/stores/recensioniStore';
 					<div class="domande">
 						<form action="" on:submit|preventDefault={modificaEsame}>
 							<div class="inputs-container">
-								<label for="voto">Votazione esame</label>
 								<input bind:value={voto} type="number" id="voto" min="18" max="30" required />
 								<label for="lode">Lode</label>
 								<input bind:checked={lode} disabled={voto != 30} type="checkbox" id="lode" />
 							</div>
-							<div class="submit-box">
-								<button type="submit">Salva</button>
-							</div>
 						</form>
 						<div class="oppure">
-							<p>Oppure</p>
-							<button class="elimina" on:click={eliminaDalLibretto}>Elimina dal libretto</button>
+							<div class="submit-box">
+								<button class="save" type="submit"><span class="material-icons"> save </span></button>
+							</div>
+							<button class="elimina" on:click={eliminaDalLibretto}
+								><span class="material-icons"> delete_forever </span></button
+							>
 						</div>
 					</div>
 				</div>
@@ -263,16 +278,20 @@ import { esamiRecensiti } from '$lib/stores/recensioniStore';
 		align-self: center;
 		padding: 0.4rem;
 		background-color: var(--sfondo);
-		box-shadow: var(--neumorphism);
+		box-shadow: var(--innerNeu);
 		border: var(--bordo);
 		border-radius: 6px;
 		outline: none;
 		cursor: pointer;
-		font-size: 1rem;
+		font-size: 1em;
 		transition: var(--velocita);
 	}
 
-	.domanda-button:hover{
+	.domanda-button > span {
+		font-size: 2em;
+	}
+
+	.domanda-button:hover {
 		box-shadow: var(--innerNeu);
 		scale: var(--premuto);
 	}
@@ -325,7 +344,7 @@ import { esamiRecensiti } from '$lib/stores/recensioniStore';
 		transition: var(--velocita);
 	}
 
-	.close-button:hover{
+	.close-button:hover {
 		transform: var(--premuto);
 	}
 	.titolo {
@@ -341,8 +360,17 @@ import { esamiRecensiti } from '$lib/stores/recensioniStore';
 		gap: 0.5rem;
 	}
 
+	.domande {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
 	.contenuto {
 		overflow: auto;
+	}
+	.oppure{
+		display: flex;
 	}
 
 	form {
@@ -357,9 +385,12 @@ import { esamiRecensiti } from '$lib/stores/recensioniStore';
 		align-items: center;
 	}
 
-	input{
+	label {
+		font-size: 1.2em;
+	}
+	input {
 		background-color: var(--sfondo);
-		font-size: 1rem;
+		font-size: 1.2em;
 		outline: none;
 		border-radius: 0.2rem;
 		border: var(--bordo);
@@ -367,21 +398,37 @@ import { esamiRecensiti } from '$lib/stores/recensioniStore';
 		color: var(--testo);
 	}
 
-
-
-	.elimina {
+	.elimina,.save {
 		border: var(--bordo);
 		background-color: var(--sfondo);
-		color: var(--alert);
-		box-shadow: var(--neumorphism);
+		color: var(--testo);
+		box-shadow: var(--innerNeu);
 		padding: 0.5rem;
 		border-radius: 0.4rem;
 		cursor: pointer;
 		font-size: 1rem;
-		transition:var(--velocita);
+		transition: var(--velocita);
+		display: flex;
+		align-items: center;
 	}
+
+	.elimina{
+		color: var(--alert);
+	}
+
+	.save{
+		color: var(--submit);
+	}
+
 	.elimina:hover{
-		box-shadow: var(--innerNeu);
+		color: var(--sfondo);
+		box-shadow: var(--alertHover);
+		background-color: var(--alert);
+	}
+	.save:hover{
+		color: var(--sfondo);
+		box-shadow: var(--submitHover);
+		background-color: var(--submit);
 	}
 
 	.submit-box {
@@ -393,23 +440,7 @@ import { esamiRecensiti } from '$lib/stores/recensioniStore';
 		margin: 0 1rem;
 	}
 
-	.submit-box > button {
-		background-color: var(--sfondo);
-		font-size: 1rem;
-		border-radius: 8px;
-		border: var(--bordo);
-		box-shadow: var(--neumorphism);
-		cursor: pointer;
-		padding: 5px 5px;
-		color: var(--submit);
-		transition: var(--velocita);
-		font-size: 1.5rem;
-	}
 
-	.submit-box > button:hover{
-		box-shadow: var(--innerNeu);
-		transform: var(--premuto);
-	}
 
 	.loading-div {
 		border: white solid 10px;

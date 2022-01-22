@@ -49,33 +49,41 @@
 			<option value="cfu">CFU</option>
 			<option value="nome">Nome</option>
 		</select>
-		<span>🔎</span><input bind:value={filtro} type="text" />
-		{:else}
+		<div class="search">
+			<span class="material-icons"> search </span><input bind:value={filtro} type="text" />
+		</div>
+	{:else}
 		<div class="vuoto">
-			<p class="emoji">📜</p>
+			<span class="material-icons emoji"> description </span>
 			<p class="testo">Non ci sono corsi disponibili per questo Corso di Laurea</p>
 		</div>
 	{/if}
 </div>
-<div class="lista">
-	{#if listaFiltrata.length < 0}
-		{#each corsi as corso (corso.id)}
-			<CorsoBox {corso} />
-		{/each}
-	{:else}
-		{#each listaFiltrata as corso (corso.id)}
-			<CorsoBox {corso} />
-		{/each}
-	{/if}
-</div>
+{#if corsi.length > 0}
+	<div class="lista">
+		{#if listaFiltrata.length < 0}
+			{#each corsi as corso (corso.id)}
+				<CorsoBox {corso} />
+			{/each}
+		{:else}
+			{#each listaFiltrata as corso (corso.id)}
+				<CorsoBox {corso} />
+			{/each}
+		{/if}
+	</div>
+{/if}
 
 <style>
 	.ordina-div {
 		padding: 1.2rem;
 		font-size: 1.1rem;
 		margin: 1rem;
-		box-shadow:var(--innerNeu);
+		box-shadow: var(--innerNeu);
 		border-radius: 0.4rem;
+		display: flex;
+		gap: 1em;
+		justify-content: center;
+		align-items: center;
 	}
 
 	select {
@@ -86,7 +94,7 @@
 		outline: none;
 	}
 
-	input{
+	input {
 		border: var(--bordo);
 		outline: none;
 		box-shadow: var(--innerNeu);
@@ -106,14 +114,14 @@
 		border-radius: 1rem;
 	}
 
-	.vuoto{
+	.vuoto {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 	}
 
-	.emoji{
+	.emoji {
 		font-size: 3rem;
 		margin: 0;
 		border-radius: 0.5rem;
@@ -121,9 +129,14 @@
 		background-color: var(--sfondo);
 	}
 
-	.testo{
+	.testo {
 		font-size: 2rem;
 	}
 
-
+	.search{
+		display: flex;
+		gap: 1em;
+		justify-content: center;
+		align-items: center;
+	}
 </style>

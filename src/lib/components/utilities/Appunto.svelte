@@ -309,7 +309,9 @@
 		</div>
 		{#if $authStore.isLoggedIn}
 			{#if $authStore.user.uid == appunto.data().idUtente}
-				<button on:click={eliminaAppunto} class="delete-appunto">🗑️</button>
+				<button on:click={eliminaAppunto} class="delete-appunto"
+					><span class="material-icons"> delete </span></button
+				>
 			{/if}
 		{/if}
 	</div>
@@ -329,7 +331,8 @@
 					<button
 						disabled={!appunto.data().revisionato}
 						on:click={likeFunction}
-						class="like bottone-ld {uiLocaleLike}">👍</button
+						class="like bottone-ld {uiLocaleLike}"
+						><span class="material-icons"> thumb_up </span></button
 					>
 				</div>
 				<div class="singolo-bottone">
@@ -339,7 +342,8 @@
 					<button
 						disabled={!appunto.data().revisionato}
 						on:click={dislikeFunction}
-						class="dislike bottone-ld {uiLocaleDislike}">👎</button
+						class="dislike bottone-ld {uiLocaleDislike}"
+						><span class="material-icons"> thumb_down </span></button
 					>
 				</div>
 			</div>
@@ -350,7 +354,9 @@
 						class="download-button"
 						target="_blank"
 						href={appunto.data().urlAppunti.url}
-						download={appunto.data().titoloAppunti}>⬇️ SCARICA</a
+						download={appunto.data().titoloAppunti}><span class="material-icons">
+							file_download
+							</span>SCARICA</a
 					>
 				{:else}
 					<button disabled class="non-disponibile">NON DISPONBIILE</button>
@@ -426,6 +432,9 @@
 		font-weight: 600;
 		box-shadow: var(--neumorphism);
 		transition: var(--velocita);
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 	.download-button:hover {
 		color: var(--sfondo);
@@ -459,11 +468,13 @@
 	}
 
 	.like:hover {
-		box-shadow: var(--submitHover);
+		background-color: var(--submit);
+		box-shadow: none;
 	}
 
 	.dislike:hover {
-		box-shadow: var(--alertHover);
+		background-color: var(--alert);
+		box-shadow: none;
 	}
 	.singolo-bottone {
 		display: flex;
@@ -474,6 +485,11 @@
 
 	.liked {
 		background-color: var(--submit);
+	}
+
+	.liked:hover,
+	.disliked:hover {
+		background-color: var(--sfondo);
 	}
 
 	.disliked {

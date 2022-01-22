@@ -134,12 +134,12 @@
 				<div class="domande">
 					<form action="" on:submit|preventDefault={mandaRecensione}>
 						<div class="domanda">
-							<p>Quanto reputi difficile l'esame? <span class="icona">🧠</span></p>
+							<p>Quanto reputi difficile l'esame? <span class="material-icons"> psychology </span></p>
 							<SelectionForm bind:difficolta icon={'🧠'} {utilita} />
 						</div>
 
 						<div class="domanda">
-							<p>Quanto reputi utile l'esame? <span class="icona">🎓</span></p>
+							<p>Quanto reputi utile l'esame? <span class="material-icons"> stars </span></p>
 							<SelectionForm icon={'🎓'} bind:utilita {difficolta} />
 						</div>
 
@@ -258,10 +258,6 @@
 		border-radius: 1rem;
 		outline: none;
 		color: var(--testo);
-	}
-
-	.icona {
-		font-size: 1.4rem;
 	}
 
 	.submit-box {

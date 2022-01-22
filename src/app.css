@@ -66,6 +66,7 @@ textarea {
 select {
     color: var(--testo);
     background-color: var(--sfondo);
+    box-shadow: var(--innerNeu);
 }
 
 .emoji {

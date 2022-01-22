@@ -61,7 +61,7 @@
 			<button class="close-button" on:click={close}> ❌ </button>
 			<slot name="header">
 				<div class="titolo">
-					<p>Fai una domanda</p>
+					<p>Scrivi la tua domanda</p>
 				</div>
 			</slot>
 
@@ -70,7 +70,7 @@
 				<div class="domande">
 					<form action="" on:submit|preventDefault={mandaDomanda}>
 						<div class="titolo-container">
-							<label for="inputdomanda">Titolo domanda</label>
+							<label for="inputdomanda">Titolo</label>
 							<input type="text" id="inputdomanda" bind:value={titoloDomanda} required />
 						</div>
 						<div class="domanda text-area">

@@ -40,6 +40,7 @@
 	.esame {
 		display: flex;
 		justify-content: center;
+		gap: 1em;
 	}
 	.esame-libretto {
 		width: 80%;
@@ -59,13 +60,12 @@
 	}
 
 	.sinistra {
-		box-shadow: var(--neumorphism);
-		border-radius: 100%;
+		box-shadow: var(--innerNeu);
+		border-radius: 1.2em;
 		width: 75px;
 		height: 75px;
 		place-self: center;
 		background-color: var(--sfondo);
-		box-shadow: var(--neumorphism);
 		display: flex;
 		align-items: center;
 		justify-content: center;

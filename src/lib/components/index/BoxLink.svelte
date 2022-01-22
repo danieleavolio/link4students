@@ -6,12 +6,12 @@
 	export let linkto;
 
 	const redirectTo = (linkto) => {
-        goto(linkto)
-    };
+		goto(linkto);
+	};
 </script>
 
 <div on:click={() => redirectTo(linkto)} class="container">
-	<p class="emoji">{emoji}</p>
+	<p class="emoji"><span class="material-icons">{emoji} </span></p>
 	<p>{nome}</p>
 </div>
 
@@ -25,25 +25,25 @@
 		padding: 1rem;
 		border-radius: 1rem;
 		background: var(--sfondoComp);
-        cursor: pointer;
-        transition: var(--velocita);
+		cursor: pointer;
+		transition: var(--velocita);
 		border: var(--bordo);
 	}
 
-    .container:hover{
-       box-shadow: var(--innerNeu);
-	   transform: var(--premuto);
-	   
-    }
-	.emoji{
+	.container:hover {
+		box-shadow: var(--innerNeu);
+		transform: var(--premuto);
+	}
+	.emoji {
 		justify-self: center;
 		align-self: center;
-		font-size: 4rem;
 		margin: 0;
 		width: 100px;
 		text-align: center;
-		font-family: -webkit-pictograph
+		font-family: -webkit-pictograph;
 	}
 
-	
+	.emoji > span{
+		font-size: 4em;
+	}
 </style>

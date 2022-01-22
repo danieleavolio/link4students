@@ -46,9 +46,9 @@
 			--ottimo: rgb(28, 255, 77);
 			--buono: rgb(82, 37, 245);
 			--submitHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(0, 0, 0, 0.5),
-				inset 15px 15px 10px rgb(58, 97, 255), inset -15px -15px 10px #30459b;
+				inset 15px 15px 10px rgb(58, 97, 255), inset -15px -15px 10px #3e5dd8;
 			--alertHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(0, 0, 0, 0.5),
-				inset 15px 15px 15px rgb(218, 60, 60), inset -15px -15px 15px #e93a3a;
+				inset 15px 15px 15px rgb(218, 60, 60), inset -15px -15px 15px #db3535;
 			--resolveHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(0, 0, 0, 0.5),
 				inset 15px 15px 15px rgb(242, 255, 58), inset -15px -15px 15px #d0ff00;
 		}

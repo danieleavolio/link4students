@@ -48,7 +48,7 @@
 	<div class="utilities">
 		<ModalDomanda {idCorso} />
 		<div class="filtering">
-			<span class="lente">🔎</span><input
+			<span class="material-icons">search</span><input
 				bind:value={keywords}
 				class="filtro"
 				type="text"

@@ -74,7 +74,7 @@
 				<div class="domande">
 					<form action="" on:submit|preventDefault={mandaSegnalazione}>
 						<div class="domanda text-area">
-							<p>Motiva la tua segnalazione ‼️</p>
+							<p>Motiva la tua segnalazione <span class="material-icons"> report_problem </span></p>
 							<textarea
 								bind:value={contenuto}
 								name="recensione"
@@ -104,8 +104,12 @@
 		padding: 0.5rem;
 		border-radius: 6px;
 		cursor: pointer;
-		color: var(--alert);
-		border: var(--alert) solid;
+		color: var(--sfondo);
+		background-color: var(--alert);
+	}
+
+	.segnalazione:hover{
+		box-shadow: var(--alertHover);
 	}
 
 	.segnalato {
@@ -117,7 +121,7 @@
 		color: var(--submit);
 		border: var(--submit) solid;
 	}
-	.segnalato:hover{
+	.segnalato:hover {
 		box-shadow: var(--neumorphism);
 		transform: scale(1);
 	}
@@ -180,7 +184,6 @@
 	}
 
 	.domanda {
-		box-shadow: var(--innerNeu);
 		border-radius: 0.8rem;
 		padding: 0.5rem;
 		justify-content: center;
@@ -188,6 +191,14 @@
 		flex-direction: column;
 		align-items: center;
 	}
+
+	.domanda > p{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 1em;
+	}
+
 
 	textarea {
 		resize: none;

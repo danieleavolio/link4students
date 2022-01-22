@@ -84,12 +84,20 @@
 			{#if corso.data().numRecensioni}
 				<div class="difficolta">
 					<p class="singola-diff">
-						Difficolta: <span> {stampaEmoji(corso.data().mediaDifficolta, '🧠')} </span>
-						<span class="mancanti"> {stampaEmoji(difficoltaMancante, '⚫')} </span>
+						Difficolta: <span class="material-icons acceso">
+							{stampaEmoji(corso.data().mediaDifficolta, 'psychology ')}
+						</span>
+						<span class="mancanti material-icons spento">
+							{stampaEmoji(difficoltaMancante, 'psychology ')}
+						</span>
 					</p>
 					<p class="singola-diff">
-						Utilita: <span>{stampaEmoji(corso.data().mediaUtilita, '🎓')}</span>
-						<span class="mancanti"> {stampaEmoji(utilitaMancante, '⚫')} </span>
+						Utilita: <span class="material-icons acceso"
+							>{stampaEmoji(corso.data().mediaUtilita, 'stars ')}</span
+						>
+						<span class="mancanti material-icons spento">
+							{stampaEmoji(utilitaMancante, 'stars ')}
+						</span>
 					</p>
 				</div>
 			{:else}
@@ -100,14 +108,14 @@
 </div>
 <div class="recensione-box">
 	{#if $authStore.isLoggedIn}
-	<!-- Se hai aggiunto l'esame al libretto, puoi lasciare una recensione -->
+		<!-- Se hai aggiunto l'esame al libretto, puoi lasciare una recensione -->
 		{#if $esamiLibretto.find((elem) => elem.data().codiceCorso == corso.data().codiceCorso)}
 			{#if !recensito}
 				<p>Hai superato l'esame?</p>
 				<p>Lascia una recensione!</p>
 				<ModalRecensione idCorso={corso.data().codiceCorso} nome={corso.data().nome} />
 			{:else}
-				<p>Hai recensito questo esame! ☑️</p>
+				<p class="hai-recensito">Hai recensito questo esame! <span class="material-icons"> check_circle </span></p>
 			{/if}
 		{/if}
 	{/if}
@@ -126,7 +134,7 @@
 	{:else if scelta == 'Domande'}
 		<BoxDomande idCorso={corso.data().codiceCorso} />
 	{:else if scelta == 'Appunti'}
-		<BoxAppunti corso={corso} />
+		<BoxAppunti {corso} />
 	{/if}
 </div>
 
@@ -173,6 +181,11 @@
 
 	.mancanti {
 		font-weight: 600;
+		color: var(--testo);
+	}
+
+	.acceso {
+		color: var(--submit);
 	}
 
 	.media {
@@ -186,6 +199,13 @@
 		font-size: 3rem;
 		padding: 3rem;
 		margin: 0;
+	}
+
+	.hai-recensito{
+		display: flex;
+		align-items: center;
+		justify-content: center	;
+		gap: 1em;
 	}
 
 	.recensione-box {
@@ -224,5 +244,8 @@
 		box-shadow: var(--innerNeu);
 		padding: 1rem;
 		border-radius: 1rem;
+		display: flex;
+		justify-content: space-around;
+		align-items: center;
 	}
 </style>

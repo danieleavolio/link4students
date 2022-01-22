@@ -178,14 +178,16 @@
 		<p class="company-name">Link 4 Students</p>
 		<button class="close-button" on:click={handleOpen}>❌</button>
 		<BarraRicerca />
-		<a on:click={handleOpen} href="/"> <span class="icona">🏚️</span> Home</a>
-		<a on:click={handleOpen} href="/corsi"> <span class="icona">🎓</span> Corsi</a>
-		<a on:click={handleOpen} href="/info"> <span class="icona">📄</span> Info</a>
-		<a on:click={handleOpen} href="/contattaci"> <span class="icona">✉️</span> Contattaci</a>
+		<a on:click={handleOpen} href="/"> <span class="material-icons"> home </span> Home</a>
+		<a on:click={handleOpen} href="/corsi"> <span class="material-icons"> school </span> Corsi</a>
+		<a on:click={handleOpen} href="/info"> <span class="material-icons"> info </span> Info</a>
+		<a on:click={handleOpen} href="/contattaci">
+			<span class="material-icons"> email </span> Contattaci</a
+		>
 		{#if datiUtente != null}
 			{#if datiUtente.data().superuser}
 				<a on:click={handleOpen} href="/dashboard/adminpage">
-					<span class="icona">🔒</span> Admin</a
+					<span class="material-icons"> gpp_maybe </span> Admin</a
 				>
 			{/if}
 		{/if}
@@ -202,11 +204,13 @@
 				<div class="others">
 					<ModalRichiesteCollegamento />
 
-					<button class="logout" on:click={logout}>Logout</button>
+					<button class="logout" on:click={logout}
+						>Logout <span class="material-icons"> logout </span></button
+					>
 				</div>
 			{:else if !$authStore.isLoggedIn}
 				<a on:click={handleOpen} class="unisciti" href="/reg/joinus">
-					<span class="icona">🙏</span> Unisciti</a
+					<span class="material-icons"> input </span> Unisciti</a
 				>
 			{/if}
 		</div>
@@ -238,10 +242,9 @@
 		justify-content: center;
 		align-items: center;
 		padding: 0.2em;
-		
 	}
 
-	.hamburger{
+	.hamburger {
 		font-size: 1.2em;
 	}
 
@@ -301,6 +304,9 @@
 		width: 80%;
 		transition: all 0.2s ease;
 		font-size: 1.5rem;
+		display: flex;
+		align-items: center;
+		gap: 1em;
 	}
 
 	a:hover {
@@ -310,10 +316,6 @@
 
 	span {
 		color: var(--testo);
-	}
-
-	.icona {
-		font-weight: 600;
 	}
 
 	.logout {
@@ -329,9 +331,24 @@
 		box-shadow: var(--neumorphism);
 		transition: all 0.2s ease;
 		font-weight: 600;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 1em;
 	}
 
+	.logout > span{
+		color: var(--alert);
+		font-weight: 600;
+	}
 	.logout:hover {
+		box-shadow: var(--alertHover);
+		transform: var(--premuto);
+		color: var(--sfondo);
+		background-color: var(--alert);
+	}
+	.logout:hover > span {
+
 		box-shadow: var(--alertHover);
 		transform: var(--premuto);
 		color: var(--sfondo);

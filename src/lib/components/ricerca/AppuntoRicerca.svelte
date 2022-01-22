@@ -4,16 +4,12 @@
 	export let appunto;
 	import { fly } from 'svelte/transition';
 
-
 	let showName = false;
-
-
-
 </script>
 
 <div transition:fly={{ y: 100 }} class="appunto-lista">
 	<div class="avatar">
-		<p>{appunto.data().titoloAppunti[0].toUpperCase()}</p>
+		<span class="material-icons"> file_present </span>
 	</div>
 	<div class="nome">
 		<p class="titolo">{appunto.data().titoloAppunti}</p>
@@ -23,15 +19,26 @@
 			</p>
 			<!-- svelte-ignore a11y-mouse-events-have-key-events -->
 			{#if showName}
-				<p transition:fly={{y:-100}} class="comparsa">{appunto.data().idCorso}</p>
+				<p transition:fly={{ y: -100 }} class="comparsa">{appunto.data().idCorso}</p>
 			{/if}
-			<p on:click={() => goto(`/corsodilaurea/corso/${appunto.data().corsoUid}`)} class="corso" on:mouseleave={() => showName = false} on:mouseenter={() => showName = true}>Corso</p>
+			<p
+				on:click={() => goto(`/corsodilaurea/corso/${appunto.data().corsoUid}`)}
+				class="corso"
+				on:mouseleave={() => (showName = false)}
+				on:mouseenter={() => (showName = true)}
+			>
+				Corso
+			</p>
 		</div>
 	</div>
 	{#if appunto.data().revisionato}
-		<a  class="download" href={appunto.data().urlAppunti.url} download={appunto.data().titoloAppunti} target="_blank"
-			>Download ⬇️ </a
-		>
+		<a
+			class="download"
+			href={appunto.data().urlAppunti.url}
+			download={appunto.data().titoloAppunti}
+			target="_blank"
+			>Download<span class="material-icons"> file_download </span>
+		</a>
 	{:else}
 		<button class="download" disabled>Non disponibile</button>
 	{/if}
@@ -39,8 +46,8 @@
 
 <style>
 	.appunto-lista {
-		width: 650px;
-		height: 150px;
+		width: 80%;
+		height: auto;
 		border-radius: 0.5rem;
 		padding: 1rem;
 		display: grid;
@@ -62,6 +69,10 @@
 		box-shadow: var(--innerNeu);
 	}
 
+	.material-icons{
+		font-size: 1.5em;
+	}
+
 	.autore {
 		cursor: pointer;
 		transition: var(--velocita);
@@ -81,7 +92,7 @@
 		text-transform: uppercase;
 	}
 
-	.info{
+	.info {
 		display: flex;
 		gap: 1rem;
 		align-items: center;
@@ -115,7 +126,7 @@
 		box-shadow: var(--neumorphism);
 	}
 
-	.comparsa{
+	.comparsa {
 		position: fixed;
 		box-shadow: var(--innerNeu);
 		padding: 0.3rem;
@@ -125,7 +136,7 @@
 		cursor: pointer;
 	}
 
-	.corso{
+	.corso {
 		cursor: pointer;
 		transition: var(--velocita);
 		width: fit-content;
@@ -137,10 +148,10 @@
 		color: var(--sfondo);
 	}
 
-	.download{
+	.download {
 		font-size: 1em;
-
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
-
-
 </style>

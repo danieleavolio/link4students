@@ -13,7 +13,12 @@
 
 <div class="search">
 	<form on:submit|preventDefault={() => gotoRicerca('utenti')} action="">
-		<span>🔎</span><input bind:value={ricerca} type="text" required min="2" />
+		<span class="material-icons"> search </span><input
+			bind:value={ricerca}
+			type="text"
+			required
+			min="2"
+		/>
 	</form>
 	{#if ricerca.length >= 3}
 		<SuggerimentoRicerca bind:ricerca {gotoRicerca} />
@@ -34,13 +39,15 @@
 		transition: var(--velocita);
 	}
 
-	.search:hover{
+	.search:hover {
 		box-shadow: var(--innerNeu);
-		transform: scale(1.1)
+		transform: scale(1.1);
 	}
 
-	form{
+	form {
 		display: flex;
+		align-items: center;
+		gap: 0.5em;
 	}
 	input {
 		border: none;
@@ -51,7 +58,7 @@
 		background-color: var(--sfondo);
 	}
 
-	span{
+	span {
 		font-size: 1.5rem;
 		font-weight: 600;
 		color: var(--testo);

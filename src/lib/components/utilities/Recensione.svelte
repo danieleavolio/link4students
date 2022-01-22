@@ -385,7 +385,9 @@
 				<p>{recensione.data().autore.nome}</p>
 			</div>
 			{#if recensione.data().autore.idAutore == $authStore.user.uid}
-				<button on:click={eliminaRecensione} class="delete-review">🗑️</button>
+				<button on:click={eliminaRecensione} class="delete-review"
+					><span class="material-icons"> delete_forever </span></button
+				>
 			{/if}
 		{:else if recensione.data().autore.idAutore != $authStore.user.uid}
 			<div class="avatar anonimo">
@@ -401,7 +403,7 @@
 			<div class="nome">
 				<p>Anonimo (Tu)</p>
 			</div>
-			<button on:click={eliminaRecensione} class="delete-review">🗑️</button>
+			<button on:click={eliminaRecensione} class="delete-review"><span class="material-icons"> delete_forever </span></button>
 		{/if}
 	</div>
 
@@ -409,8 +411,10 @@
 		<div class="contenuto">
 			<p>{recensione.data().contenuto}</p>
 			<div class="voti">
-				<p>{tornaDato(recensione.data().votoDifficolta, '🧠')}</p>
-				<p>{tornaDato(recensione.data().votoUtilita, '🎓')}</p>
+				<span class="material-icons"
+					>{tornaDato(recensione.data().votoDifficolta, 'psychology')}</span
+				>
+				<span class="material-icons">{tornaDato(recensione.data().votoUtilita, 'stars')}</span>
 			</div>
 		</div>
 		<div class="box-bottoni">
@@ -419,13 +423,16 @@
 					<p>
 						{recensione.data().likes}
 					</p>
-					<button on:click={likeFunction} class="like bottone-ld {uiLocaleLike}">👍</button>
+					<button on:click={likeFunction} class="like bottone-ld {uiLocaleLike}"
+						><span class="material-icons"> thumb_up </span></button
+					>
 				</div>
 				<div class="singolo-bottone">
 					<p>
 						{recensione.data().dislikes}
 					</p>
-					<button on:click={dislikeFunction} class="dislike bottone-ld {uiLocaleDislike}">👎</button
+					<button on:click={dislikeFunction} class="dislike bottone-ld {uiLocaleDislike}"
+						><span class="material-icons"> thumb_down</span></button
 					>
 				</div>
 			</div>
@@ -461,7 +468,6 @@
 		align-self: center;
 		border-radius: 100%;
 		font-weight: 600;
-		font-size: 1.3rem;
 		color: var(--alert);
 		height: 50px;
 		width: 50px;
@@ -470,6 +476,10 @@
 		margin-left: -2rem;
 		margin-top: -6rem;
 		box-shadow: var(--innerNeu);
+	}
+
+	.delete-review > span{
+		font-size: 2em;
 	}
 
 	.avatar {
@@ -536,6 +546,7 @@
 		display: flex;
 		justify-content: center;
 		border-radius: 20px;
+		align-items: center;
 	}
 
 	.singolo-bottone {
@@ -545,8 +556,22 @@
 		gap: 0.5rem;
 	}
 
+	.like:hover {
+		color: var(--submit);
+	}
+
+	.dislike:hover {
+		color: var(--alert);
+	}
+
 	.liked {
 		background-color: var(--submit);
+	}
+
+	.liked:hover,
+	.dislike:hover {
+		background-color: var(--sfondo);
+		color: var(--testo);
 	}
 
 	.disliked {

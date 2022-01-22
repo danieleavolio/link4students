@@ -46,7 +46,7 @@
 				tipo,
 				keyword,
 				lista,
-				oldTipo,
+				oldTipo
 			}
 		};
 	}
@@ -67,13 +67,11 @@
 	let listaUtenti;
 	let listaCorsi;
 	let oldKeyword = keyword;
-	let messaggio = '';
 
 	let noMoreRes = false;
 
 	// Controllino
-	if (tipo == null)
-		tipo = 'utenti';
+	if (tipo == null) tipo = 'utenti';
 
 	// Per fare una ricerca in modo preciso, firebase non offre nessun servizio. Siccome ci sono 45 cubi + 2 dipartimenti per cubo circa
 	// contando triennale e magistrale con 20 corsi ognuno, ci sono circa 3600 corsi
@@ -246,7 +244,7 @@
 				<option value="50">50</option>
 				<option value="100">+100</option>
 			</select>
-			<span>🔎</span><input
+			<span class="material-icons"> search </span><input
 				bind:this={searchBar}
 				type="text"
 				bind:value={keyword}
@@ -257,13 +255,13 @@
 			/>
 			<div class="filtro">
 				<button type="button" on:click={() => (tipo = 'utenti')} class="selezione {classeUtenti}">
-					👤
+					<span class="material-icons"> person </span>
 				</button>
 				<button type="button" on:click={() => (tipo = 'corsi')} class="selezione {classeCorsi}">
-					🎓
+					<span class="material-icons"> school </span>
 				</button>
 				<button type="button" on:click={() => (tipo = 'appunti')} class="selezione {classeAppunti}">
-					✒️
+					<span class="material-icons"> edit </span>
 				</button>
 			</div>
 		</form>

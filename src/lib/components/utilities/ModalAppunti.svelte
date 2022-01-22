@@ -89,7 +89,9 @@
 	<div class="modal">
 		<div class="backdrop" on:click={close} />
 		<div class="content-wrapper">
-			<button class="close-button" on:click={close}> ❌ </button>
+			<button class="close-button" on:click={close}> <span class="material-icons">
+				close
+				</span> </button>
 			<slot name="header">
 				<div class="titolo">
 					<p>Invia i tuoi appunti</p>
@@ -103,11 +105,11 @@
 					<div class="domande">
 						<form action="" on:submit|preventDefault={mandaAppunti}>
 							<div class="titolo-container">
-								<label for="input-titolo">Dai un titolo ai tuoi appunti</label>
+								<label for="input-titolo">Titolo</label>
 								<input type="text" id="input-titolo" bind:value={titoloAppunti} required />
 							</div>
 							<div class="domanda text-area">
-								<label for="area-appunti">Descrivi il contenuto dei tuoi appunti</label>
+								<label for="area-appunti">Descrizione degli appunti</label>
 								<textarea
 									bind:value={contenuto}
 									name="appunti"
@@ -204,6 +206,14 @@
 		position: absolute;
 		margin-left: -3rem;
 		margin-top: -3rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.material-icons{
+		font-size: 1.5em;
+		color: var(--alert);
 	}
 	.titolo {
 		font-size: 1.3rem;

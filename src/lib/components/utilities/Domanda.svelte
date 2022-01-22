@@ -160,7 +160,9 @@
 				<p>{domanda.data().autore.nome}</p>
 			</div>
 			{#if domanda.data().autore.idAutore == $authStore.user.uid}
-				<button on:click={eliminaDomanda} class="delete-domanda">🗑️</button>
+				<button on:click={eliminaDomanda} class="delete-domanda"><span class="material-icons">
+					delete
+					</span></button>
 			{/if}
 		{:else if domanda.data().autore.idAutore != $authStore.user.uid}
 			<div class="avatar anonimo">
@@ -178,7 +180,9 @@
 				<p class="titolo-domanda">{domanda.data().titolo}</p>
 				<p>Anonimo (Tu)</p>
 			</div>
-			<button on:click={eliminaDomanda} class="delete-domanda">🗑️</button>
+			<button on:click={eliminaDomanda} class="delete-domanda"
+				><span class="material-icons"> delete </span></button
+			>
 		{/if}
 	</div>
 
@@ -275,8 +279,6 @@
 		margin-top: -6rem;
 	}
 
-	
-
 	.avatar {
 		max-width: 75px;
 		max-height: 75px;
@@ -362,5 +364,9 @@
 		align-content: center;
 		align-items: flex-start;
 		padding: 1rem;
+	}
+
+	.material-icons{
+		font-size: 1.5em;
 	}
 </style>

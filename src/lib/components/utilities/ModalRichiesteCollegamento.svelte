@@ -19,7 +19,10 @@
 
 {#if $authStore.isLoggedIn}
 	<slot name="trigger" {open}>
-		<button class="domanda-button" on:click={open}>🔔<span>{$richiesteUtente.length}</span></button>
+		<button class="domanda-button" on:click={open}
+			><span class="material-icons"> notifications </span><span>{$richiesteUtente.length}</span
+			></button
+		>
 	</slot>
 {/if}
 
@@ -72,12 +75,14 @@
 		cursor: pointer;
 		font-weight: 600;
 		box-shadow: var(--neumorphism);
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
 	}
 
-	.domanda-button:hover{
+	.domanda-button:hover {
 		box-shadow: var(--innerNeu);
 		transform: var(--premuto);
-
 	}
 
 	.modal {
@@ -178,12 +183,12 @@
 		color: white;
 	}
 
-	.vuoto{
-        font-size: 2rem;
-        text-align: center;
+	.vuoto {
+		font-size: 2rem;
+		text-align: center;
 		box-shadow: var(--innerNeu);
 		padding: 1rem;
 		border-radius: 1rem;
 		font-weight: 600;
-    }
+	}
 </style>

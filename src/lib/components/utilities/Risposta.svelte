@@ -34,7 +34,9 @@ import { goto } from '$app/navigation';
 	</div>
 	{#if $authStore.isLoggedIn}
 		{#if $authStore.user.uid == risposta.data().idRispondente}
-			<button on:click={eliminaRisposta} class="delete-risposta">🗑️</button>
+			<button on:click={eliminaRisposta} class="delete-risposta"><span class="material-icons">
+				delete
+				</span></button>
 		{/if}
 	{/if}
 

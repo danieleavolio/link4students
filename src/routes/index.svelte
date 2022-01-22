@@ -55,13 +55,13 @@
 
 <div class="main-links">
 	{#if !$authStore.isLoggedIn}
-		<BoxLink nome="Unisciti a noi!" emoji="👏" linkto="reg/joinus" />
+		<BoxLink nome="Unisciti a noi!" emoji="login" linkto="reg/joinus" />
 	{:else}
-		<BoxLink nome="Profilo" emoji="👥" linkto="profilo/{$authStore.user.uid}" />
+		<BoxLink nome="Profilo" emoji="account_circle" linkto="profilo/{$authStore.user.uid}" />
 	{/if}
 
-	<BoxLink nome="Corsi" emoji="🎓	" linkto="corsi" />
-	<BoxLink nome="Ricerca" emoji="🔎" linkto="ricerca" />
+	<BoxLink nome="Corsi" emoji="school" linkto="corsi" />
+	<BoxLink nome="Ricerca" emoji="search" linkto="ricerca" />
 </div>
 
 <BoxStatistiche {statistiche} />
@@ -71,7 +71,9 @@
 	<ListaAnnunci {annunci} />
 </div>
 {#if moreThan3}
-	<a class="ref-annunci" href="/annunci">📢 Vai agli annunci</a>
+	<a class="ref-annunci" href="/annunci"
+		><span class="material-icons"> campaign </span> Vai agli annunci</a
+	>
 {/if}
 
 <style>
@@ -104,12 +106,15 @@
 		font-weight: 700;
 		padding: 0.3rem;
 		border-radius: 0.4rem;
-		margin:1rem;
+		margin: 1rem;
 		font-size: 1.3rem;
 		transition: var(--velocita);
+		display: flex;
+		align-items: center;
+		gap: 1em;
 	}
 
-	.ref-annunci:hover{
+	.ref-annunci:hover {
 		background-color: var(--testo);
 		color: var(--sfondo);
 	}

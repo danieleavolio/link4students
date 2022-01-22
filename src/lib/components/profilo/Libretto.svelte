@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { onMount } from 'svelte';
 
 	import EsamePub from './EsamePub.svelte';
 	import ListaCollegamenti from './ListaCollegamenti.svelte';
@@ -8,6 +9,10 @@
 	export let esamiCdl;
 	export let mediaUtente;
 	export let collegamentiUtente;
+
+	esamiSuperati = esamiSuperati.sort((a, b) =>
+		a.data().nomeCorso.localeCompare(b.data().nomeCorso)
+	);
 </script>
 
 <div class="statistiche">
@@ -35,8 +40,6 @@
 		text-align: center;
 		font-size: 1.3em;
 	}
-
-
 
 	.lista-esami {
 		border-radius: 0.5rem;

@@ -26,7 +26,7 @@
 					value="1"
 					on:change={() => cambiaDifficolta(1)}
 				/>
-				<label for="num1">1{icon}</label>
+				<label for="num1">1 <span class="material-icons"> psychology </span></label>
 			</li>
 			<li>
 				<input
@@ -36,7 +36,7 @@
 					value="2"
 					on:change={() => cambiaDifficolta(2)}
 				/>
-				<label for="num2">2 {icon}</label>
+				<label for="num2">2 <span class="material-icons"> psychology </span></label>
 			</li>
 			<li>
 				<input
@@ -46,7 +46,7 @@
 					value="3"
 					on:change={() => cambiaDifficolta(3)}
 				/>
-				<label for="num3">3 {icon}</label>
+				<label for="num3">3 <span class="material-icons"> psychology </span></label>
 			</li>
 
 			<li>
@@ -57,7 +57,7 @@
 					value="4"
 					on:change={() => cambiaDifficolta(4)}
 				/>
-				<label for="num4">4 {icon}</label>
+				<label for="num4">4 <span class="material-icons"> psychology </span></label>
 			</li>
 			<li>
 				<input
@@ -67,7 +67,7 @@
 					value="5"
 					on:change={() => cambiaDifficolta(5)}
 				/>
-				<label for="num5">5 {icon}</label>
+				<label for="num5">5 <span class="material-icons"> psychology </span></label>
 			</li>
 		</ul>
 	</div>
@@ -82,7 +82,7 @@
 					value="1"
 					on:change={() => cambiaUtilita(1)}
 				/>
-				<label for="num6">1{icon}</label>
+				<label for="num6">1 <span class="material-icons"> stars </span></label>
 			</li>
 			<li>
 				<input
@@ -92,7 +92,7 @@
 					value="2"
 					on:change={() => cambiaUtilita(2)}
 				/>
-				<label for="num7">2 {icon}</label>
+				<label for="num7">2 <span class="material-icons"> stars </span></label>
 			</li>
 			<li>
 				<input
@@ -102,7 +102,7 @@
 					value="3"
 					on:change={() => cambiaUtilita(3)}
 				/>
-				<label for="num8">3 {icon}</label>
+				<label for="num8">3 <span class="material-icons"> stars </span></label>
 			</li>
 
 			<li>
@@ -113,7 +113,7 @@
 					value="4"
 					on:change={() => cambiaUtilita(4)}
 				/>
-				<label for="num9">4 {icon}</label>
+				<label for="num9">4 <span class="material-icons"> stars </span></label>
 			</li>
 			<li>
 				<input
@@ -123,7 +123,7 @@
 					value="5"
 					on:change={() => cambiaUtilita(5)}
 				/>
-				<label for="num10">5 {icon}</label>
+				<label for="num10">5 <span class="material-icons"> stars </span></label>
 			</li>
 		</ul>
 	</div>
@@ -159,14 +159,17 @@
 		border-radius: 10px;
 		transition: var(--velocita);
 		font-weight: 600;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
-	li > label:hover{
+	li > label:hover {
 		box-shadow: var(--innerNeu);
 		transform: var(--premuto);
 	}
 	input[type='radio']:checked ~ label {
-		background-color: var(--alert);
+		background-color: var(--submit);
 	}
 
 	input[type='radio']:checked ~ label:hover {

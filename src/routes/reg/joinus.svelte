@@ -312,7 +312,7 @@
 
 	input:-webkit-autofill {
     -webkit-text-fill-color: var(--testo);
-    -webkit-box-shadow: 0 0 0 1000px var(--sfondo) inset;
+    -webkit-box-shadow: var(--neumorphism);
     box-shadow: 0 0 0 1000px var(--sfondo) inset;
 }
 </style>

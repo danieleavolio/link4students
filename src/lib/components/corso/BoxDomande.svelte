@@ -110,8 +110,12 @@
 	.filtro {
 		border: none;
 		padding: 0.2rem;
-		font-size: 1rem;
+		font-size: 1.3em;
 		outline: none;
 		border: none;
+	}
+
+	.lente{
+		font-size: 1.3em;
 	}
 </style>

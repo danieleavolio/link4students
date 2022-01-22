@@ -143,24 +143,23 @@
 						{#if listaEsamiPossibili.length != 0}
 							<form action="" on:submit|preventDefault={aggiungiAlLibretto}>
 								<div class="inputs-container">
-									<label for="scegli-esame">Scegli l'esame da aggiungere al libretto</label>
 									<select required bind:value={corsoScelto} name="esame" id="scegli-esame">
 										{#each listaEsamiPossibili as esame (esame.id)}
 											<option selected value={esame}>{esame.data().nome}</option>
 										{/each}
 									</select>
 									<div class="voto">
-										<label for="voto">Inserisci voto</label>
-										<div class="input-voto">
+										<div >
 											<input
 												required
 												bind:value={voto}
 												type="number"
 												name="voto"
 												id="voto"
-												placeholder="18 --- 30"
+												placeholder="18-30"
 												min="18"
 												max="30"
+												class="input-voto"
 											/>
 										</div>
 										<label for="lode">Lode?</label>
@@ -268,14 +267,13 @@
 		transform: var(--premuto);
 	}
 	.titolo {
-		font-size: 1.3rem;
+		font-size: 1.3em;
 		font-weight: 600;
 		text-align: center;
 	}
 
 	.inputs-container {
 		display: flex;
-		flex-direction: column;
 		justify-content: left;
 		gap: 0.5rem;
 	}
@@ -298,16 +296,21 @@
 
 	input,
 	select {
-		font-size: 1.1rem;
+		font-size: 1.3em;
 		width: fit-content;
 		background-color: var(--sfondo);
 		border-radius: 0.5rem;
 		outline: none;
 		border: var(--bordo);
+		box-shadow: var(--innerNeu);
 	}
 
 	option{
 		background-color: var(--sfondo);
+	}
+
+	.input-voto{
+		width: 100px;;
 	}
 	
 

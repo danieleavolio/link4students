@@ -61,31 +61,37 @@
 	.sinistra {
 		box-shadow: var(--neumorphism);
 		border-radius: 100%;
-		width: 50px;
-		height: 50px;
+		width: 75px;
+		height: 75px;
 		place-self: center;
 		background-color: var(--sfondo);
 		box-shadow: var(--neumorphism);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin: 0.3em;
+
 	}
 
 	.voto{
 		font-weight: 800;
+		font-size: 1.4rem;
 	}
 	
 
 	.destra {
 		display: flex;
 		justify-content: left;
-		align-items: flex-start;
+		align-items: center;
 	}
 
 	.ottimo {
-		color: rgb(23, 117, 87);
+		color: var(--ottimo);
 	}
 	.medio {
-		color: rgb(27, 9, 126);
+		color: var(--buono);
 	}
 	.sufficiente {
-		color: rgb(128, 98, 16);
+		color: var(--discreto);
 	}
 </style>

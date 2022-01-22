@@ -28,17 +28,17 @@
 	
 	@media (prefers-color-scheme: dark) {
 		:global(:root) {
-			--neumorphism: 5px 5px 5px #050505, -5px -5px 10px rgb(20, 20, 20),
+			--neumorphism: 8px 8px 5px #1a1a1a, -8px -8px 10px rgb(35, 35, 35),
 				inset 0 0 0 rgba(0, 0, 0, 0.2), inset 0 0 0 rgba(0, 0, 0, 0.5);
-			--sfondo: rgb(15, 15, 15);
+			--sfondo: rgb(31, 31, 31);
 			--sfondoComposfondonent:linear-gradient(145deg, #131313, #101010);
 			--alert: rgb(230, 68, 68);
 			--testo: rgb(240, 240, 240);
 			--innerNeu: 0 0 0 rgb(15, 15, 15), 0 0 0 rgba(22, 22, 22, 0.5),
-				inset 5px 5px 10px rgb(5, 5, 5), inset -5px -5px 10px rgb(20, 20, 20);
+				inset 8px 8px 10px #1a1a1a, inset -8px -8px 10px  rgb(35, 35, 35);
 			--velocita: 0.2s ease;
 			--premuto: scale(0.98);
-			--bordo: rgb(15, 15, 15) solid 2px;
+			--bordo: rgb(27, 27, 27) solid 2px;
 			--collegati: rgb(167, 63, 216);
 			--submit: rgb(58, 97, 255);
 			--resolve: rgb(248, 252, 32);

@@ -241,11 +241,12 @@
 		justify-content: center;
 		align-items: center;
 		gap: 1rem;
+		font-size: 1.3rem;
 	}
 	form > input {
 		width: 80%;
 		outline: none;
-		font-size: 1.1rem;
+		font-size: 1.3rem;
 	}
 
 	button {
@@ -308,4 +309,10 @@
 	.resend:hover{
 		transform: scale(1.1);
 	}
+
+	input:-webkit-autofill {
+    -webkit-text-fill-color: var(--testo);
+    -webkit-box-shadow: 0 0 0 1000px var(--sfondo) inset;
+    box-shadow: 0 0 0 1000px var(--sfondo) inset;
+}
 </style>

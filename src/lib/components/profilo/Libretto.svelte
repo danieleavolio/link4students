@@ -33,7 +33,10 @@
 		border-radius: 0.5rem;
 		box-shadow: var(--innerNeu);
 		text-align: center;
+		font-size: 1.3em;
 	}
+
+
 
 	.lista-esami {
 		border-radius: 0.5rem;

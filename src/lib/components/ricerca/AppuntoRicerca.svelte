@@ -29,21 +29,22 @@
 		</div>
 	</div>
 	{#if appunto.data().revisionato}
-		<a href={appunto.data().urlAppunti.url} download={appunto.data().titoloAppunti} target="_blank"
-			>Download</a
+		<a  class="download" href={appunto.data().urlAppunti.url} download={appunto.data().titoloAppunti} target="_blank"
+			>Download ⬇️ </a
 		>
 	{:else}
-		<button disabled>Non disponibile</button>
+		<button class="download" disabled>Non disponibile</button>
 	{/if}
 </div>
 
 <style>
 	.appunto-lista {
-		width: 400px;
+		width: 650px;
 		height: 150px;
 		border-radius: 0.5rem;
 		padding: 1rem;
 		display: grid;
+		font-size: 1.4em;
 		grid-template-columns: 1fr 2fr 1fr;
 		place-items: center;
 		box-shadow: var(--neumorphism);
@@ -51,12 +52,12 @@
 	}
 
 	.avatar {
-		width: 80px;
-		height: 80px;
+		width: 100px;
+		height: 100px;
 		border-radius: 100%;
 		display: grid;
 		place-items: center;
-		font-size: 1.5rem;
+		font-size: 1.4em;
 		font-weight: 600;
 		box-shadow: var(--innerNeu);
 	}
@@ -75,7 +76,7 @@
 	}
 
 	.titolo {
-		font-size: 1.3rem;
+		font-size: 1.2em;
 		font-weight: 900;
 		text-transform: uppercase;
 	}
@@ -136,7 +137,10 @@
 		color: var(--sfondo);
 	}
 
-	
+	.download{
+		font-size: 1em;
+
+	}
 
 
 </style>

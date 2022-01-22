@@ -243,7 +243,7 @@
 	import Appunto from '$lib/components/utilities/Appunto.svelte';
 	import { getAuth } from 'firebase/auth';
 	import { richiesteMandate, richiesteUtente } from '$lib/stores/richiesteStore';
-import { collegamentiUtente } from '$lib/stores/collegamentiStore';
+	import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 
 	let profilePicture;
 	let file;
@@ -416,8 +416,8 @@ import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 			<img src={profilo.avatar} alt="" />
 		</div>
 		{#if $authStore.isLoggedIn}
-			{#if profilo.uid == $authStore.user.uid}
-				<div transition:fade class="cambia-immagine">
+			{#if profilo.uid == $authStore.user.uid && modificaPreferenze}
+				<div class="cambia-immagine">
 					<form on:submit|preventDefault={cambiaFoto} action="">
 						<label class="bottone-file" for="file">Cambia immagine del profilo</label>
 						<input
@@ -443,7 +443,7 @@ import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 		<p>Anno di corso: {profilo.annoDiCorso}</p>
 		{#if $authStore.isLoggedIn}
 			<!-- DEBUG -->
-			
+
 			{#if $authStore.user.uid != profilo.uid}
 				<div class="connect-report-buttons">
 					{#if !collegati}
@@ -495,13 +495,13 @@ import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 		{/if}
 	</div>
 	<div class="bio">
-		<p>Bio</p>
+		<p class="titolo-bio">Bio</p>
 		<div class="container-bio">
 			{#if !modificaBio}
 				{#if profilo.bio}
-					<p>{profilo.bio}</p>
+					<p class="bio">{profilo.bio}</p>
 				{:else}
-					<p class="bio-vuota">{contenutoBio}</p>
+					<p class="bio bio-vuota">{contenutoBio}</p>
 				{/if}
 			{:else}
 				<div class="modifica-bio">
@@ -722,6 +722,14 @@ import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 		border: var(--bordo);
 	}
 
+	.bio {
+		padding: 1em;
+	}
+	.titolo-bio{
+		margin: 0;
+		padding: 0;
+	}
+
 	form {
 		display: flex;
 		flex-direction: column;
@@ -768,6 +776,8 @@ import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 		justify-content: space-around;
 		width: 400px;
 		overflow-wrap: break-word;
+		gap: 0.5em;
+
 	}
 
 	.bio > p {

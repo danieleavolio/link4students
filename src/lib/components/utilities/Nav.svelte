@@ -23,7 +23,7 @@
 	import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 	const logout = async () => {
 		await auth.signOut().then(() => {
-			location.reload();
+			goto('/');
 		});
 	};
 	let datiUtente;
@@ -40,15 +40,14 @@
 			// Se per qualche motivo tu fossi bannato
 			await getDoc(doc(db, 'users', fbUser.uid)).then(async (user) => {
 				datiUtente = user;
-				await getDoc(doc(db,'banTimes',fbUser.uid)).then((ban)=>{
-					if (ban.exists()){
-						if (ban.data().time < Timestamp.now()){
+				await getDoc(doc(db, 'banTimes', fbUser.uid)).then((ban) => {
+					if (ban.exists()) {
+						if (ban.data().time < Timestamp.now()) {
 							alert('Still banned');
 							logout();
 						}
 					}
-				})
-				
+				});
 			});
 			// Passo le info allo store dopo che carico le info utente
 			// Altrimenti non potrebbe aspettare l'AWAIT del getDoc delle info
@@ -148,7 +147,7 @@
 			onSnapshot(queryCollegamentiUtente, (snapshot) => {
 				collegamentiList = snapshot.docs;
 				collegamentiUtente.update((oldCollegamenti) => collegamentiList);
-				console.log(collegamentiUtente)
+				console.log(collegamentiUtente);
 			});
 		} else {
 			let data = {
@@ -170,7 +169,9 @@
 </script>
 
 {#if !isOpen}
-	<button transition:fly={{ x: -100 }} class="open-button" on:click={handleOpen}>🌎</button>
+	<button transition:fly={{ x: -100 }} class="open-button" on:click={handleOpen}
+		><span class="material-icons hamburger"> menu </span>
+	</button>
 {:else}
 	<nav transition:fly={{ x: -100 }}>
 		<div on:click={handleOpen} class="backdrop" />
@@ -225,15 +226,23 @@
 		position: fixed;
 		top: 10px;
 		left: 10px;
-		font-size: 1.5rem;
+		font-size: 2rem;
 		border-radius: 100%;
-		width: 50px;
-		height: 50px;
 		background-color: var(--sfondo);
 		box-shadow: var(--neumorphism);
 		cursor: pointer;
 		transition: var(--velocita);
 		font-weight: 600;
+		aspect-ratio: 1/1;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 0.2em;
+		
+	}
+
+	.hamburger{
+		font-size: 1.2em;
 	}
 
 	.open-button:hover {
@@ -243,11 +252,11 @@
 
 	.close-button {
 		position: absolute;
-		right: -2rem;
-		font-size: 1.5rem;
+		right: -2em;
+		font-size: 2em;
 		border-radius: 100%;
-		width: 50px;
-		height: 50px;
+		width: 75px;
+		height: 75px;
 		border: none;
 		background-color: var(--sfondo);
 		box-shadow: var(--neumorphism);

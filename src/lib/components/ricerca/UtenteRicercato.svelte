@@ -18,18 +18,19 @@ import { goto } from "$app/navigation";
 
 <style>
     .utente-lista{
-        width: 300px;
-        height: 100px;
-        border-radius: 0.5rem;
-        padding: 1rem;
-        display: flex;
-        gap: 1rem;
-        justify-content: left;
-        align-items: center;
-        box-shadow: var(--neumorphism);
-        margin: 1rem;
-        cursor: pointer;
-        transition: var(--velocita)
+        width: 500px;
+		height: 100px;
+		border-radius: 0.5rem;
+		padding: 1rem;
+		font-size: 1.3em;
+		display: grid;
+		grid-template-columns: 1fr 2fr;
+		gap: 1rem;
+		place-items: center;
+		box-shadow: var(--neumorphism);
+		margin: 1rem;
+		cursor: pointer;
+		transition: var(--velocita);
     }
 
     .utente-lista:hover{

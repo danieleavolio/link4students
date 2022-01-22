@@ -297,7 +297,7 @@
 
 <style>
 	input {
-		font-size: 1rem;
+		font-size: 1.3em;
 		outline: none;
 	}
 	.container-ricerca {
@@ -323,9 +323,10 @@
 		border: var(--bordo);
 		border-radius: 0.5rem;
 		box-shadow: var(--innerNeu);
+		font-size: 1.3em;
 	}
 	.selezione {
-		font-size: 1rem;
+		font-size: 1.5em;
 		border: none;
 		box-shadow: var(--neumorphism);
 		padding: 1rem;
@@ -348,6 +349,7 @@
 
 	span {
 		align-self: center;
+		font-size: 1.5em;
 	}
 
 	.attiva {
@@ -363,6 +365,9 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0.5rem;
+		width: 100%;
+		justify-content: center;
+		align-items: center;
 	}
 	.carica-altri {
 		background-color: var(--submit);

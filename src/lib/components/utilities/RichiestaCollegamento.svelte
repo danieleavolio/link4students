@@ -72,11 +72,12 @@
 		border-radius: 0.4rem;
 		margin: 1rem;
 		font-weight: 500;
+		font-size: 1.3em;
 	}
 
 	.dati {
 		display: flex;
-		gap: 1rem;
+		gap: 1.5em;
 		justify-content: center;
 		align-items: center;
 	}
@@ -96,6 +97,8 @@
 		border-radius: 100%;
 		border: var(--bordo);
 		box-shadow: var(--neumorphism);
+		object-fit: cover;
+
 	}
 
 	.avatar:hover {

@@ -211,7 +211,7 @@
 	}
 	.box-bottoni > button {
 		opacity: 0.5;
-		font-size: 1rem;
+		font-size: 1.4rem;
 		border-radius: 10px;
 		border: none;
 		outline: none;

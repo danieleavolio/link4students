@@ -11,7 +11,6 @@ import { goto } from '$app/navigation';
 	export let eliminaRisposta = () => {
 		deleteDoc(doc(db, 'risposte', risposta.id))
 			.then(() => {
-				alert('Risposta eliminata!');
 			})
 			.catch((err) => {
 				alert(err.message);

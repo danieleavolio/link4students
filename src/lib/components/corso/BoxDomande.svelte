@@ -115,7 +115,5 @@
 		border: none;
 	}
 
-	.lente{
-		font-size: 1.3em;
-	}
+	
 </style>

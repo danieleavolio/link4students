@@ -38,7 +38,6 @@
 			};
 			addDoc(collection(db, 'domande'), data)
 				.then(() => {
-					alert('Domanda fatta!');
                     close();
 				})
 				.catch((error) => {

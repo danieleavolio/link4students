@@ -4,12 +4,16 @@
 
 
 <div class="nascosto1">
-    <p class="lucchetto1">🔒</p>
+    <p class="lucchetto1"><span class="material-icons">
+        lock
+        </span></p>
     <p class="testo1">L'utente ha nascosto le statistiche</p>
 </div>
 
 <div class="nascosto2">
-    <p class="lucchetto2">🔒</p>
+    <p class="lucchetto2"><span class="material-icons">
+        lock
+        </span></p>
     <p class="testo2">L'utente ha nascosto suo libretto</p>
 </div>
 

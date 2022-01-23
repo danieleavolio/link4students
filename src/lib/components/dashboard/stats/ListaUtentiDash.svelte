@@ -14,14 +14,16 @@
 <div class="lista-utenti">
 	<p class="nome-box">Lista utenti</p>
 	<div class="filtro">
-		<span>🔎 </span><input type="text" bind:value={keyword}/>
+		<span class="material-icons"> search </span>
+		<input type="text" bind:value={keyword} />
 	</div>
 	<div class="lista-scroll">
 		{#if keyword.length > 0}
 			{#each listaFiltrata as utente (utente.id)}
 				<div class="utente-lista">
 					<p on:click={() => goto(`/profilo/${utente.id}`)}>
-						🎓 {utente.data().nome}
+						<span class="material-icons"> account_circle </span>
+						{utente.data().nome}
 						{utente.data().cognome}
 					</p>
 				</div>
@@ -30,7 +32,8 @@
 			{#each utentiGenerali as utente (utente.id)}
 				<div class="utente-lista">
 					<p on:click={() => goto(`/profilo/${utente.id}`)}>
-						🎓 {utente.data().nome}
+						<span class="material-icons"> account_circle </span>
+						{utente.data().nome}
 						{utente.data().cognome}
 					</p>
 				</div>
@@ -47,6 +50,11 @@
 		padding: 1rem;
 	}
 
+	.filtro{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
 	.nome-box {
 		font-size: 1.2rem;
 		font-weight: 600;
@@ -62,10 +70,16 @@
 		cursor: pointer;
 		transition: var(--velocita);
 		border-radius: 0.3rem;
-		padding: 1px;
 	}
 
 	.utente-lista:hover {
 		box-shadow: var(--innerNeu);
+	}
+
+	p {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		padding: 0.5em;
 	}
 </style>

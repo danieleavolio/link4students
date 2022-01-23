@@ -4,7 +4,7 @@
 </script>
 
 <div in:fly={{ y: 100, duration: 1000 }} out:fade class="box">
-	<p class="emoji">☁️</p>
+	<p class="emoji"><span class="material-icons"> inbox </span></p>
 	<p class="contenuto">Non ci sono <span>{oggetti}</span> da controllare</p>
 </div>
 
@@ -23,6 +23,9 @@
 		font-size: 4rem;
 		margin: 0;
 		font-weight: 600;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.contenuto {
@@ -30,7 +33,9 @@
 		margin: 0;
 	}
 
-    span{
-        font-weight: 600;
-    }
+	span {
+		font-weight: 600;
+	}
+
+	
 </style>

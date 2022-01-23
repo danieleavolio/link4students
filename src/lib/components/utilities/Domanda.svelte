@@ -72,7 +72,6 @@
 						// Elimino la domanda stessa
 						deleteDoc(doc(db, 'domande', domanda.id))
 							.then(() => {
-								alert('Domanda eliminata');
 							})
 							.catch((error) => {
 								alert(error.message);
@@ -98,7 +97,6 @@
 
 			addDoc(collection(db, 'risposte'), dati)
 				.then(() => {
-					alert('Risposta inviata');
 					rispondendo = false;
 					risposta = '';
 				})

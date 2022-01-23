@@ -10,7 +10,7 @@
 
 <h1>Contattaci</h1>
 <div class="mex">
-	<div class="icon">⭐</div>
+	<div class="icon"><span class="material-icons"> mail </span></div>
 	<p>
 		Hai trovato qualche problema nel sito? Hai in mente qualcosa che possa rendere il sito migliore?
 		Faccelo sapere mandando un messaggio tramite il form sottostante!
@@ -97,7 +97,7 @@
 		width: 50%;
 		word-break: keep-all;
 		padding: 1rem;
-		box-shadow: var(--neumorphism);
+		box-shadow: var(--innerNeu);
 		border-radius: 0.5rem;
 		font-size: 1.2rem;
 	}
@@ -115,5 +115,13 @@
 
 	.si {
 		color: var(--alert);
+	}
+	.icon {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	.material-icons {
+		font-size: 1.5em;
 	}
 </style>

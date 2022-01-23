@@ -63,7 +63,9 @@
 			</div>
 			<p>{appunto.data().nome}</p>
 		</div>
-		<button on:click={eliminaAppunto} class="delete-appunto">🗑️</button>
+		<button on:click={eliminaAppunto} class="delete-appunto"><span class="material-icons">
+			delete
+			</span></button>
 	</div>
 
 	<div class="contenuto">
@@ -76,7 +78,8 @@
 				class="download-button"
 				target="_blank"
 				href={appunto.data().urlAppunti.url}
-				download={appunto.data().titoloAppunti}>⬇️ SCARICA</a
+				download={appunto.data().titoloAppunti}
+				><span class="material-icons"> download </span> SCARICA</a
 			>
 			<ModalRevisione {appunto} {eliminaAppunto} />
 		</div>
@@ -143,6 +146,9 @@
 		font-weight: 600;
 		transition: var(--velocita);
 		box-shadow: var(--neumorphism);
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.download-button:hover {

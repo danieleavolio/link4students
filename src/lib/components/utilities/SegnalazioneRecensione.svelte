@@ -37,7 +37,6 @@
 			};
 
 			addDoc(collection(db, 'segnalazioniRecensioni'), dati).then(() => {
-				alert('Segnalazione inviata! 👌');
 				// Aggiungo la segnalazione allo store
 				recensioniSegnalate.update((oldReports) => [...oldReports, dati]);
 				close();

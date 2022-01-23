@@ -9,11 +9,20 @@
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
 {#if tipo == 'appunti'}
-	<p>{emoji} {elemento.data().nome} ha caricato degli appunti</p>
+	<p>
+		<span class="material-icons">{emoji}</span>
+		{elemento.data().nome} ha caricato degli appunti
+	</p>
 {:else if tipo == 'risposta'}
-	<p>{emoji} {elemento.data().nomeRispondente} ha scritto una {tipo}</p>
+	<p>
+		<span class="material-icons">{emoji}</span>
+		{elemento.data().nomeRispondente} ha scritto una {tipo}
+	</p>
 {:else}
-	<p>{emoji} {elemento.data().autore.nome} ha scritto una {tipo}</p>
+	<p>
+		<span class="material-icons">{emoji}</span>
+		{elemento.data().autore.nome} ha scritto una {tipo}
+	</p>
 {/if}
 <div class="attivita">
 	<p class="contenuto">{elemento.data().contenuto}</p>
@@ -27,5 +36,12 @@
 		width: 50%;
 		margin: 0 0.5rem;
 		overflow-wrap: anywhere;
-}
+	}
+	p{
+		display: flex;
+		justify-content: left;
+		align-items: center;
+		gap: 1em;
+		margin: 1em;
+	}
 </style>

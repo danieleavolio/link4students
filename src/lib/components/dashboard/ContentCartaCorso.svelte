@@ -13,7 +13,6 @@
 
 		deleteDoc(doc(db, 'corsidelcdl', corso.id))
 			.then(() => {
-				alert('Corso eliminato con successo');
 			})
 			.catch((error) => {
 				alert(error.message);

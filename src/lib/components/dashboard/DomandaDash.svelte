@@ -60,9 +60,7 @@
 						cambiaDomandeSegnalate(oggettoSegnalazione.domanda.id);
 						// Elimino la domanda stessa
 						deleteDoc(doc(db, 'domande', oggettoSegnalazione.domanda.id))
-							.then(() => {
-								alert('Domanda eliminata');
-							})
+							.then(() => {})
 							.catch((error) => {
 								alert(error.message);
 							});
@@ -110,7 +108,9 @@
 			<p>{oggettoSegnalazione.domanda.data().autore.nome}</p>
 		</div>
 
-		<button on:click={eliminaDomanda} class="delete-domanda">🗑️</button>
+		<button on:click={eliminaDomanda} class="delete-domanda"
+			><span class="material-icons"> delete </span></button
+		>
 	</div>
 
 	<div class="down-part">
@@ -118,12 +118,15 @@
 			<p>{oggettoSegnalazione.domanda.data().contenuto}</p>
 		</div>
 		<div class="box-bottoni">
-			<button on:click={displayReport}> Mostra segnalazione </button>
+			<button class="show-report" on:click={displayReport}>
+				Mostra segnalazione <span class="material-icons"> visibility </span>
+			</button>
 			<div class="div-sospensione">
 				<!-- Form per la sospensione -->
 				<form
 					action=""
-					on:submit|preventDefault={() => setBanTime(oggettoSegnalazione.domanda.data().autore.idAutore)}
+					on:submit|preventDefault={() =>
+						setBanTime(oggettoSegnalazione.domanda.data().autore.idAutore)}
 				>
 					<input
 						class="input-giorni"
@@ -189,11 +192,9 @@
 		background-color: var(--sfondo);
 	}
 
-	.delete-domanda:hover{
+	.delete-domanda:hover {
 		transform: var(--premuto);
 	}
-
-	
 
 	.avatar {
 		max-width: 75px;
@@ -215,6 +216,13 @@
 		flex-direction: column;
 		gap: 1rem;
 		justify-content: center;
+	}
+
+	.show-report {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 1em;
 	}
 
 	button {

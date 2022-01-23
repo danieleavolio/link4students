@@ -66,9 +66,8 @@
 
 <BoxStatistiche {statistiche} />
 <h2>Lista annunci</h2>
-
 <div class="container-lista">
-	<ListaAnnunci {annunci} />
+	<ListaAnnunci {annunci} modificando={false} />
 </div>
 {#if moreThan3}
 	<a class="ref-annunci" href="/annunci"
@@ -93,10 +92,11 @@
 	.container-lista {
 		display: flex;
 		justify-content: center;
-		align-items: center;
+		flex-direction: column;
 		box-shadow: var(--neumorphism);
 		padding: 2rem;
 		border-radius: 1rem;
+		gap: 2em;
 	}
 
 	.ref-annunci {

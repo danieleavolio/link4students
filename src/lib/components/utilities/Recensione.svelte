@@ -114,7 +114,6 @@
 									(oldEsami) =>
 										(oldEsami = oldEsami.filter((item) => item != recensione.data().idCorso))
 								);
-								alert('Recensione eliminata!');
 								statoVoto = 0;
 								// Decremento il contatore del numero di recensioni
 								setDoc(
@@ -403,7 +402,9 @@
 			<div class="nome">
 				<p>Anonimo (Tu)</p>
 			</div>
-			<button on:click={eliminaRecensione} class="delete-review"><span class="material-icons"> delete_forever </span></button>
+			<button on:click={eliminaRecensione} class="delete-review"
+				><span class="material-icons"> delete_forever </span></button
+			>
 		{/if}
 	</div>
 
@@ -478,7 +479,7 @@
 		box-shadow: var(--innerNeu);
 	}
 
-	.delete-review > span{
+	.delete-review > span {
 		font-size: 2em;
 	}
 

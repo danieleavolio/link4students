@@ -94,7 +94,6 @@
 				setDoc(snapshot.docs[0].ref, datiMedia, { merge: true }).then(() => {
 					addDoc(collection(db, 'recensioni'), data)
 						.then(async (esame) => {
-							alert('Recensione caricata');
 							esamiRecensiti.update((oldEsami) => (oldEsami = [...oldEsami, idCorso]));
 							// Aumento il numero di recensioni totali del sito
 							setDoc(

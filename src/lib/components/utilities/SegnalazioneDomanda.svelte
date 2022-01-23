@@ -37,7 +37,6 @@
 			};
 
 			addDoc(collection(db, 'segnalazioniDomande'), dati).then(() => {
-				alert('Segnalazione inviata! 👌');
 				// Aggiungo la segnalazione allo store
 				domandeSegnalate.update((oldReports) => [...oldReports, dati]);
 				close();
@@ -62,7 +61,9 @@
 	<div class="modal">
 		<div class="backdrop" on:click={close} />
 		<div class="content-wrapper">
-			<button class="close-button" on:click={close}> ❌ </button>
+			<button class="close-button" on:click={close}>
+				<span class="material-icons"> close </span>
+			</button>
 			<slot name="header">
 				<div class="titolo">
 					<p>Segnala domanda</p>
@@ -153,7 +154,6 @@
 	.close-button {
 		outline: none;
 		font-size: 1.2rem;
-		border: black solid;
 		border-radius: 50%;
 		width: 50px;
 		height: 50px;
@@ -161,6 +161,10 @@
 		position: absolute;
 		margin-left: -3rem;
 		margin-top: -3rem;
+		box-shadow: var(--innerNeu);
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 	.titolo {
 		font-size: 1.3rem;

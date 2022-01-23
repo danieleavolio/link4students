@@ -49,7 +49,9 @@
 		</div>
 		<p>{oggettoSegnalazione.utente.data().nome}</p>
 	</div>
-	<button class="show-report" on:click={displayReport}>Mostra report 🛑</button>
+	<button class="show-report" on:click={displayReport}
+		>Mostra report <span class="material-icons"> visibility </span></button
+	>
 	<div class="div-sospensione">
 		<!-- Form per la sospensione -->
 		<form
@@ -71,7 +73,10 @@
 		</form>
 	</div>
 	{#if segnalazioneMostrata}
-		<SegnalazioneUtente {risolviSegnalazioneUtente} segnalazione={oggettoSegnalazione.segnalazione}/>
+		<SegnalazioneUtente
+			{risolviSegnalazioneUtente}
+			segnalazione={oggettoSegnalazione.segnalazione}
+		/>
 	{/if}
 </div>
 
@@ -92,7 +97,6 @@
 		height: 50px;
 		border-radius: 100%;
 		border: var(--bordo);
-
 	}
 	.immagine > img {
 		width: 100%;
@@ -108,6 +112,10 @@
 		border-radius: 8px;
 		cursor: pointer;
 		font-weight: 600;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 1em;
 	}
 
 	.div-sospensione {
@@ -122,7 +130,7 @@
 		box-shadow: var(--neumorphism);
 	}
 
-	.sospendi{
+	.sospendi {
 		border-radius: 0.3rem;
 		cursor: pointer;
 	}

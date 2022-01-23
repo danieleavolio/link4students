@@ -63,13 +63,13 @@
 				class="elemento"
 			>
 				{#if elemento.ref.parent.id == 'domande'}
-					<ElementoAct {elemento} tipo={'domanda'}  emoji={'❓'}  />
+					<ElementoAct {elemento} tipo={'domanda'}  emoji={'quiz'}  />
 				{:else if elemento.ref.parent.id == 'risposte'}
-					<ElementoAct {elemento} tipo={'risposta'} emoji={'❗'} />
+					<ElementoAct {elemento} tipo={'risposta'} emoji={'question_answer'} />
 				{:else if elemento.ref.parent.id == 'appunti'}
-					<ElementoAct {elemento} tipo={'appunti'} emoji={'✒️'} />
+					<ElementoAct {elemento} tipo={'appunti'} emoji={'edit'} />
 				{:else if elemento.ref.parent.id == 'recensioni'}
-					<ElementoAct {elemento} tipo={'recensione'} emoji={'📃'} />
+					<ElementoAct {elemento} tipo={'recensione'} emoji={'reviews'} />
 				{/if}
 			</div>
 		{/each}

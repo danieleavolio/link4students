@@ -80,6 +80,7 @@
 		border-radius: 0.5rem;
 		padding: 0.8rem;
 		box-shadow: var(--innerNeu);
+		margin: 2em;
 	}
 	.sezione-bottoni {
 		display: flex;

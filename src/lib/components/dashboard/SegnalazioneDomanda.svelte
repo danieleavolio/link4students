@@ -9,7 +9,6 @@
 	const risolviSegnalazione = () => {
 		deleteDoc(doc(db, 'segnalazioniDomande', segnalazione.id)).then(() => {
 			risolviSegnalazioneDomanda(segnalazione.id);
-			alert('Segnalazione risolta');
 		});
 	};
 </script>

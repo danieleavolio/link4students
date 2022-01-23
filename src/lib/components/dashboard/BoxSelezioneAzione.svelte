@@ -1,22 +1,21 @@
 <script>
-import { goto } from "$app/navigation";
-
+	import { goto } from '$app/navigation';
 
 	export let emoji;
 	export let azione;
 
 	const chooseAzione = () => {
-		switch(emoji){
-			case '🎓':
-			goto('/dashboard/sezioni/gestiscicdl');
-			break;
-			case '📜':
-			goto('/dashboard/sezioni/gestiscicorso');
-			break;
-			case '📢':
-			goto('/dashboard/sezioni/gestisciannunci');
-			
-			break;
+		switch (emoji) {
+			case 'school':
+				goto('/dashboard/sezioni/gestiscicdl');
+				break;
+			case 'assignment':
+				goto('/dashboard/sezioni/gestiscicorso');
+				break;
+			case 'campaign':
+				goto('/dashboard/sezioni/gestisciannunci');
+
+				break;
 		}
 		if (emoji == '🎓') {
 		} else if (emoji == '📜') {
@@ -26,7 +25,9 @@ import { goto } from "$app/navigation";
 
 <div on:click={chooseAzione} class="container">
 	<div class="left">
-		<p>{emoji}</p>
+		<span class="material-icons">
+			{emoji}
+		</span>
 	</div>
 	<div class="right">
 		<p>{azione}</p>
@@ -47,7 +48,7 @@ import { goto } from "$app/navigation";
 		cursor: pointer;
 	}
 
-	.container:hover{
+	.container:hover {
 		box-shadow: var(--innerNeu);
 		transform: var(--premuto);
 	}
@@ -60,9 +61,10 @@ import { goto } from "$app/navigation";
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		box-shadow: var(--innerNeu);
 		font-weight: 600;
 	}
+
+	
 
 	.right {
 		font-size: 2rem;

@@ -119,7 +119,6 @@
 										(item) => item != oggettoSegnalazione.recensione.data().idCorso
 									))
 							);
-							alert('Recensione eliminata!');
 							cambiaRecensioniSegnalate(oggettoSegnalazione.recensione.id);
 							// Decremento il contatore del numero di recensioni
 							setDoc(
@@ -160,59 +159,63 @@
 	};
 </script>
 
-	<div transition:fly class="recensione">
-		<div class="up-part">
-			<!-- Se non sei loggato, allora vedi la recensione -->
-			<div
-				class="avatar"
-				on:click={() => redirectProfilo(oggettoSegnalazione.recensione.data().idAutore)}
-			>
-				<img src={oggettoSegnalazione.recensione.data().autore.avatar} alt="" />
-			</div>
-			<div class="nome">
-				<p>{oggettoSegnalazione.recensione.data().autore.nome}</p>
-			</div>
-			<button on:click={eliminaRecensione} class="delete-review">🗑️</button>
+<div transition:fly class="recensione">
+	<div class="up-part">
+		<!-- Se non sei loggato, allora vedi la recensione -->
+		<div
+			class="avatar"
+			on:click={() => redirectProfilo(oggettoSegnalazione.recensione.data().idAutore)}
+		>
+			<img src={oggettoSegnalazione.recensione.data().autore.avatar} alt="" />
 		</div>
+		<div class="nome">
+			<p>{oggettoSegnalazione.recensione.data().autore.nome}</p>
+		</div>
+		<button on:click={eliminaRecensione} class="delete-review"
+			><span class="material-icons"> delete </span></button
+		>
+	</div>
 
-		<div class="down-part">
-			<div class="contenuto">
-				<p>{oggettoSegnalazione.recensione.data().contenuto}</p>
-				<div class="voti">
-					<p>{tornaDato(oggettoSegnalazione.recensione.data().votoDifficolta, '🧠')}</p>
-					<p>{tornaDato(oggettoSegnalazione.recensione.data().votoUtilita, '🎓')}</p>
+	<div class="down-part">
+		<div class="contenuto">
+			<p>{oggettoSegnalazione.recensione.data().contenuto}</p>
+			<div class="voti">
+				<p>{tornaDato(oggettoSegnalazione.recensione.data().votoDifficolta, '🧠')}</p>
+				<p>{tornaDato(oggettoSegnalazione.recensione.data().votoUtilita, '🎓')}</p>
+			</div>
+		</div>
+		<div class="segnalazione">
+			<div class="bottoni">
+				<button class="show-report" on:click={displayReport}
+					>Mostra report <span class="material-icons"> visibility </span></button
+				>
+				<div class="div-sospensione">
+					<!-- Form per la sospensione -->
+					<form
+						action=""
+						on:submit|preventDefault={() =>
+							setBanTime(oggettoSegnalazione.recensione.data().autore.idAutore)}
+					>
+						<input
+							class="input-giorni"
+							required
+							bind:value={giorniSospensione}
+							min="1"
+							type="number"
+							name="giorni"
+							id="giorni-sospensione"
+							placeholder="Giorni di sospensione"
+						/>
+						<button class="sospendi">Sospendi</button>
+					</form>
 				</div>
 			</div>
-			<div class="segnalazione">
-				<div class="bottoni">
-					<button class="show-report" on:click={displayReport}>Mostra report 🛑</button>
-					<div class="div-sospensione">
-						<!-- Form per la sospensione -->
-						<form
-							action=""
-							on:submit|preventDefault={() =>
-								setBanTime(oggettoSegnalazione.recensione.data().autore.idAutore)}
-						>
-							<input
-								class="input-giorni"
-								required
-								bind:value={giorniSospensione}
-								min="1"
-								type="number"
-								name="giorni"
-								id="giorni-sospensione"
-								placeholder="Giorni di sospensione"
-							/>
-							<button class="sospendi">Sospendi</button>
-						</form>
-					</div>
-				</div>
-				{#if segnalazioneMostrata}
-					<Segnalazione segnalazione={oggettoSegnalazione.segnalazione} {risolviRecensione} />
-				{/if}
-			</div>
+			{#if segnalazioneMostrata}
+				<Segnalazione segnalazione={oggettoSegnalazione.segnalazione} {risolviRecensione} />
+			{/if}
 		</div>
 	</div>
+</div>
 
 <style>
 	.recensione {
@@ -292,6 +295,10 @@
 		border-radius: 8px;
 		cursor: pointer;
 		font-weight: 600;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 1em;
 	}
 
 	.bottoni {

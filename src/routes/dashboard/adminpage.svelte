@@ -236,9 +236,9 @@
 			<div class="gestione-corsi">
 				<h1>Gestione</h1>
 				<div class="pagina-azioni">
-					<BoxSelezioneAzione emoji={'🎓'} azione="Gestisci Corsi di Laurea" />
-					<BoxSelezioneAzione emoji={'📜'} azione="Gestisci Singoli Corsi" />
-					<BoxSelezioneAzione emoji={'📢'} azione="Gestisci Annunci" />
+					<BoxSelezioneAzione emoji={'school'} azione="Corsi" />
+					<BoxSelezioneAzione emoji={'assignment'} azione="Insegnamenti" />
+					<BoxSelezioneAzione emoji={'campaign'} azione="Annunci" />
 				</div>
 			</div>
 

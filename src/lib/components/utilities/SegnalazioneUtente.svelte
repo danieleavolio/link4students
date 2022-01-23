@@ -37,7 +37,6 @@
 			};
 
 			addDoc(collection(db, 'segnalazioniUtenti'), dati).then(() => {
-				alert('Utente segnalato! 👌');
 				// Aggiungo la segnalazione allo store
 				utentiSegnalati.update((oldReports) => [...oldReports, dati]);
 				close();

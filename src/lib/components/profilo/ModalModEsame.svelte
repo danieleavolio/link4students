@@ -171,7 +171,6 @@
 								(oldEsami) =>
 									(oldEsami = oldEsami.filter((item) => item != recensione.data().idCorso))
 							);
-							alert('Recensione eliminata!');
 							// Decremento il contatore del numero di recensioni
 							setDoc(
 								doc(db, 'statistiche', 'infoSito'),

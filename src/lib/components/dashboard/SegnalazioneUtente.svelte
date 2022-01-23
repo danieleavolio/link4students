@@ -22,7 +22,7 @@
 			on:click={() => goto(`/profilo/${segnalazione.data().idSegnalatore}`)}
 			class="segnalatore"
 		>
-			🔗 SEGNALATORE</button
+			<span class="material-icons"> account_circle </span> SEGNALATORE</button
 		>
 		<button on:click={risolviSegnalazione} class="risolvi">Risolvi segnalazione </button>
 	</div>
@@ -40,6 +40,10 @@
 		margin: 0.5rem 0;
 		width: fit-content;
 		border: none;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap:0.5em
 	}
 	.risolvi {
 		font-weight: 600;
@@ -54,8 +58,6 @@
 		align-items: center;
 		transition: all 1s ease;
 	}
-
-	
 
 	.main-container {
 		display: flex;

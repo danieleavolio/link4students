@@ -1,10 +1,11 @@
 <script>
-	import { onMount } from 'svelte';
 
 	import AnnuncioDash from '../dashboard/AnnuncioDash.svelte';
+	import Loading from './Loading.svelte';
 
 	export let annunci;
 	export let modificando;
+	import { fly } from "svelte/transition";
 
 	let ascendente = false;
 
@@ -19,14 +20,18 @@
 	}
 </script>
 
-<button class="sort" on:click={() => (ascendente = !ascendente)}
-	>{ascendente == true ? 'Ascendente' : 'Discendente'}</button
->
-<div class="lista-annunci">
-	{#each annunci as annuncio (annuncio.id)}
-		<AnnuncioDash {annuncio} bind:modificando />
-	{/each}
-</div>
+{#if annunci.length > 0}
+	<button class="sort" on:click={() => (ascendente = !ascendente)}
+		>{!ascendente ? 'Crescente' : 'Decrescente'}</button
+	>
+	<div class="lista-annunci" transition:fly|local>
+		{#each annunci as annuncio (annuncio.id)}
+			<AnnuncioDash {annuncio} bind:modificando />
+		{/each}
+	</div>
+{:else}
+	<Loading />
+{/if}
 
 <style>
 	.lista-annunci {

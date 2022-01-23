@@ -22,7 +22,7 @@
 			on:click={() => goto(`/profilo/${segnalazione.data().idSegnalatore}`)}
 			class="segnalatore"
 		>
-			🔗 SEGNALATORE</button
+			<span class="material-icons"> account_circle </span> SEGNALATORE</button
 		>
 		<button on:click={risolviSegnalazione} class="risolvi">Risolvi segnalazione </button>
 	</div>
@@ -32,6 +32,7 @@
 	.bottoni {
 		display: flex;
 		gap: 1rem;
+		justify-content: center;
 	}
 	.segnalatore {
 		font-weight: 600;
@@ -39,6 +40,9 @@
 		padding: 0.5rem;
 		margin: 0.5rem 0;
 		width: fit-content;
+		display: flex;
+		align-items: center;
+		gap: 0.5em;
 	}
 	.risolvi {
 		font-weight: 600;
@@ -53,7 +57,6 @@
 		transition: all 1s ease;
 	}
 
-	
 	.main-container {
 		display: flex;
 		flex-direction: column;
@@ -66,6 +69,4 @@
 	.contenuto {
 		font-size: 1.1rem;
 	}
-
-	
 </style>

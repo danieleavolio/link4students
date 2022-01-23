@@ -41,7 +41,9 @@
 	{:else}
 		<div class="sezione-bottoni">
 			<div class="ricerca">
-				<span>Trova corso🔍</span><input bind:value={filtro} type="text" />
+				<span class="trova">Trova corso <span class="material-icons">
+					search
+					</span></span><input bind:value={filtro} type="text" />
 			</div>
 		</div>
 
@@ -128,5 +130,17 @@
 
 	span {
 		font-size: 1.2rem;
+	}
+
+	.trova{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 1em;
+	}
+
+	.ricerca{
+		display: flex;
+		gap: 0.5em;
 	}
 </style>

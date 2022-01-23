@@ -180,8 +180,16 @@
 		<div class="contenuto">
 			<p>{oggettoSegnalazione.recensione.data().contenuto}</p>
 			<div class="voti">
-				<p>{tornaDato(oggettoSegnalazione.recensione.data().votoDifficolta, '🧠')}</p>
-				<p>{tornaDato(oggettoSegnalazione.recensione.data().votoUtilita, '🎓')}</p>
+				<p>
+					<span class="material-icons">
+						{tornaDato(oggettoSegnalazione.recensione.data().votoDifficolta, 'psychology')}</span
+					>
+				</p>
+				<p>
+					<span class="material-icons">
+						{tornaDato(oggettoSegnalazione.recensione.data().votoUtilita, 'stars')}</span
+					>
+				</p>
 			</div>
 		</div>
 		<div class="segnalazione">
@@ -243,8 +251,8 @@
 		cursor: pointer;
 		transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
 		position: absolute;
-		margin-left: -1.6rem;
-		margin-top: -3rem;
+		margin-left: -2rem;
+		margin-top: -5rem;
 		box-shadow: var(--innerNeu);
 	}
 
@@ -282,6 +290,7 @@
 		padding: 0.5rem;
 		overflow-wrap: break-word;
 		max-width: 380px;
+		white-space: break-spaces;
 	}
 
 	.voti {
@@ -315,6 +324,7 @@
 		border-radius: 0.3rem;
 		outline: none;
 		border: none;
+		font-size: 1.2em;
 	}
 	.sospendi {
 		padding: 0.2rem;

@@ -19,7 +19,7 @@
 
 {#if $authStore.isLoggedIn}
 	<slot name="trigger" {open}>
-		<button class="domanda-button" on:click={open}
+		<button class="domanda-button {$richiesteUtente.length > 0 ? 'presenti' : ''}" on:click={open}
 			><span class="material-icons"> notifications </span><span>{$richiesteUtente.length}</span
 			></button
 		>
@@ -190,5 +190,9 @@
 		padding: 1rem;
 		border-radius: 1rem;
 		font-weight: 600;
+	}
+
+	.presenti{
+		color: var(--resolve);
 	}
 </style>

@@ -12,6 +12,7 @@
 		animation: loading 1s linear infinite;
 		border-radius: 100%;
         margin: 1rem;
+		align-self: center;
 	}
 
 	@keyframes loading {

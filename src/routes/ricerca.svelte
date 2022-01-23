@@ -221,14 +221,18 @@
 		classeUtenti = 'attiva';
 		classeCorsi = '';
 		classeAppunti = '';
+		ricercaByUtenti();
 	} else if (tipo == 'corsi') {
 		classeUtenti = '';
 		classeCorsi = 'attiva';
 		classeAppunti = '';
+		ricercaByCorsi();
+
 	} else if (tipo == 'appunti') {
 		classeUtenti = '';
 		classeCorsi = '';
 		classeAppunti = 'attiva';
+		ricercaByAppunti();
 	}
 </script>
 

@@ -166,10 +166,10 @@
 				<div class="prima-sinistra">
 					<div class="lista-schermate">
 						<p>Lista schermate</p>
-						<button on:click={clickUtenti} class="bottone">Utenti</button>
-						<button on:click={clickRecensioni} class="bottone">Recensioni</button>
-						<button on:click={clickDomande} class="bottone">Domande</button>
-						<button on:click={clickAppunti} class="bottone">Appunti</button>
+						<button on:click={clickUtenti} class="bottone {schermata == 'utenti' ? 'attiva' : ''}">Utenti</button>
+						<button on:click={clickRecensioni} class="bottone {schermata == 'recensioni' ? 'attiva' : ''}">Recensioni</button>
+						<button on:click={clickDomande} class="bottone {schermata == 'domande' ? 'attiva' : ''}">Domande</button>
+						<button on:click={clickAppunti} class="bottone {schermata == 'appunti' ? 'attiva' : ''}">Appunti</button>
 					</div>
 				</div>
 				<div class="prima-destra">
@@ -239,6 +239,7 @@
 					<BoxSelezioneAzione emoji={'school'} azione="Corsi" />
 					<BoxSelezioneAzione emoji={'assignment'} azione="Insegnamenti" />
 					<BoxSelezioneAzione emoji={'campaign'} azione="Annunci" />
+					<BoxSelezioneAzione emoji={'person_off'} azione="Sospesi" />
 				</div>
 			</div>
 
@@ -281,6 +282,9 @@
 		justify-content: center;
 	}
 
+	.attiva{
+		box-shadow: var(--innerNeu);
+	}
 	.selezionato {
 		font-size: 2rem;
 		text-transform: uppercase;
@@ -319,10 +323,10 @@
 	.pagina-azioni {
 		width: 80%;
 		height: 80%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		gap: 1rem;
+		display: grid;
+		place-items: center;
+		grid-template-columns: 1fr 1fr;
+		gap: 1em;
 	}
 
 	.loading {
@@ -346,6 +350,9 @@
 
 	.box-statistiche {
 		display: grid;
-		grid-template-columns: 1fr 2fr;
+		grid-template-columns: 2fr 2fr;
+	}
+	.statistiche-sito > h1{
+		text-align: center;
 	}
 </style>

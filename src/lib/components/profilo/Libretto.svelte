@@ -10,7 +10,7 @@
 	export let mediaUtente;
 	export let collegamentiUtente;
 
-	esamiSuperati = esamiSuperati.sort((a, b) =>
+	$:esamiSuperati = esamiSuperati.sort((a, b) =>
 		a.data().nomeCorso.localeCompare(b.data().nomeCorso)
 	);
 </script>

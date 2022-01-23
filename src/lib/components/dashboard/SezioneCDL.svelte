@@ -30,7 +30,9 @@
 	<div class="sezione-bottoni">
 		<ModalAggiungiCdl {listaCorsi} />
 		<div class="ricerca">
-			<span>🔍</span><input bind:value={filtro} type="text" />
+			<span class="cerca"><span class="material-icons">
+				search
+				</span></span><input bind:value={filtro} type="text" />
 		</div>
 	</div>
 
@@ -109,5 +111,17 @@
 	.not-found {
 		font-weight: 600;
 		margin: auto;
+	}
+	.ricerca{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+	
+
+	.cerca{
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 </style>

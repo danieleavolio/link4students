@@ -115,19 +115,30 @@
 				<p>Lascia una recensione!</p>
 				<ModalRecensione idCorso={corso.data().codiceCorso} nome={corso.data().nome} />
 			{:else}
-				<p class="hai-recensito">Hai recensito questo esame! <span class="material-icons"> check_circle </span></p>
+				<p class="hai-recensito">
+					Hai recensito questo esame! <span class="material-icons"> check_circle </span>
+				</p>
 			{/if}
 		{/if}
 	{/if}
 </div>
 <!-- container per le recensioni e altro -->
 <div class="second-container">
+	{#if !$authStore.isLoggedIn}
+		<div class="signin-todo">
+			<p class="annuncio">
+				Per interagire con la comunity, effettua <a href="/reg/joinus" class="action">
+					unisciti a noi
+					<span class="material-icons"> logout </span>
+				</a>
+			</p>
+		</div>
+	{/if}
 	<div class="box-bottoni">
 		<button bind:this={recensioni} on:click={handleClickBottoni}>Recensioni</button>
 		<button bind:this={domande} on:click={handleClickBottoni}>Domande</button>
 		<button bind:this={appunti} on:click={handleClickBottoni}>Appunti</button>
 	</div>
-
 	<!-- Mostrare in base alla scelta fatta -->
 	{#if scelta == 'Recensioni'}
 		<BoxRecensioni idCorso={corso.data().codiceCorso} />
@@ -201,10 +212,10 @@
 		margin: 0;
 	}
 
-	.hai-recensito{
+	.hai-recensito {
 		display: flex;
 		align-items: center;
-		justify-content: center	;
+		justify-content: center;
 		gap: 1em;
 	}
 
@@ -248,4 +259,39 @@
 		justify-content: space-around;
 		align-items: center;
 	}
+
+	.signin-todo {
+		font-size: 1.2em;
+		box-shadow: var(--innerNeu);
+		padding: 0.5em;
+		border-radius: 0.5em;
+		margin: 1em;
+	}
+
+	.annuncio {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0.2em;
+	}
+
+	.action {
+		box-shadow: var(--neumorphism);
+		padding: 0.3em;
+		border-radius: 0.5em;
+		cursor: pointer;
+		color: var(--submit);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0.2em;
+		text-decoration: none;
+		transition: var(--velocita);
+	}
+
+	.action:hover{
+		box-shadow: var(--innerNeu);
+	}
+
+	
 </style>

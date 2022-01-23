@@ -66,7 +66,7 @@
 			<button class="close-button" on:click={close}> ❌ </button>
 			<slot name="header">
 				<div class="titolo">
-					<p>Revisione per {appunto.data().titoloAppunti}</p>
+					<p>Revisione per <span class="nome-appunto"> {appunto.data().titoloAppunti}</span></p>
 				</div>
 			</slot>
 			{#if caricamento}
@@ -85,9 +85,8 @@
 							</div>
 						</form>
 						<div class="alternativa">
-							<p>oppure</p>
 							<div class="div">
-								<p>Se l'appunto ha problemi come copyright o altro</p>
+								<p class="oppure">Se l'appunto ha problemi come copyright o altro</p>
 								<button on:click={eliminaAppunto} class="elimina" id="elimina-appunto"
 									>Elimina</button
 								>
@@ -113,7 +112,12 @@
 		outline: none;
 		cursor: pointer;
 	}
-
+	.nome-appunto{
+		padding: 0.3em;
+		background-color: var(--testo);
+		color: var(--sfondo);
+		border-radius: 0.2em;
+	}
 	.modal {
 		position: fixed;
 		top: 0;
@@ -145,6 +149,10 @@
 		flex-direction: column;
 	}
 
+	label{
+		font-size: 1.3em;
+	}
+
 	.close-button {
 		outline: none;
 		font-size: 1.2rem;
@@ -158,7 +166,7 @@
 		box-shadow: var(--innerNeu);
 	}
 	.titolo {
-		font-size: 1.3rem;
+		font-size: 1.5em;
 		font-weight: 600;
 		text-align: center;
 	}
@@ -176,6 +184,10 @@
 	}
 	.contenuto {
 		overflow: auto;
+	}
+
+	.oppure{
+		font-size: 1.2em;
 	}
 
 	form {
@@ -264,5 +276,6 @@
 	.elimina:hover {
 		color: var(--sfondo);
 		box-shadow: var(--alertHover);
+		background-color: var(--alert);
 	}
 </style>

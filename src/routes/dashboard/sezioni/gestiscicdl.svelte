@@ -22,5 +22,4 @@
 
 <SezioneCdl />
 
-<style>
-</style>
+

@@ -15,7 +15,9 @@
 	{#if linkScheda == 'Non disponibile'}
 		<p class="scheda non-disponibile">Scheda Insegnamento<br /> Non disponbile</p>
 	{:else}
-		<a class="scheda disponibile" target="_blank" href={linkScheda}> 📃 {nomeLinkScheda}</a>
+		<a class="scheda disponibile" target="_blank" href={linkScheda}>
+			<span class="material-icons"> description </span> {nomeLinkScheda}</a
+		>
 	{/if}
 	<p>Ore di insegnamento totali: {oreCorso}</p>
 </div>
@@ -38,5 +40,12 @@
 	.disponibile {
 		display: block;
 		margin: 1rem 0;
+		opacity: 100%;
+		box-shadow: var(--neumorphism);
+		font-size: 1.2em;
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 0.5em;
 	}
 </style>

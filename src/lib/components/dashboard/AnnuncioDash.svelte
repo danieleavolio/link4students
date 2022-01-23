@@ -63,7 +63,7 @@
 			<span on:click={deleteAnnuncio} class="material-icons deleting"> delete </span>
 		</div>
 	{/if}
-	<div class="cover">
+	<div class="cover" id={annuncio.id}>
 		<img class={annuncio.data().tipo} src="/images/{annuncio.data().tipo}.png" alt="" />
 	</div>
 	<div class="content">
@@ -74,7 +74,7 @@
 		</p>
 	</div>
 	{#if showMore && annuncio.data().contenuto.length >= 300 && !mostrando}
-		<button class="show-more" on:click={mostraAltro}> Mostra altro..</button>
+		<a href="#{annuncio.id}" class="show-more" on:click={mostraAltro}> Mostra altro..</a>
 	{/if}
 	{#if mostrando}
 		<button class="show-less" on:click={mostraMeno}> Comprimi..</button>
@@ -87,6 +87,15 @@
 		margin: 0.4rem 0;
 	}
 
+
+	a{
+		border: var(--bordo);
+		background-color: var(--sfondo);
+		transition: var(--velocita);
+		text-decoration: none;
+	}
+
+	
 	.shadow {
 		position: absolute;
 		width: 100%;
@@ -101,6 +110,7 @@
 		left: 0;
 		right: 0;
 		bottom: 0;
+		border-radius: 0.6em;
 	}
 
 	.annuncio {

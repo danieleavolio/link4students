@@ -14,7 +14,9 @@
 				break;
 			case 'campaign':
 				goto('/dashboard/sezioni/gestisciannunci');
-
+				break;
+			case 'person_off':
+				goto('/dashboard/sezioni/gestiscibannati');
 				break;
 		}
 		if (emoji == '🎓') {
@@ -40,12 +42,12 @@
 		width: max-content;
 		border-radius: 0.8rem;
 		gap: 1rem;
-		justify-content: center;
 		align-items: center;
 		box-shadow: var(--neumorphism);
 		padding: 1rem;
 		transition: var(--velocita);
 		cursor: pointer;
+		width: 80%;
 	}
 
 	.container:hover {
@@ -63,8 +65,6 @@
 		align-items: center;
 		font-weight: 600;
 	}
-
-	
 
 	.right {
 		font-size: 2rem;

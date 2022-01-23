@@ -60,10 +60,10 @@
 	</form>
 	<div class="div-tipo">
 		<button on:click={() => (tipo = 'alert')} class={tipo == 'alert' ? 'avvertenza' : ''}
-			><span class="material-icons "> email </span> Avvertenza</button
+			><span class="material-icons "> campaign </span> Avvertenza</button
 		>
 		<button on:click={() => (tipo = 'message')} class={tipo == 'message' ? 'messaggio' : ''}
-			><span class="material-icons"> campaign </span>Annuncio</button
+			><span class="material-icons"> email </span>Annuncio</button
 		>
 	</div>
 </div>

@@ -27,6 +27,7 @@
 </script>
 
 <div class="sezione-cdl">
+	<h1>Sezione Corsi di Studio</h1>
 	<div class="sezione-bottoni">
 		<ModalAggiungiCdl {listaCorsi} />
 		<div class="ricerca">
@@ -123,5 +124,9 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+
+	h1{
+		text-align: center;
 	}
 </style>

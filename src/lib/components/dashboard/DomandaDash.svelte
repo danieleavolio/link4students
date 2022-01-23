@@ -90,7 +90,6 @@
 			risolviSegnalazioneDomanda(oggettoSegnalazione.segnalazione.id);
 			// Si elimina la domanda e le risposte
 			eliminaDomanda();
-			console.log('Utente sospeso per: ', giorniSospensione);
 		});
 	};
 </script>

@@ -6,11 +6,8 @@
 		for (const bannato of idBannati.docs) {
 			await getDoc(doc(db, 'users', bannato.id)).then((user) => {
 				listaBannati = [...listaBannati, user];
-				console.log('FINE GET DOC');
 			});
 		}
-
-		console.log('B4 RETURN');
 
 		return {
 			props: { idBannati, listaBannati }
@@ -21,30 +18,43 @@
 <script>
 	import { db } from '$lib/firebaseConfig';
 
-	import { collection, deleteDoc, doc, getDoc, getDocs, query } from 'firebase/firestore';
-
+	import {
+		collection,
+		deleteDoc,
+		doc,
+		getDoc,
+		getDocs,
+		onSnapshot,
+		query
+	} from 'firebase/firestore';
 	export let listaBannati;
-    export let idBannati;
+	export let idBannati;
 
 	const deleteBan = (uid) => {
-        // TODO
+		deleteDoc(idBannati.docs[idBannati.docs.map((e) => e.id).indexOf(uid)].ref);
+		listaBannati = listaBannati.filter((elem) => elem.id != uid);
+		// TODO
 	};
 </script>
 
 <h1>Gestione degli utenti sospesi</h1>
 <div class="container">
 	<h3>Lista degli utenti bannati</h3>
-	<div class="lista-bannati">
-		{#each listaBannati as bannato}
-			<div class="utente-bannato">
-				<div class="avatar">
-					<img src={bannato.data().avatar} alt="" />
+	{#if listaBannati.length > 0}
+		<div class="lista-bannati">
+			{#each listaBannati as bannato}
+				<div class="utente-bannato">
+					<div class="avatar">
+						<img src={bannato.data().avatar} alt="" />
+					</div>
+					<p class="nome-cognome">{bannato.data().nome} {bannato.data().cognome}</p>
+					<button on:click={() => deleteBan(bannato.id)} class="unban">Unban</button>
 				</div>
-				<p class="nome-cognome">{bannato.data().nome} {bannato.data().cognome}</p>
-				<button on:click={()=> deleteBan(bannato.uid)} class="unban">Unban</button>
-			</div>
-		{/each}
-	</div>
+			{/each}
+		</div>
+	{:else}
+		<p class="nessuno"><span class="material-icons"> person </span> Non ci sono utenti bannati</p>
+	{/if}
 </div>
 
 <style>
@@ -92,5 +102,19 @@
 		font-size: 1.2em;
 		border-radius: 0.3em;
 		cursor: pointer;
+	}
+
+	.nessuno{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		font-size: 1.2em;
+		box-shadow: var(--innerNeu);
+		border-radius: 0.5rem;
+		padding: 0.5em;
+	}
+
+	.material-icons{
+		font-size: 2em;
 	}
 </style>

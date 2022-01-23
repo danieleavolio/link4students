@@ -29,6 +29,8 @@
 	import { collection, doc, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 	import ListaUtentiDash from '$lib/components/dashboard/stats/ListaUtentiDash.svelte';
 	import UltimeAttivita from '$lib/components/dashboard/stats/UltimeAttivita.svelte';
+	import Loading from '$lib/components/utilities/Loading.svelte';
+	import CheckEverything from '$lib/components/dashboard/checkEverything.svelte';
 
 	let user;
 	let schermata = 'utenti';
@@ -166,10 +168,19 @@
 				<div class="prima-sinistra">
 					<div class="lista-schermate">
 						<p>Lista schermate</p>
-						<button on:click={clickUtenti} class="bottone {schermata == 'utenti' ? 'attiva' : ''}">Utenti</button>
-						<button on:click={clickRecensioni} class="bottone {schermata == 'recensioni' ? 'attiva' : ''}">Recensioni</button>
-						<button on:click={clickDomande} class="bottone {schermata == 'domande' ? 'attiva' : ''}">Domande</button>
-						<button on:click={clickAppunti} class="bottone {schermata == 'appunti' ? 'attiva' : ''}">Appunti</button>
+						<button on:click={clickUtenti} class="bottone {schermata == 'utenti' ? 'attiva' : ''}"
+							>Utenti</button
+						>
+						<button
+							on:click={clickRecensioni}
+							class="bottone {schermata == 'recensioni' ? 'attiva' : ''}">Recensioni</button
+						>
+						<button on:click={clickDomande} class="bottone {schermata == 'domande' ? 'attiva' : ''}"
+							>Domande</button
+						>
+						<button on:click={clickAppunti} class="bottone {schermata == 'appunti' ? 'attiva' : ''}"
+							>Appunti</button
+						>
 					</div>
 				</div>
 				<div class="prima-destra">
@@ -250,8 +261,9 @@
 					<UltimeAttivita />
 				</div>
 			</div>
+			<CheckEverything />
 		{:else}
-			<div class="loading" />
+			<Loading />
 		{/if}
 	{/if}
 </div>
@@ -260,12 +272,13 @@
 	.dashboard {
 		width: 90vw;
 		height: 100%;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.prima-sezione {
 		display: grid;
 		grid-template-columns: 1fr 2fr;
-		align-items: center;
 		gap: 1rem;
 		flex-wrap: wrap;
 	}
@@ -282,7 +295,7 @@
 		justify-content: center;
 	}
 
-	.attiva{
+	.attiva {
 		box-shadow: var(--innerNeu);
 	}
 	.selezionato {
@@ -307,7 +320,6 @@
 		display: flex;
 		overflow-x: scroll;
 		scroll-behavior: smooth;
-		width: 70vw;
 		gap: 1rem;
 		white-space: nowrap;
 	}
@@ -329,30 +341,11 @@
 		gap: 1em;
 	}
 
-	.loading {
-		width: 10px;
-		height: 10px;
-		border-radius: 0.3rem;
-		animation: loading infinite 1s;
-		border: black solid;
-		background-color: rgb(162, 0, 255);
-		margin: auto;
-	}
-
-	@keyframes loading {
-		0% {
-			width: 10px;
-		}
-		100% {
-			width: 100px;
-		}
-	}
-
 	.box-statistiche {
 		display: grid;
-		grid-template-columns: 2fr 2fr;
+		grid-template-columns: 1fr 2fr;
 	}
-	.statistiche-sito > h1{
+	.statistiche-sito > h1 {
 		text-align: center;
 	}
 </style>

@@ -11,7 +11,6 @@
 		where
 	} from 'firebase/firestore';
 	export async function load({ page }) {
-		console.log('caricato on load');
 		// Prendere da Firebase le informazioni dell'utente come singolo documento
 		// per utilizzarlo all'interno della pagina per scegliere cosa mostrare.
 
@@ -30,14 +29,12 @@
 			let docs = document.docs;
 			profilo = docs[0].data();
 
-			console.log('Entrato in funzione');
 
 			// Se sto visitando il mio stesso profilo
 			if (getAuth().currentUser != null) {
 				if (getAuth().currentUser.uid == uid) {
 					collegati = true;
 					isDatiAccessibili = true;
-					console.log('caricato on same profile');
 					// SET PREFERENZA SE NON SETTATA
 					profilo.preferenzaLibretto =
 						profilo.preferenzaLibretto != undefined ? profilo.preferenzaLibretto : 'tutti';
@@ -70,11 +67,9 @@
 						// Se ha la preferenza su 'tutti' oppure siamo collegati
 						await getDoc(doc(db, 'collegamenti', getAuth().currentUser.uid + uid)).then(
 							async (res) => {
-								console.log('ho la preferenza non nessuno');
 								if (res.exists()) {
 									collegati = true;
 									isDatiAccessibili = true;
-									console.log('siamo collegati');
 									let queryEsamiCDL = query(
 										collection(db, 'corsidelcdl'),
 										where('cdl', '==', profilo.corsoDiLaurea)
@@ -90,7 +85,6 @@
 										where('idUtente', '==', uid)
 									);
 
-									console.log('carico');
 									// await altrimenti ritorna fuori dalla funzione prima della fine
 									await getDocs(queryEsamiCDL).then(async (esami) => {
 										esamiCdl = esami.docs;
@@ -102,7 +96,6 @@
 										});
 									});
 								} else {
-									console.log('Non siamo collegati.');
 									collegati = false;
 								}
 							}
@@ -124,7 +117,6 @@
 							where('idUtente', '==', uid)
 						);
 
-						console.log('carico');
 						// await altrimenti ritorna fuori dalla funzione prima della fine
 						await getDocs(queryEsamiCDL).then(async (esami) => {
 							esamiCdl = esami.docs;
@@ -142,7 +134,6 @@
 				) {
 					await getDoc(doc(db, 'collegamenti', getAuth().currentUser.uid + uid)).then((res) => {
 						if (res.exists()) {
-							console.log('Preferenza NESSUNO e siamo collegati');
 							isDatiAccessibili = false;
 							collegati = true;
 						}
@@ -151,7 +142,6 @@
 			} else {
 				if (profilo.preferenzaLibretto == 'tutti') {
 					isDatiAccessibili = true;
-					console.log('caricato on not logged');
 					// SET PREFERENZA SE NON SETTATA
 					profilo.preferenzaLibretto =
 						profilo.preferenzaLibretto != undefined ? profilo.preferenzaLibretto : 'tutti';
@@ -306,7 +296,6 @@
 	}
 
 	onMount(() => {
-		console.log('sono entrato');
 		// Controllo per capire se devo mostrare o meno le informazioni
 		if (isDatiAccessibili) {
 			if ($authStore.isLoggedIn) {
@@ -908,5 +897,12 @@
 	.controlla-collegamento:hover {
 		box-shadow: var(--neumorphism);
 		transform: scale(1);
+	}
+
+	.lista-appunti{
+		display: grid;
+		grid-template-columns: auto auto;
+		gap: 3em;
+		place-items: center;
 	}
 </style>

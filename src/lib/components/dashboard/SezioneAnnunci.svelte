@@ -52,9 +52,10 @@
 			name="contenuto"
 			id="contenuto"
 			cols="30"
-			rows="3"
+			rows="10"
 			placeholder="Aggiungi un contenuto.."
 		/>
+		
 
 		<button class="pubblica">Pubblica</button>
 	</form>

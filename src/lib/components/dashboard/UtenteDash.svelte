@@ -86,21 +86,27 @@
 		padding: 0.5rem;
 		box-shadow: var(--neumorphism);
 		margin: 1rem;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 	}
 	.immagine-nome {
 		display: flex;
 		gap: 1rem;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.immagine {
-		width: 50px;
-		height: 50px;
+		width: 100px;
+		height: 100px;
 		border-radius: 100%;
 		border: var(--bordo);
 	}
 	.immagine > img {
 		width: 100%;
-		height: 50px;
+		height: 100px;
 		object-fit: cover;
 		cursor: pointer;
 		border-radius: 100%;

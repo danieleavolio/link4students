@@ -4,13 +4,12 @@
 	import { fly } from 'svelte/transition';
 
 	export async function load({ page }) {
-		let tipo = page.query.get('tipo');
-		let keyword = page.query.get('keyword');
+		let tipo = page.query.get('tipo') != null ? page.query.get('tipo') : '';
+		let keyword = page.query.get('keyword') != null ? page.query.get('keyword') : '';
 		let oldTipo = tipo;
 
 		// NON RIESCO A TROVARE UN MODO PER FARE DELLE QUERY LEGGERE
 		let lista = [];
-		console.log('im here');
 		switch (tipo) {
 			case 'utenti':
 				const q = query(collection(db, 'users'), limit(10 * 10));
@@ -83,13 +82,6 @@
 	 * in caso di un numero di query eccessivamente grande.
 	 */
 	let limiteRicerca;
-	const handleSearchBarRepetition = () => {
-		searchBar.style = 'border: solid var(--alert)';
-	};
-
-	const resetSearchBar = () => {
-		searchBar.style = 'outline: none';
-	};
 
 	/**
 	 * In base @var tipo si sceglie che tipo di ricerca fare.
@@ -133,7 +125,7 @@
 			});
 			lista = listaCorsi;
 			oldTipo = 'corsi';
-		} else handleSearchBarRepetition();
+		}
 	};
 
 	const ricercaByUtenti = async () => {
@@ -146,7 +138,7 @@
 			});
 			lista = listaUtenti;
 			oldTipo = 'utenti';
-		} else handleSearchBarRepetition();
+		}
 	};
 
 	const ricercaByAppunti = async () => {
@@ -160,7 +152,7 @@
 			});
 			lista = listaAppunti;
 			oldTipo = 'appunti';
-		} else handleSearchBarRepetition();
+		}
 	};
 
 	const loadMoreCorsi = async () => {
@@ -227,7 +219,6 @@
 		classeCorsi = 'attiva';
 		classeAppunti = '';
 		ricercaByCorsi();
-
 	} else if (tipo == 'appunti') {
 		classeUtenti = '';
 		classeCorsi = '';
@@ -252,7 +243,6 @@
 				bind:this={searchBar}
 				type="text"
 				bind:value={keyword}
-				on:input={resetSearchBar}
 				min="2"
 				placeholder="Minimo 3 caratteri"
 				required

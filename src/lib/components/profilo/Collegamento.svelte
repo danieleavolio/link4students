@@ -38,7 +38,9 @@
 </div>
 {#if $authStore.isLoggedIn}
 		{#if collegamento.data().idUtente == $authStore.user.uid}
-			<button class="elimina-collegamento" on:click={eliminaCollegamento}>❌</button>
+			<button class="elimina-collegamento" on:click={eliminaCollegamento}><span class="material-icons">
+				clear
+				</span></button>
 		{/if}
 	{/if}
 
@@ -54,6 +56,7 @@
 		border-radius: 0.5rem;
 		transition: var(--velocita);
 		cursor: pointer;
+		width: 100%;
 	}
 
 	.collegamento:hover{
@@ -82,6 +85,14 @@
 		box-shadow: var(--neumorphism);
 		border-radius: 0.5rem;
 		transition: var(--velocita);
+		display: flex;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.material-icons{
+		color: var(--alert);
+		font-size: 2em;
 	}
 
 	.elimina-collegamento:hover{

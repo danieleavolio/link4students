@@ -42,7 +42,7 @@
 {#if !loaded}
 	<div class="loading" />
 {:else}
-	<ListaAnnunci bind:annunci />
+	<ListaAnnunci bind:annunci modificando=false/>
 	{#if isMoreThanLimit}
 		<button
 			on:mouseleave={() => (loadMore = false)}

@@ -13,8 +13,6 @@
 
 <style>
 	.lista-collegamenti {
-		height: 400px;
-		overflow-y: scroll;
 		margin: 1rem;
 	}
 
@@ -24,8 +22,9 @@
 
 	.singolo-collegamento {
 		display: flex;
-		gap: 1rem;
+		gap: 0.5em;
 		justify-content: center;
 		align-items: center;
+		width: 100%;
 	}
 </style>

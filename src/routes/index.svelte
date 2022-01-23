@@ -61,7 +61,7 @@
 	{/if}
 
 	<BoxLink nome="Corsi" emoji="school" linkto="corsi" />
-	<BoxLink nome="Ricerca" emoji="search" linkto="ricerca" />
+	<BoxLink nome="Ricerca" emoji="search" linkto="ricerca"/>
 </div>
 
 <BoxStatistiche {statistiche} />

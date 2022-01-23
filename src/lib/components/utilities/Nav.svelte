@@ -133,9 +133,7 @@
 			onSnapshot(queryRicMandate, (mandateSnap) => {
 				mandateList = mandateSnap.docs;
 				richiesteMandate.update((oldRichieste) => mandateList);
-				$richiesteMandate.forEach((element) => {
-					console.log(element.data());
-				});
+				
 			});
 
 			//Collegamenti utente che sono in tempo reale
@@ -147,7 +145,6 @@
 			onSnapshot(queryCollegamentiUtente, (snapshot) => {
 				collegamentiList = snapshot.docs;
 				collegamentiUtente.update((oldCollegamenti) => collegamentiList);
-				console.log(collegamentiUtente);
 			});
 		} else {
 			let data = {

@@ -179,7 +179,6 @@
 				eliminaAppunti(corso).then(() => {
 					deleteDoc(corso.ref)
 						.then(() => {
-							alert('Corso eliminato');
 						})
 						.catch((err) => {});
 				});

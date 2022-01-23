@@ -167,7 +167,6 @@
                 // Svelte aggiorna la lista quindi elimina dal DOM l'elemento e la finestra scompare
 				deleteDoc(corso.ref).then(() => {
 					caricamento = false;
-					alert('Operazione completata')
 				}).catch((error)=>{
                     messaggio = error.message;
                 });

@@ -29,7 +29,6 @@
 			let docs = document.docs;
 			profilo = docs[0].data();
 
-
 			// Se sto visitando il mio stesso profilo
 			if (getAuth().currentUser != null) {
 				if (getAuth().currentUser.uid == uid) {
@@ -213,7 +212,6 @@
 	export let esamiCdl;
 	export let esamiSuperati;
 	export let collegamentiProfilo;
-	export let preferenza;
 	export let contenutoBio;
 	export let sommaVoti;
 	export let mediaUtente;
@@ -234,6 +232,7 @@
 	import { getAuth } from 'firebase/auth';
 	import { richiesteMandate, richiesteUtente } from '$lib/stores/richiesteStore';
 	import { collegamentiUtente } from '$lib/stores/collegamentiStore';
+	import { goto } from '$app/navigation';
 
 	let profilePicture;
 	let file;
@@ -244,8 +243,6 @@
 
 	// CHECK PREFERENZA PROFILO SE NON SETTATA
 	let loading = true;
-	let modificaPreferenze = false;
-	let modificaBio = false;
 
 	const cambiaFoto = () => {
 		if (file) {
@@ -334,43 +331,6 @@
 		}
 	}
 
-	const cambiaBio = () => {
-		// Controllo
-		if ($authStore.isLoggedIn) {
-			// Controllo
-			if ($authStore.user.uid == profilo.uid)
-				// Modifico il documento dell'utente con la nuova bio
-				setDoc(
-					doc(db, 'users', $authStore.user.uid),
-					{
-						bio: contenutoBio
-					},
-					{ merge: true }
-				).then(() => {
-					// Dopo aver cambiato bio
-					profilo.bio = contenutoBio;
-					modificaBio = false;
-				});
-		}
-	};
-
-	const cambiaPreferenza = () => {
-		// Preferenza libretto
-		setDoc(
-			doc(db, 'users', profilo.uid),
-			{
-				preferenzaLibretto: preferenza
-			},
-			{ merge: true }
-		)
-			.then(() => {
-				modificaPreferenze = false;
-			})
-			.catch((error) => {
-				alert(error.message);
-			});
-	};
-
 	const mandaRichiestaCollegamento = () => {
 		if ($authStore.isLoggedIn) {
 			// GESTIRE SE GIA' PRESENTE
@@ -404,7 +364,7 @@
 		<div class="image-div">
 			<img src={profilo.avatar} alt="" />
 		</div>
-		{#if $authStore.isLoggedIn}
+		<!-- {#if $authStore.isLoggedIn}
 			{#if profilo.uid == $authStore.user.uid && modificaPreferenze}
 				<div class="cambia-immagine">
 					<form on:submit|preventDefault={cambiaFoto} action="">
@@ -423,7 +383,7 @@
 					</form>
 				</div>
 			{/if}
-		{/if}
+		{/if} -->
 	</div>
 	<div class="info">
 		<p class="nomecognome">{profilo.nome} {profilo.cognome}</p>
@@ -455,29 +415,8 @@
 						{/if}
 					</div>
 				</div>
-			{:else if modificaPreferenze}
-				<div class="modifica-preferenza">
-					<form on:submit|preventDefault={cambiaPreferenza} action="">
-						<div class="inputs">
-							<select
-								bind:value={preferenza}
-								name="preferenze"
-								id="preferenze"
-								class="select-preferenza"
-							>
-								<option value="tutti">Tutti</option>
-								<option value="connessi">Solo connessi</option>
-								<option value="nessuno">Nessuno</option>
-							</select>
-						</div>
-						<button class="salva" type="submit">Salva</button>
-						<button class="annulla" type="reset" on:click={() => (modificaPreferenze = false)}
-							>Annulla</button
-						>
-					</form>
-				</div>
 			{:else}
-				<button class="modifica-preferenza" on:click={() => (modificaPreferenze = true)}
+				<button class="modifica-preferenza" on:click={() => goto('/profilo/modificainfo')}
 					>Modifica preferenze</button
 				>
 			{/if}
@@ -486,38 +425,12 @@
 	<div class="bio">
 		<p class="titolo-bio">Bio</p>
 		<div class="container-bio">
-			{#if !modificaBio}
-				{#if profilo.bio}
-					<p class="bio">{profilo.bio}</p>
-				{:else}
-					<p class="bio bio-vuota">{contenutoBio}</p>
-				{/if}
+			{#if profilo.bio}
+				<p class="bio">{profilo.bio}</p>
 			{:else}
-				<div class="modifica-bio">
-					<textarea
-						bind:value={contenutoBio}
-						name="modificaBio"
-						id="modificabio"
-						cols="30"
-						rows="3"
-						placeholder="Inserisci ciò che vuoi!"
-						class="textarea-bio"
-						required
-						minlength="10"
-					/>
-					<div class="bottoni">
-						<button class="button-annulla" on:click={() => (modificaBio = false)}>Annulla</button>
-						<button class="button-salva" on:click={cambiaBio}>Salva</button>
-					</div>
-				</div>
+				<p class="bio bio-vuota">{contenutoBio}</p>
 			{/if}
 		</div>
-
-		{#if $authStore.isLoggedIn}
-			{#if profilo.uid == $authStore.user.uid && !modificaBio}
-				<button class="button-modifica" on:click={() => (modificaBio = true)}>Modifica</button>
-			{/if}
-		{/if}
 	</div>
 </div>
 <div class="sezione-titolo-libretto">
@@ -652,106 +565,12 @@
 		gap: 1rem;
 	}
 
-	.bottoni {
-		display: flex;
-		width: 100%;
-		gap: 1rem;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.button-modifica {
-		outline: none;
-		padding: 0.4rem 0;
-		border-radius: 6px;
-		background-color: var(--sfondo);
-		text-transform: uppercase;
-		cursor: pointer;
-		width: 50%;
-		align-self: center;
-	}
-
-	.button-salva {
-		width: 50%;
-		outline: none;
-		padding: 0.4rem 0;
-		border-radius: 6px;
-		text-transform: uppercase;
-		cursor: pointer;
-	}
-
-	.button-annulla {
-		width: 50%;
-		outline: none;
-		padding: 0.4rem 0;
-		border-radius: 6px;
-		text-transform: uppercase;
-		cursor: pointer;
-		color: var(--alert);
-	}
-	.modifica-bio {
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		gap: 0.5rem;
-		padding: 0.5rem;
-	}
-
-	.textarea-bio {
-		border-radius: 1rem;
-		outline: none;
-		box-shadow: var(--innerNeu);
-		resize: none;
-		padding: 0.3rem;
-		width: 300px;
-		height: 130px;
-		background-color: var(--sfondo);
-		color: var(--testo);
-		border: var(--bordo);
-	}
-
 	.bio {
 		padding: 1em;
 	}
-	.titolo-bio{
+	.titolo-bio {
 		margin: 0;
 		padding: 0;
-	}
-
-	form {
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-		justify-content: center;
-		align-items: center;
-	}
-
-	.bottone-file {
-		border-radius: 5px;
-		padding: 5px 10px;
-		box-shadow: var(--neumorphism);
-		cursor: pointer;
-		transition: var(--velocita);
-		border: var(--bordo);
-	}
-
-	.bottone-file:hover {
-		box-shadow: var(--innerNeu);
-		transform: var(--premuto);
-	}
-
-	.conferma {
-		cursor: pointer;
-		border-radius: 8px;
-
-		outline: none;
-		padding: 5px 10px;
-		width: 50%;
-	}
-	.da-nascondere {
-		opacity: 0;
-		display: none;
 	}
 
 	.nomecognome {
@@ -766,7 +585,6 @@
 		width: 400px;
 		overflow-wrap: break-word;
 		gap: 0.5em;
-
 	}
 
 	.bio > p {
@@ -785,6 +603,7 @@
 		justify-content: center;
 		align-items: center;
 		overflow-wrap: anywhere;
+		word-break: break-all;
 	}
 
 	.modifica-preferenza {
@@ -794,23 +613,6 @@
 		cursor: pointer;
 	}
 
-	.salva {
-		color: var(--testo);
-	}
-
-	.annulla {
-		color: var(--alert);
-	}
-
-	.select-preferenza {
-		font-size: 1rem;
-		border-radius: 00.3rem;
-		outline: none;
-		border: var(--bordo);
-		background-color: var(--sfondo);
-		color: var(--testo);
-		box-shadow: var(--neumorphism);
-	}
 	.connect-report-buttons {
 		display: flex;
 		gap: 1rem;
@@ -824,10 +626,6 @@
 		border-radius: 0.3rem;
 		color: var(--testo);
 		cursor: pointer;
-	}
-
-	.inputs {
-		display: flex;
 	}
 
 	.report {
@@ -891,6 +689,7 @@
 
 	.controlla-collegamento {
 		cursor: inherit;
+		color: var(--sfondo);
 		background-color: rgb(255, 255, 137);
 	}
 
@@ -899,7 +698,7 @@
 		transform: scale(1);
 	}
 
-	.lista-appunti{
+	.lista-appunti {
 		display: grid;
 		grid-template-columns: auto auto;
 		gap: 3em;

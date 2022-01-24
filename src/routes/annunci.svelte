@@ -42,7 +42,7 @@
 {#if !loaded}
 	<div class="loading" />
 {:else}
-	<ListaAnnunci bind:annunci modificando=false/>
+	<ListaAnnunci bind:annunci modificando={false} />
 	{#if isMoreThanLimit}
 		<button
 			on:mouseleave={() => (loadMore = false)}
@@ -92,9 +92,7 @@
 		justify-content: center;
 		align-items: center;
 		gap: 1rem;
-        transition: all 0.5s ease;
-        cursor: pointer;
+		transition: all 0.5s ease;
+		cursor: pointer;
 	}
-
- 
 </style>

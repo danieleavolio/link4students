@@ -261,6 +261,7 @@
 					<UltimeAttivita />
 				</div>
 			</div>
+			<p>Controla</p>
 			<CheckEverything />
 		{:else}
 			<Loading />

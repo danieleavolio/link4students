@@ -114,6 +114,7 @@
 		padding: 2rem;
 		display: flex;
 		flex-direction: column;
+
 	}
 
 	.close-button {
@@ -140,6 +141,7 @@
 		width: 100%;
 		justify-content: center;
 		align-items: center;
+		flex-direction: column;
 	}
 
 	.contenuto {

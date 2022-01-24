@@ -73,7 +73,7 @@
 			{contenutoTroncato}
 		</p>
 	</div>
-	{#if showMore && annuncio.data().contenuto.length >= 300 && !mostrando}
+	{#if showMore && annuncio.data().contenuto.length >= 200 && !mostrando}
 		<a href="#{annuncio.id}" class="show-more" on:click={mostraAltro}> Mostra altro..</a>
 	{/if}
 	{#if mostrando}

@@ -1,7 +1,7 @@
 <script>
 	import { db } from '$lib/firebaseConfig';
 	import { collection, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
-	import { fly } from "svelte/transition";
+	import { fly } from 'svelte/transition';
 	let verificando = false;
 	let progress;
 	let verificato = false;
@@ -27,19 +27,9 @@
 			// Calcolo la media
 			mediaCalcolata = Math.floor(sommaCalcolata / esamiRegistrati.docs.length);
 
-			if (mediaCalcolata == mediaCorrente) console.log('media corretta');
-			else if (mediaCorrente == null || mediaCalcolata == NaN) {
-				console.log('No exams');
+			if (mediaCorrente == null || mediaCalcolata == NaN) {
+				// fai niente
 			} else {
-				console.log(
-					'media errata',
-					' - ',
-					mediaCalcolata,
-					' - ',
-					mediaCorrente,
-					' - ',
-					esame.data().nome
-				);
 				// Se la media è errata, sostituiscila con quella corretta
 				await setDoc(
 					doc(db, 'corsidelcdl', esame.id),
@@ -89,7 +79,6 @@
 					},
 					{ merge: true }
 				);
-				console.log(`Settato la media difficolta e utilita di ${esame.data().nome} a 0`);
 			} else {
 				// Se ha voti, calcola.
 
@@ -104,20 +93,7 @@
 				// Controllo che sia uguale, altrimenti cambio.
 
 				if (mediaUtilita == utilitaCorrente && mediaDifficolta == difficoltaCorrente) {
-					console.log('Tutto ok per ', esame.data().nome);
 				} else {
-					console.log(
-						'Media errata per ',
-						esame.data().nome,
-						' Utilità: ',
-						utilitaCorrente,
-						' Calcolata: ',
-						mediaUtilita,
-						' - Difficolta: ',
-						difficoltaCorrente,
-						' Calcolata ',
-						mediaDifficolta
-					);
 					await setDoc(
 						doc(db, 'corsidelcdl', esame.id),
 						{
@@ -164,7 +140,9 @@
 	{/if}
 
 	{#if verificato}
-		<p transition:fly class="verify-done">Verifica e modifica effettuata con successo</p>
+		<p transition:fly class="verify-done">Verifica e modifica effettuata con successo <span class="material-icons-outlined">
+			check_circle_outline
+			</span></p>
 	{/if}
 </div>
 
@@ -218,6 +196,12 @@
 		border-radius: 0.5em;
 		width: 80%;
 		margin: 1em;
+	}
+
+	.verify-done{
+		display: flex;
+		justify-content: center;
+		align-items: center;
 	}
 
 	::-webkit-progress-bar {

@@ -333,7 +333,6 @@
 						element.data().idRecensione == recensione.id && element.data().operazione == 'like'
 				)
 			) {
-				console.log('entrato 1');
 				uiLocaleLike = 'liked';
 				uiLocaleDislike = '';
 			}
@@ -348,7 +347,6 @@
 						element.data().idRecensione == recensione.id && element.data().operazione == 'dislike'
 				)
 			) {
-				console.log('entrato 2');
 
 				uiLocaleDislike = 'disliked';
 				uiLocaleLike = '';

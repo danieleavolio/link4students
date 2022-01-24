@@ -42,7 +42,6 @@
 				getDocs(queryReazioni).then((reazioni) => {
 					reazioni.docs.forEach((reazione) => {
 						deleteDoc(reazione.ref).then(() => {
-							console.log('Eliminata reazione');
 						});
 					});
 				});
@@ -54,7 +53,6 @@
 				getDocs(querySegnalazioni).then((segnalazioni) => {
 					segnalazioni.docs.forEach((segnalazione) => {
 						deleteDoc(segnalazione.ref).then(() => {
-							console.log('Segnalazione elimiata');
 						});
 					});
 				});
@@ -94,7 +92,6 @@
 					// Per ogni risposta elimino la docRef
 					risposte.docs.forEach((risposta) => {
 						deleteDoc(risposta.ref).then(() => {
-							console.log('Risposta eliminata');
 						});
 					});
 				});
@@ -107,7 +104,6 @@
 					// Per ogni segnalazione, elimino la docRef
 					segnalazioni.docs.forEach((segnalazione) => {
 						deleteDoc(segnalazione.ref).then(() => {
-							console.log('Segnalazione eliminata');
 						});
 					});
 				});
@@ -140,7 +136,6 @@
 				getDocs(queryReazioni).then((reazioniAppunti) => {
 					reazioniAppunti.docs.forEach((reazione) => {
 						deleteDoc(reazione.ref).then(() => {
-							console.log('Reazione eliminata');
 						});
 					});
 				});

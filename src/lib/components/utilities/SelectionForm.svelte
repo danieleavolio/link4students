@@ -6,12 +6,10 @@
 
 	const cambiaDifficolta = (num) => {
 		difficolta = num;
-		console.log('difficolta');
 	};
 
 	const cambiaUtilita = (num) => {
 		utilita = num;
-		console.log('utilita');
 	};
 </script>
 

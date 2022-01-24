@@ -154,7 +154,6 @@
 		).then(() => {
 			// Quando un utente viene flaggato con questo, la recensione incriminata viene eliminata
 			eliminaRecensione();
-			console.log('Utente sospeso per: ', giorniSospensione);
 		});
 	};
 </script>

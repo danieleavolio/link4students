@@ -33,7 +33,6 @@
 			deleteDoc(doc(db, 'segnalazioniUtenti', oggettoSegnalazione.segnalazione.id));
 			// Rimuovere localmente la recensione
 			cambiaUtentiSegnalati(oggettoSegnalazione.segnalazione.id);
-			console.log('Utente sospeso per: ', giorniSospensione);
 		});
 	};
 </script>

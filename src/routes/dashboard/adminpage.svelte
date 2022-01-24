@@ -101,7 +101,6 @@
 				querySnapshot.docs.forEach((elem) => {
 					getDoc(doc(db, 'recensioni', elem.data().idRecensione)).then((docum) => {
 						if (docum.exists()) {
-							console.log(docum);
 							tempList.push({
 								segnalazione: elem,
 								recensione: docum

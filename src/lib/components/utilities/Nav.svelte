@@ -173,7 +173,9 @@
 	<nav transition:fly={{ x: -100 }}>
 		<div on:click={handleOpen} class="backdrop" />
 		<p class="company-name">Link 4 Students</p>
-		<button class="close-button" on:click={handleOpen}>❌</button>
+		<button class="close-button" on:click={handleOpen}><span class="material-icons">
+			close
+			</span></button>
 		<BarraRicerca />
 		<a on:click={handleOpen} href="/"> <span class="material-icons"> home </span> Home</a>
 		<a on:click={handleOpen} href="/corsi"> <span class="material-icons"> school </span> Corsi</a>
@@ -262,6 +264,9 @@
 		box-shadow: var(--neumorphism);
 		cursor: pointer;
 		transition: all 0.5s ease;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.close-button:hover {

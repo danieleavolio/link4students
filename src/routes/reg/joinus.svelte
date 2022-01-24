@@ -62,7 +62,7 @@
 		let exp = /@studenti.unical.it$/i;
 
 		// Se la REGEX rispostta @studenti.unical.it
-		if (true) {
+		if (email.match(exp)) {
 			createUserWithEmailAndPassword(auth, email, password)
 				.then(async () => {
 					// Crea l'account nel database con i dati che servono a noi.
@@ -88,7 +88,7 @@
 							// Sopra viene generato un numero da 0 a 6 che equivale al link di un immagine su storage
 						},
 						{ merge: true }
-					).then(async() => {
+					).then(async () => {
 						// Manda la mail di verifica per evitare account non istituzionali
 						await sendEmailVerification(auth.currentUser);
 						// Fai uscire perchè firebase fa subito il login
@@ -117,7 +117,6 @@
 		await signInWithEmailAndPassword(auth, email, password)
 			.then(() => {
 				if ($authStore.isLoggedIn) {
-					console.log('entrato');
 					if ($authStore.user.emailVerified == false) {
 						signOut(auth);
 						message = 'Email non verificata';
@@ -132,6 +131,9 @@
 	};
 </script>
 
+<svelte:head>
+	<title>Unisciti a noi!</title>
+</svelte:head>
 <main>
 	{#if !$authStore.isLoggedIn}
 		<div class="box-scelta">
@@ -204,6 +206,7 @@
 				<button class="accedi" type="submit">Accedi</button>
 			</form>
 			<a class="resend" href="/reg/resend">Non hai ricevuto la mail? Clicca qui!</a>
+			<a class="reset" href="/reg/resetpassword">Password Dimenticata?</a>
 		{/if}
 	{:else}
 		<p>Hai già effettuato l'accesso!</p>
@@ -300,19 +303,21 @@
 		border: var(--bordo);
 	}
 
-	.resend{
+	.resend,
+	.reset {
 		margin: 1rem;
 		color: var(--submit);
 		text-decoration: none;
 		transition: all 0.4s cubic-bezier(0.445, 0.05, 0.55, 0.95);
 	}
-	.resend:hover{
+	.resend:hover,
+	.reset:hover {
 		transform: scale(1.1);
 	}
 
 	input:-webkit-autofill {
-    -webkit-text-fill-color: var(--testo);
-    -webkit-box-shadow: var(--neumorphism);
-    box-shadow: 0 0 0 1000px var(--sfondo) inset;
-}
+		-webkit-text-fill-color: var(--testo);
+		-webkit-box-shadow: var(--neumorphism);
+		box-shadow: 0 0 0 1000px var(--sfondo) inset;
+	}
 </style>

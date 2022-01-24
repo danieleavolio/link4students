@@ -47,13 +47,11 @@
 		if (esame.mediaDifficolta) {
 			let vecchiaMediaTot = esame.mediaDifficolta * esame.numRecensioni;
 			mediaDifficolta = Math.floor((vecchiaMediaTot + difficolta) / numRecensioni);
-			console.log(mediaDifficolta, 'media difficolta');
 		} else mediaDifficolta = difficolta;
 		// Se esiste la media, allora salvo la vecchia e poi calcolo la nuova
 		if (esame.mediaUtilita) {
 			let vecchiaMediaTot = esame.mediaUtilita * esame.numRecensioni;
 			mediaUtilita = Math.floor((vecchiaMediaTot + utilita) / numRecensioni);
-			console.log(mediaUtilita, 'media utilita');
 		} else mediaUtilita = utilita;
 
 		let datiMedia = {

@@ -1,8 +1,8 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation';
 	import Loading from '$lib/components/utilities/Loading.svelte';
 
-	import { auth, db } from '$lib/firebaseConfig';
+	import { auth, db, storage } from '$lib/firebaseConfig';
 	import { authStore } from '$lib/stores/authStore';
 	import {
 		EmailAuthProvider,
@@ -12,6 +12,7 @@
 	} from 'firebase/auth';
 
 	import { doc, getDoc, setDoc } from 'firebase/firestore';
+	import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 	let user;
 
 	let pswField = '';
@@ -24,6 +25,11 @@
 	let message = '';
 	let loading = false;
 	let contenutoBio;
+	let file;
+
+	let avatar;
+
+	let profilePicture;
 
 	$: if (pswField.length || oldPsw.length || pswFieldConfirm) {
 		errorMessage = '';
@@ -37,9 +43,13 @@
 			bio: bio,
 			preferenzaLibretto: preferenza
 		};
+
+		if (file != null) {
+			await cambiaFoto();
+		}
 		await setDoc(doc(db, 'users', $authStore.user.uid), data, { merge: true });
-		console.log('DATI CAMBIATI');
 		await aggiornaPassword();
+		loading = false;
 	};
 
 	const aggiornaPassword = async () => {
@@ -51,7 +61,6 @@
 						.then(() => {
 							loading = false;
 							message = 'Dati modificati con successo';
-							console.log('PSW CAMBIATA');
 						})
 						.catch((error) => {
 							loading = false;
@@ -69,6 +78,34 @@
 		bio = area.value.trim();
 	};
 
+	const onChange = () => {
+		// Quando scelgo l'immagine viene assegnato a questo file
+		file = profilePicture.files[0];
+		avatar.src = URL.createObjectURL(file);
+	};
+
+	const cambiaFoto = async () => {
+		if (file) {
+			let picturesRef = ref(storage, `profilePictures/avatar${user.data().uid}`);
+			// Carico l'immagine del profilo nel database
+			uploadBytes(picturesRef, file).then(() => {
+				// Prendo l'url dell'immagine appena caricata
+				getDownloadURL(picturesRef).then((url) => {
+					// Aggiorno l'immagine del profilo dell'utente con il link di quello caricato
+					setDoc(
+						doc(db, 'users', $authStore.user.uid),
+						{
+							avatar: url
+						},
+						{ merge: true }
+					);
+				});
+			});
+		} else {
+			alert('Errore caricamento immagine');
+		}
+	};
+
 	onAuthStateChanged(auth, async (usr) => {
 		user = await getDoc(doc(db, 'users', usr.uid));
 		preferenza = user.data().preferenzaLibretto;
@@ -82,10 +119,24 @@
 	<div class="container">
 		<div class="avatar-nome">
 			<div class="avatar">
-				<img src={user.data().avatar} alt="" />
+				<div class="backdrop" on:click={() => profilePicture.click()}>
+					<span class="material-icons"> image </span>
+					<form action="">
+						<input
+							type="file"
+							name="photo"
+							id="avatar"
+							bind:this={profilePicture}
+							on:change={onChange}
+							accept="images/pmg, images/jpg "
+						/>
+					</form>
+				</div>
+				<img bind:this={avatar} src={user.data().avatar} alt="" />
 			</div>
 			<div class="nome-cognome">{user.data().nome} {user.data().cognome}</div>
 		</div>
+
 
 		<div class="dati">
 			<label for="nome"
@@ -196,6 +247,7 @@
 		width: 200px;
 		height: 200px;
 		border-radius: 50%;
+		position: relative;
 	}
 
 	.avatar > img {
@@ -211,6 +263,36 @@
 		place-items: center;
 	}
 
+	.avatar:hover > .backdrop {
+		opacity: 100%;
+	}
+
+	.backdrop {
+		position: absolute;
+		top: 0;
+		left: 0;
+		bottom: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		background-color: rgba(0, 0, 0, 0.753);
+		border-radius: 100%;
+		opacity: 0%;
+		transition: all 0.3s ease;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+	}
+
+	.material-icons {
+		position: relative;
+		font-size: 3em;
+	}
+
+	input[type='file'] {
+		display: none;
+	}
 	.dati {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
@@ -312,10 +394,10 @@
 		text-align: center;
 		background-color: var(--submit);
 		box-shadow: var(--submitHover);
-        font-size: 1.5em;
-        width: fit-content;
-        align-self: center;
-        border-radius: 0.2em;
-        padding: 0.5em;
+		font-size: 1.5em;
+		width: fit-content;
+		align-self: center;
+		border-radius: 0.2em;
+		padding: 0.5em;
 	}
 </style>

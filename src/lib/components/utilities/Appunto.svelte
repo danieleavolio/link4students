@@ -271,10 +271,8 @@
 					(element) => element.data().idAppunto == appunto.id && element.data().operazione == 'like'
 				)
 			) {
-				console.log('entrato 1');
 				uiLocaleLike = 'liked';
 				uiLocaleDislike = 'dislike';
-				console.log($appuntiReagiti[0].data());
 			}
 		}
 	};
@@ -293,7 +291,6 @@
 			) {
 				uiLocaleDislike = 'disliked';
 				uiLocaleLike = '';
-				console.log('entrato 2');
 			}
 		}
 	};

@@ -46,4 +46,12 @@
 	.emoji > span{
 		font-size: 4em;
 	}
+
+	/* Responsive */
+	@media screen and (max-width: 500px){
+		.container{
+			flex-direction: row;
+			width: 80%;
+		}
+	}
 </style>

@@ -26,6 +26,10 @@
 </div>
 
 <style>
+
+	input{
+		width: 100%;
+	}
 	.search {
 		color: rgb(27, 27, 27);
 		padding: 1rem;

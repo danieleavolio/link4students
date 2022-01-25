@@ -87,15 +87,13 @@
 		margin: 0.4rem 0;
 	}
 
-
-	a{
+	a {
 		border: var(--bordo);
 		background-color: var(--sfondo);
 		transition: var(--velocita);
 		text-decoration: none;
 	}
 
-	
 	.shadow {
 		position: absolute;
 		width: 100%;
@@ -140,7 +138,7 @@
 		display: flex;
 		flex-direction: column;
 		font-size: 1rem;
-		overflow-wrap: anywhere;
+		word-break: break-all;
 	}
 
 	.data {
@@ -209,5 +207,19 @@
 		cursor: pointer;
 		user-select: none;
 		opacity: 120%;
+	}
+
+	/* Responsive */
+	@media screen and (max-width: 600px) {
+		.annuncio {
+			position: relative;
+			display: grid;
+			grid-template-rows: auto 1fr;
+			width: 280px;
+			height: fit-content;
+			box-shadow: var(--neumorphism);
+			border-radius: 0.6rem;
+			transition: all 0.5s cubic-bezier(0.39, 0.575, 0.565, 1);
+		}
 	}
 </style>

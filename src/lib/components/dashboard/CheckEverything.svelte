@@ -140,7 +140,7 @@
 	{/if}
 
 	{#if verificato}
-		<p transition:fly class="verify-done">Verifica e modifica effettuata con successo <span class="material-icons-outlined">
+		<p transition:fly class="verify-done">Verifica e modifica effettuata con successo <span class="material-icons">
 			check_circle_outline
 			</span></p>
 	{/if}

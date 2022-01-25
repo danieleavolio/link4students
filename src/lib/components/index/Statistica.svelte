@@ -27,4 +27,11 @@
         font-weight: 600;
 
     }
+
+    /* Responsive */
+	@media screen and (max-width: 350px){
+		.container{
+			flex-direction: row;
+		}
+	}
 </style>

@@ -134,8 +134,7 @@
 				</div>
 				<img bind:this={avatar} src={user.data().avatar} alt="" />
 			</div>
-			<div class="nome-cognome">{user.data().nome} {user.data().cognome}</div>
-		</div>
+			</div>
 
 
 		<div class="dati">
@@ -237,17 +236,23 @@
 {/if}
 
 <style>
+
+	p{
+		text-align: center;
+	}
 	.container {
 		display: flex;
 		flex-direction: column;
 		padding: 1em;
 		box-shadow: var(--neumorphism);
-	}
+		border-radius: 0.4em;
+		}
 	.avatar {
 		width: 200px;
 		height: 200px;
 		border-radius: 50%;
 		position: relative;
+		margin: 3em;
 	}
 
 	.avatar > img {
@@ -259,7 +264,7 @@
 
 	.avatar-nome {
 		display: grid;
-		grid-template-columns: 2fr 1fr;
+		grid-template-columns:1fr;
 		place-items: center;
 	}
 
@@ -365,6 +370,8 @@
 	.preferenze-field {
 		display: flex;
 		gap: 1em;
+		justify-content: center;
+		align-items: center;
 	}
 	.attivo {
 		box-shadow: var(--submitHover);
@@ -380,6 +387,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		width: 50%;
 	}
 
 	.bottoni {
@@ -400,4 +408,37 @@
 		border-radius: 0.2em;
 		padding: 0.5em;
 	}
+
+	@media screen and (max-width:850px){
+		.avatar-nome{
+			grid-template-columns: 1fr;
+			margin: 1em;
+		}
+
+		label{
+			text-align: center;
+		}
+
+		.dati{
+			grid-template-columns: 1fr;
+		}
+
+		.psw-field{
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media screen and (max-width:500px){
+		.dato-costante{
+			font-size: 0.8em;
+		}
+	}
+
+	@media screen and (max-width:600px){
+		.preferenze-field{
+			flex-direction: column;
+		}
+	}
+
+
 </style>

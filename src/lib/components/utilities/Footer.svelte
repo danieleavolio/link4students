@@ -16,7 +16,7 @@
 			<a href="/contattaci" class="collegamento">Contattaci</a>
 		</div>
 		<div class="box">
-			<p class="main-text">Link utili</p>
+			<p class="main-text">Social</p>
 			<a
 				target="_blank"
 				href="https://www.linkedin.com/in/daniele-avolio-465aba145/"
@@ -40,11 +40,13 @@
         justify-content: center;
         align-items: center;
         margin-top: 200px;
+		overflow-x: hidden;
+		line-height: 1em;
 	}
 
     .first{
         display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
+		grid-template-columns: 2fr 1fr 1fr;
 		gap: 1rem;
 		padding: 1rem;
 		width: 97%;
@@ -69,11 +71,14 @@
 	.titolo {
 		font-size: 1.6rem;
 		font-weight: 700;
+		text-decoration: underline;
+
 	}
 
 	.main-text {
 		font-size: 1.3rem;
 		font-weight: 600;
+		text-decoration: underline;
 	}
 
 	.collegamento {
@@ -87,5 +92,17 @@
 
 	.collegamento:hover {
 		box-shadow: var(--innerNeu);
+	}
+
+	@media screen and (max-width:650px){
+		.first{
+			grid-template-columns: 3fr 1fr 1fr;
+		}
+	}
+
+	@media screen and (max-width:500px){
+		.first{
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

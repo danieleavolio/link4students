@@ -30,6 +30,7 @@
 		justify-content: center;
 		align-items: center;
 		gap: 1rem;
+		flex-wrap: wrap;
 	}
 
 	h1 {
@@ -40,5 +41,13 @@
 		gap: 1rem;
 		justify-content: center;
 		align-items: center;
+		flex-wrap: wrap;
 	}
+
+	@media screen and (max-width:500px){
+		.lista-statistiche{
+			flex-direction: column;
+		}
+	}
+	
 </style>

@@ -511,4 +511,11 @@
 	.titolo-appunti {
 		font-weight: 600;
 	}
+
+	@media screen and (max-width:800px){
+		.appunto{
+			width: 230px;
+			height: 100%;
+		}
+	}
 </style>

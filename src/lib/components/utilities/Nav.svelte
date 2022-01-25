@@ -27,8 +27,9 @@
 		});
 	};
 	let datiUtente;
+	export let navOpen;
 
-	let isOpen = false;
+	navOpen = false;
 
 	onAuthStateChanged(auth, async (fbUser) => {
 		if (fbUser) {
@@ -156,7 +157,7 @@
 	});
 
 	const handleOpen = () => {
-		isOpen = !isOpen;
+		navOpen = !navOpen;
 	};
 
 	const gotoProfilo = () => {
@@ -165,17 +166,17 @@
 	};
 </script>
 
-{#if !isOpen}
+{#if !navOpen}
 	<button transition:fly={{ x: -100 }} class="open-button" on:click={handleOpen}
 		><span class="material-icons hamburger"> menu </span>
 	</button>
 {:else}
-	<nav transition:fly={{ x: -100 }}>
+	<nav on:scroll|stopPropagation transition:fly={{ x: -100 }}>
 		<div on:click={handleOpen} class="backdrop" />
-		<p class="company-name">Link 4 Students</p>
 		<button class="close-button" on:click={handleOpen}><span class="material-icons">
 			close
 			</span></button>
+			
 		<BarraRicerca />
 		<a on:click={handleOpen} href="/"> <span class="material-icons"> home </span> Home</a>
 		<a on:click={handleOpen} href="/corsi"> <span class="material-icons"> school </span> Corsi</a>
@@ -217,14 +218,7 @@
 {/if}
 
 <style>
-	.company-name {
-		font-size: 2rem;
-		font-weight: 600;
-		text-align: center;
-		box-shadow: var(--neumorphism);
-		border-radius: 0.5rem;
-		margin: 2rem 0.5rem;
-	}
+	
 	.open-button {
 		position: fixed;
 		top: 10px;
@@ -241,6 +235,8 @@
 		justify-content: center;
 		align-items: center;
 		padding: 0.2em;
+		z-index: 20;
+
 	}
 
 	.hamburger {
@@ -253,22 +249,24 @@
 	}
 
 	.close-button {
-		position: absolute;
-		right: -2em;
+		position: relative;
 		font-size: 2em;
 		border-radius: 100%;
-		width: 75px;
-		height: 75px;
+		width: 50px;
+		height: 50px;
 		border: none;
 		background-color: var(--sfondo);
 		box-shadow: var(--neumorphism);
 		cursor: pointer;
 		transition: all 0.5s ease;
 		display: flex;
-		align-items: center;
-		justify-content: center;
+		align-self: center;
+		margin: 1em;
 	}
+	.close-button > span{
+		color: var(--alert);
 
+	}
 	.close-button:hover {
 		box-shadow: var(--innerNeu);
 	}
@@ -410,5 +408,19 @@
 		gap: 1rem;
 		justify-content: center;
 		margin: 1rem 0;
+	}
+	/* Responsive */
+
+	@media screen and (max-width:500px){
+		nav{
+			width: 100%;
+			overflow-y: scroll;
+			overflow-x: hidden;
+		}
+
+		.backdrop{
+			display: none;
+		}
+
 	}
 </style>

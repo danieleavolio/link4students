@@ -26,7 +26,7 @@
 			</p>
 		</div>
 		<div class="destra">
-			<p alt="nome corso">{esame.data().nomeCorso}</p>
+			<p  class="nome-corso" alt="nome corso">{esame.data().nomeCorso}</p>
 		</div>
 	</div>
 	{#if $authStore.isLoggedIn}
@@ -41,6 +41,7 @@
 		display: flex;
 		justify-content: center;
 		gap: 1em;
+		margin: 1em;
 	}
 	.esame-libretto {
 		width: 80%;
@@ -78,6 +79,10 @@
 		font-size: 1.4rem;
 	}
 	
+	.nome-corso{
+		font-size: 1.2em;
+		text-align: left;
+	}
 
 	.destra {
 		display: flex;
@@ -93,5 +98,19 @@
 	}
 	.sufficiente {
 		color: var(--discreto);
+	}
+
+	@media screen and (max-width:450px){
+		.esame-libretto{
+			width: 60%;
+			grid-template-columns: 1fr;
+		}
+
+		.destra{
+			justify-content: center;
+		}
+		.nome-corso{
+			text-align: center;
+		}
 	}
 </style>

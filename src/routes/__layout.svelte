@@ -1,12 +1,22 @@
 <script lang="ts">
 	import Footer from '$lib/components/utilities/Footer.svelte';
 	import Nav from '$lib/components/utilities/Nav.svelte';
+	import { afterUpdate } from 'svelte';
 	import '../app.css';
+
+	let navOpen;
+
+	afterUpdate(() => {
+		if (navOpen && document) {
+			document.body.style.overflowY = 'hidden';
+		} else if (!navOpen && document) {
+			document.body.style.overflowY = 'auto';
+		}
+	});
 </script>
 
 <main>
-	<Nav />
-
+	<Nav bind:navOpen />
 	<div class="main-container">
 		<slot />
 	</div>
@@ -26,16 +36,17 @@
 	}
 
 	
+
 	@media (prefers-color-scheme: dark) {
 		:global(:root) {
 			--neumorphism: 8px 8px 10px rgb(26, 26, 26), -8px -8px 10px rgb(36, 36, 36),
 				inset 0 0 0 rgba(0, 0, 0, 0.2), inset 0 0 0 rgba(0, 0, 0, 0.5);
 			--sfondo: rgb(32, 32, 32);
-			--sfondoComposfondonent:linear-gradient(145deg, #131313, #101010);
+			--sfondoComposfondonent: linear-gradient(145deg, #131313, #101010);
 			--alert: rgb(230, 68, 68);
 			--testo: rgb(240, 240, 240);
 			--innerNeu: 0 0 0 rgb(15, 15, 15), 0 0 0 rgba(22, 22, 22, 0.5),
-				inset 8px 8px 10px rgb(26, 26, 26), inset -8px -8px 10px  rgb(35, 35, 35);
+				inset 8px 8px 10px rgb(26, 26, 26), inset -8px -8px 10px rgb(35, 35, 35);
 			--velocita: 0.2s ease;
 			--premuto: scale(0.98);
 			--bordo: rgb(27, 27, 27) solid 2px;
@@ -52,7 +63,6 @@
 			--resolveHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(0, 0, 0, 0.5),
 				inset 15px 15px 15px rgb(242, 255, 58), inset -20px -20px 15px #d0ff00;
 		}
-		
 	}
 	@media (prefers-color-scheme: light) {
 		:global(:root) {

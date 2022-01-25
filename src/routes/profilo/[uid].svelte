@@ -577,12 +577,17 @@
 		font-size: 1.5rem;
 	}
 
+	.info{
+		display: flex;
+		flex-direction: column;
+
+	}
 	.bio {
 		display: flex;
 		flex-direction: column;
 		align-items: left;
 		justify-content: space-around;
-		width: 400px;
+		width: 90%;
 		overflow-wrap: break-word;
 		gap: 0.5em;
 	}
@@ -592,9 +597,8 @@
 	}
 
 	.container-bio {
-		width: 80%;
-		height: 100px;
-		font-style: italic;
+		width: 100%;
+			font-style: italic;
 		box-shadow: var(--neumorphism);
 		border-radius: 10px;
 		align-self: center;
@@ -603,7 +607,6 @@
 		justify-content: center;
 		align-items: center;
 		overflow-wrap: anywhere;
-		word-break: break-all;
 	}
 
 	.modifica-preferenza {
@@ -667,7 +670,7 @@
 		box-shadow: var(--innerNeu);
 		padding: 2rem;
 		border-radius: 1rem;
-		width: 80vw;
+		width: 80%;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -700,8 +703,30 @@
 
 	.lista-appunti {
 		display: grid;
-		grid-template-columns: auto auto;
-		gap: 3em;
+		grid-template-columns: 1fr 1fr;
 		place-items: center;
+		gap: 1em;
+	}
+
+	
+
+	/* Responsive */
+	@media screen and (max-width:1000px){
+		.container-libretto{
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media screen and (max-width:450px){
+		.container-libretto{
+			width: 60%;
+			justify-content: center;
+		}
+	}
+
+	@media screen and (max-width:600px){
+		.lista-appunti{
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

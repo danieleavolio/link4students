@@ -79,6 +79,7 @@
 	h1 {
 		font-weight: 900;
 		font-size: 3rem;
+		text-align: center;
 	}
 
 	.main-links {
@@ -87,6 +88,9 @@
 		gap: 1rem;
 		padding: 1rem;
 		border-radius: 10px;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
 	}
 
 	.container-lista {
@@ -97,6 +101,7 @@
 		padding: 2rem;
 		border-radius: 1rem;
 		gap: 2em;
+		flex-wrap: wrap;
 	}
 
 	.ref-annunci {
@@ -117,5 +122,11 @@
 	.ref-annunci:hover {
 		background-color: var(--testo);
 		color: var(--sfondo);
+	}
+
+	@media screen and (max-width: 500px){
+		.main-links{
+			flex-direction: column;
+		}
 	}
 </style>

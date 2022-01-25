@@ -102,6 +102,7 @@
 		border-radius: 1rem;
 		gap: 2em;
 		flex-wrap: wrap;
+		margin: 1em;
 	}
 
 	.ref-annunci {

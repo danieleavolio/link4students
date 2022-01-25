@@ -1,7 +1,9 @@
 <script>
 </script>
 
-<button class="back" on:click={() => history.back()}>⬅ Indietro</button>
+<button class="back" on:click={() => history.back()}
+	><span class="material-icons"> arrow_back </span> Indietro</button
+>
 
 <style>
 	.back {
@@ -15,6 +17,10 @@
 		font-size: 1.1rem;
 		outline: none;
 		cursor: pointer;
+		display: flex;
 		align-self: flex-start;
+		justify-content: center;
+		align-items: center;
+		gap: 0.5em;
 	}
 </style>

@@ -15,7 +15,7 @@
 		border-radius: 6px;
 		cursor: pointer;
 		box-shadow: var(--neumorphism);
-		font-size: 1.2rem;
+		font-size: 1.5em;
 		transition: var(--velocita);
 	}
 

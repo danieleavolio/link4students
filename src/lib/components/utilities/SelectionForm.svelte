@@ -173,4 +173,31 @@
 	input[type='radio']:checked ~ label:hover {
 		box-shadow: var(--neumorphism);
 	}
+
+	/* Responsive */
+	@media screen and (max-width: 650px){
+		label{
+			width: 25px!important;
+			height: 25px!important;
+		}
+	}
+
+	@media screen and (max-width: 450px){
+		.rating{
+			gap: 0.2em;
+		}
+		.material-icons{
+			display: none;
+		}
+	}
+
+	@media screen and (max-width: 400px){
+		.rating{
+			gap: 0.2em;
+			flex-wrap: wrap;
+		}
+		.material-icons{
+			display: none;
+		}
+	}
 </style>

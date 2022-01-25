@@ -15,6 +15,7 @@
 		setDoc,
 		where
 	} from 'firebase/firestore';
+	import { afterUpdate } from 'svelte';
 
 	import SelectionForm from './SelectionForm.svelte';
 	export let idCorso;
@@ -26,6 +27,11 @@
 	let utilita = 3;
 	let contenuto;
 	let anonimo = false;
+
+	afterUpdate(() => {
+		if (isOpen) document.body.style.overflowY = 'hidden';
+		else document.body.style.overflowY = 'auto';
+	});
 
 	const open = () => {
 		isOpen = true;
@@ -131,7 +137,9 @@
 				<div class="domande">
 					<form action="" on:submit|preventDefault={mandaRecensione}>
 						<div class="domanda">
-							<p>Quanto reputi difficile l'esame? <span class="material-icons"> psychology </span></p>
+							<p>
+								Quanto reputi difficile l'esame? <span class="material-icons"> psychology </span>
+							</p>
 							<SelectionForm bind:difficolta icon={'🧠'} {utilita} />
 						</div>
 
@@ -201,9 +209,12 @@
 		max-width: 70vw;
 		border-radius: 0.3rem;
 		background-color: var(--sfondo);
-		overflow: hidden;
+		overflow-x: hidden;
 		padding: 2rem;
 		box-shadow: var(--innerNeu);
+		display: flex;
+		flex-direction: column;
+		margin: auto;
 	}
 
 	.close-button {
@@ -213,10 +224,8 @@
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
-		position: absolute;
-		margin-left: -3rem;
-		margin-top: -3rem;
 		box-shadow: var(--innerNeu);
+		align-self: center;
 	}
 	.titolo {
 		font-size: 1.3rem;
@@ -224,7 +233,7 @@
 		text-align: center;
 	}
 	.contenuto {
-		overflow: auto;
+		overflow: hidden;
 	}
 
 	form {
@@ -272,5 +281,17 @@
 		cursor: pointer;
 		padding: 5px 5px;
 		color: var(--submit);
+	}
+
+	p {
+		text-align: center;
+	}
+
+	@media screen and (max-width:500px){
+		.content-wrapper{
+			max-width: 100vw;
+			height: 100vh;
+			width: 100%;
+		}
 	}
 </style>

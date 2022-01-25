@@ -27,7 +27,8 @@
 		border-radius: 0.4rem;
 		padding: 0.3rem;
 		cursor: pointer;
-		transition: var(--velocita)
+		transition: var(--velocita);
+		height: 100%;
 	}
 
 	.carta-corso:hover{

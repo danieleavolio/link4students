@@ -48,4 +48,16 @@
 		align-items: center;
 		gap: 0.5em;
 	}
+
+	@media screen and (max-width: 700px){
+		.container{
+			text-align: center;
+			grid-template-columns: 1fr;
+			place-items: center;
+		}
+
+		.scheda{
+			margin: auto;
+		}
+	}
 </style>

@@ -37,4 +37,12 @@
 		font-size: 2.2rem;
 		margin: 0;
 	}
+
+	@media screen and (max-width: 400px){
+		.box{
+			display: grid;
+			grid-template-columns: 1fr;
+			text-align: center;
+		}
+	}
 </style>

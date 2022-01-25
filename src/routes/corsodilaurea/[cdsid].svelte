@@ -1,17 +1,19 @@
 <script context="module">
 	import { db } from '$lib/firebaseConfig';
 
-	import { collection, query, where, getDocs } from 'firebase/firestore';
+	import { collection, query, where, getDocs, getDoc, doc } from 'firebase/firestore';
 	// Quando la pagina si carica, prendi la lista degli esami
 	export async function load({ page }) {
 		const cdsid = page.params.cdsid;
 		const queryToDo = query(collection(db, 'corsidelcdl'), where('cdl', '==', cdsid));
 		let corsi = [];
+		let nomeCorso = await getDoc(doc(db, 'corsidilaurea', cdsid));
+		nomeCorso = nomeCorso.data().nome;
 		await getDocs(queryToDo).then((res) => {
 			corsi = res.docs;
 		});
 		return {
-			props: { corsi }
+			props: { corsi, nomeCorso }
 		};
 	}
 </script>
@@ -19,8 +21,10 @@
 <script>
 	import BackButton from '$lib/components/utilities/BackButton.svelte';
 	import CorsoBox from '$lib/components/CorsoBox.svelte';
+	import { onMount } from 'svelte';
 
 	export let corsi;
+	export let nomeCorso;
 
 	let ordinaPer = 'anno';
 	// Sorting corsi
@@ -41,14 +45,18 @@
 </script>
 
 <BackButton />
+<h1>{nomeCorso}</h1>
 <div class="ordina-div">
 	{#if corsi.length > 0}
-		<label for="ordina">Ordina per:</label>
-		<select bind:value={ordinaPer} name="ordina" id="ordina">
-			<option value="anno">Anno</option>
-			<option value="cfu">CFU</option>
-			<option value="nome">Nome</option>
-		</select>
+		<label for="ordina"
+			>Ordina per:
+
+			<select bind:value={ordinaPer} name="ordina" id="ordina">
+				<option value="anno">Anno</option>
+				<option value="cfu">CFU</option>
+				<option value="nome">Nome</option>
+			</select>
+		</label>
 		<div class="search">
 			<span class="material-icons"> search </span><input bind:value={filtro} type="text" />
 		</div>
@@ -74,6 +82,10 @@
 {/if}
 
 <style>
+
+	h1{
+		text-align: center;
+	}
 	.ordina-div {
 		padding: 1.2rem;
 		font-size: 1.1rem;
@@ -104,11 +116,11 @@
 	.lista {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		gap: 1rem;
+		gap: 2rem;
 		flex-wrap: wrap;
 		justify-content: center;
 		align-items: center;
-		padding: 3rem;
+		padding: 1rem;
 		box-shadow: var(--innerNeu);
 		margin: 1rem;
 		border-radius: 1rem;
@@ -133,10 +145,23 @@
 		font-size: 2rem;
 	}
 
-	.search{
+	.search {
 		display: flex;
 		gap: 1em;
 		justify-content: center;
 		align-items: center;
+	}
+
+	@media screen and (max-width: 700px) {
+		.lista {
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media screen and (max-width: 500px) {
+		.ordina-div {
+			display: grid;
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

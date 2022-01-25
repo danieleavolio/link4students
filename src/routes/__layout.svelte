@@ -33,6 +33,7 @@
 		justify-self: center;
 		margin: 2rem 0;
 		font-weight: 500;
+		overflow-x: hidden;
 	}
 
 	

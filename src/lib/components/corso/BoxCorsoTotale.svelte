@@ -150,6 +150,10 @@
 </div>
 
 <style>
+
+	h1{
+		text-align: center;
+	}
 	.container {
 		max-width: 90vw;
 		width: 100%;
@@ -293,5 +297,33 @@
 		box-shadow: var(--innerNeu);
 	}
 
-	
+	/* Responsive */
+	@media screen and (max-width: 1000px){
+		.corso-container{
+			grid-template-columns: 1fr;
+		}
+	}
+
+	@media screen and (max-width: 700px){
+		.left{
+			display: grid;
+			grid-template-columns: 1fr;
+		}
+		.media{
+			justify-content: center;
+			align-items: center;
+			place-self: center;
+			margin: 1em;
+		}
+	}
+
+	@media screen and (max-width: 550px){
+		.box-bottoni{
+			display: grid;
+			grid-template-columns: 1fr;
+			gap: 1em;
+		}
+	}
+
+
 </style>

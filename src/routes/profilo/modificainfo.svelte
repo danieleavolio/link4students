@@ -320,6 +320,7 @@
 	label,
 	p {
 		font-size: 1.1em;
+		margin: 1.2em;
 	}
 
 	#psw,

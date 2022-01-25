@@ -44,10 +44,12 @@
 		flex-direction: column;
 		gap: 1em;
 		font-size: 1.3em;
-		width: 50%;
+		width: 80%;
 		box-shadow: var(--innerNeu);
 		border-radius: 0.8em;
 		padding: 1em;
+		justify-content: center;
+		align-items: center;
 	}
 	.reset {
 		box-shadow: var(--submitHover);
@@ -62,6 +64,7 @@
 
 	input {
 		font-size: 1.1em !important;
+		width: 80%;
 	}
 
 	.message,

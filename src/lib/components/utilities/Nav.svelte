@@ -252,8 +252,8 @@
 		position: relative;
 		font-size: 2em;
 		border-radius: 100%;
-		width: 50px;
-		height: 50px;
+		width: 60px;
+		height: 60px;
 		border: none;
 		background-color: var(--sfondo);
 		box-shadow: var(--neumorphism);
@@ -261,10 +261,13 @@
 		transition: all 0.5s ease;
 		display: flex;
 		align-self: center;
+		justify-content: center;
+		align-content: center;
 		margin: 1em;
 	}
 	.close-button > span{
 		color: var(--alert);
+		align-self: center;
 
 	}
 	.close-button:hover {

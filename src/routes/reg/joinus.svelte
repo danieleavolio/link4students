@@ -45,6 +45,55 @@
 	let matricola: number;
 	let corsoDiLaurea: number;
 	let annoDiCorso: number;
+	let sicurezza;
+
+	const hasNumbers = () => {
+		let exp = /[0-9]/;
+		if (password.match(exp)) return 1;
+		return 0;
+	};
+
+	const hasUpperCase = () => {
+		let exp = /[A-Z]/;
+		if (password.match(exp)) return 1;
+		return 0;
+	};
+
+	const hasLowerCase = () => {
+		let exp = /[a-z]/;
+		if (password.match(exp)) return 1;
+		return 0;
+	};
+
+	const hasLength = () => {
+		if (password.length > 8) return 1;
+		return 0;
+	};
+
+	const checkPassowrd = () => {
+		let livello = hasLength() + hasLowerCase() + hasUpperCase() + hasNumbers();
+
+		switch (livello) {
+			case 1:
+				sicurezza = 'facile';
+				break;
+			case 2:
+				sicurezza = 'media';
+				break;
+			case 3:
+				sicurezza = 'efficace';
+				break;
+			case 4:
+				sicurezza = 'difficile';
+				break;
+			default:
+				break;
+		}
+	};
+
+	$: if (password) {
+		checkPassowrd();
+	}
 
 	$: if ($authStore.isLoggedIn) {
 		if ($authStore.user.emailVerified) {
@@ -141,68 +190,96 @@
 			<button class="accedi" on:click={() => (isRegisterChosen = false)}>Accedi</button>
 		</div>
 		{#if isRegisterChosen}
+			<h1>Crea il tuo account!</h1>
 			<form on:submit|preventDefault={handleAccountCreation} action="">
-				<h1>Crea il tuo account!</h1>
-				<p>Email</p>
-				<input
-					bind:value={email}
-					type="email"
-					placeholder="Inserisci la tua email istituzionale.."
-					required
-				/>
-				<p>Password</p>
-				<input
-					bind:value={password}
-					type="password"
-					placeholder="Inserisci una password di minimo 6 caratteri"
-					minlength="6"
-					required
-				/>
-				<label for="nome">Nome</label>
-				<input type="text" bind:value={nome} id="nome" />
-				<label for="cognome">Cognome</label>
-				<input type="text" bind:value={cognome} id="cognome" />
-				<label for="matricola">Matricola</label>
-				<input type="number" bind:value={matricola} id="matricola" />
-				<label for="corsodilaurea">Corso di Laurea</label>
-				<select bind:value={corsoDiLaurea} name="corsodilaurea" id="corsodilaurea">
-					{#each corsi as corso}
-						<option value={corso.id}>{corso.data().nome}</option>
-					{/each}
-				</select>
-				<label for="annodicorso">Anno di Corso</label>
-				<select bind:value={annoDiCorso} name="annodicorso" id="annodicorso">
-					<option
-						value="
-				1">1</option
-					>
-					<option value="2">2</option>
-					<option value="3">3</option>
-					<option value="4">4</option>
-					<option value="5">5</option>
-					<option value="Fuori Corso">Fuori corso</option>
-				</select>
+				<div class="inputs">
+					<label class="campo" for="nome"
+						>Nome
+
+						<input type="text" bind:value={nome} id="nome" />
+					</label>
+					<label class="campo" for="cognome"
+						>Cognome
+
+						<input type="text" bind:value={cognome} id="cognome" />
+					</label>
+
+					<p class="campo">
+						Email
+						<input
+							bind:value={email}
+							type="email"
+							placeholder="Inserisci la tua email istituzionale.."
+							required
+						/>
+					</p>
+
+					<p class="campo">
+						Password
+						<input
+							bind:value={password}
+							type="password"
+							placeholder="Inserisci una password di minimo 6 caratteri"
+							minlength="6"
+							required
+						/>
+						{#if password}
+							<div class={sicurezza} />
+						{/if}
+					</p>
+					<label class="campo" for="matricola"
+						>Matricola
+						<input type="number" bind:value={matricola} id="matricola" />
+					</label>
+					<label class="campo" for="corsodilaurea"
+						>Corso di Laurea
+						<select bind:value={corsoDiLaurea} name="corsodilaurea" id="corsodilaurea">
+							{#each corsi as corso}
+								<option value={corso.id}>{corso.data().nome}</option>
+							{/each}
+						</select>
+					</label>
+
+					<label class="campo" for="annodicorso"
+						>Anno di Corso
+						<select bind:value={annoDiCorso} name="annodicorso" id="annodicorso">
+							<option
+								value="
+					1">1</option
+							>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="Fuori Corso">Fuori corso</option>
+						</select>
+					</label>
+				</div>
+
 				<button class="registrati" type="submit">Registrati</button>
 			</form>
 		{:else}
 			<form on:submit|preventDefault={handleLogin} action="">
 				<h1>Effettua l'accesso!</h1>
-				<p>Email istituzionale</p>
-				<input
-					bind:value={email}
-					type="email"
-					placeholder="Inserisci la tua email istituzionale.."
-					required
-					autocomplete="on"
-				/>
-				<p>Password</p>
-				<input
-					bind:value={password}
-					type="password"
-					placeholder="Inserisci una password di minimo 6 caratteri"
-					minlength="6"
-					required
-				/>
+				<div class="inputs">
+					<p>Email istituzionale</p>
+					<input
+						bind:value={email}
+						type="email"
+						placeholder="Inserisci la tua email istituzionale.."
+						required
+						autocomplete="on"
+					/>
+					<p>Password</p>
+					<input
+						bind:value={password}
+						type="password"
+						placeholder="Inserisci una password di minimo 6 caratteri"
+						minlength="6"
+						required
+					/>
+				</div>
+
 				<button class="accedi" type="submit">Accedi</button>
 			</form>
 			<a class="resend" href="/reg/resend">Non hai ricevuto la mail? Clicca qui!</a>
@@ -219,6 +296,9 @@
 </main>
 
 <style>
+	h1 {
+		text-align: center;
+	}
 	main {
 		display: flex;
 		flex-direction: column;
@@ -238,18 +318,27 @@
 	}
 
 	form {
-		display: flex;
-		flex-direction: column;
+		display: grid;
+		grid-template-columns: 1fr;
+		place-items: center;
+		gap: 1rem;
+		font-size: 1.3rem;
+		width: 100%;
+	}
+
+	.inputs {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
 		width: 80%;
-		justify-content: center;
-		align-items: center;
+
 		gap: 1rem;
 		font-size: 1.3rem;
 	}
-	form > input {
-		width: 80%;
+	input {
+		width: 100%;
 		outline: none;
-		font-size: 1.3rem;
+		font-size: 1.1rem;
+		height: 2em;
 	}
 
 	button {
@@ -298,9 +387,10 @@
 	select {
 		border-radius: 0.5rem;
 		box-shadow: var(--neumorphism);
-		font-size: 1rem;
+		font-size: 1.1rem;
 		outline: none;
 		border: var(--bordo);
+		width: 100%;
 	}
 
 	.resend,
@@ -319,5 +409,57 @@
 		-webkit-text-fill-color: var(--testo);
 		-webkit-box-shadow: var(--neumorphism);
 		box-shadow: 0 0 0 1000px var(--sfondo) inset;
+	}
+
+	.campo {
+		display: flex;
+		flex-direction: column;
+		gap: 1em;
+	}
+
+	.facile {
+		width: 20%;
+		height: 5px;
+		background-color: var(--alert);
+	}
+
+	.media {
+		width: 50%;
+		height: 5px;
+
+		background-color: var(--resolve);
+	}
+
+	.efficace {
+		width: 80%;
+		height: 5px;
+		background-color: green;
+	}
+
+	.difficile {
+		width: 100%;
+		height: 5px;
+		background-color: var(--submit);
+	}
+
+	.tipo {
+		font-size: 0.8em;
+	}
+
+	@media screen and (max-width: 900px) {
+		.inputs {
+			grid-template-columns: 1fr;
+			text-align: center;
+		}
+	}
+
+	@media screen and (max-width: 350px) {
+		.inputs {
+			grid-template-columns: 1fr;
+			text-align: center;
+		}
+		input {
+			font-size: 0.6em !important;
+		}
 	}
 </style>

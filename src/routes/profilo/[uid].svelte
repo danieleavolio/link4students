@@ -417,7 +417,7 @@
 				</div>
 			{:else}
 				<button class="modifica-preferenza" on:click={() => goto('/profilo/modificainfo')}
-					>Modifica preferenze</button
+					>Modifica profilo</button
 				>
 			{/if}
 		{/if}

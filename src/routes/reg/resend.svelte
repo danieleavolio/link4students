@@ -36,8 +36,11 @@
 </svelte:head>
 <h2>Rimanda codice di verifica</h2>
 <form action="" on:submit|preventDefault={mandaEmail}>
-	<input bind:value={email} type="text" placeholder="Inserisci il tuo codice fiscale.." />
-	<input bind:value={password} type="password" placeholder="Inserisci la tua password" />
+	<label for="mail">CODICE FISCALE</label>
+	<input bind:value={email} type="text"  id="mail" placeholder="Inserisci il tuo codice fiscale.." />
+	<label for="mail">PASSWORD</label>
+	
+	<input bind:value={password} type="password" id="passowrd" placeholder="Inserisci la tua password" />
 	<button>Richiedi codice</button>
 	<p class="message" transition:fade>{message}</p>
 	<p class="error" transition:fade>{errore}</p>
@@ -49,16 +52,23 @@
 {/if}
 
 <style>
+
+	h2{
+		text-align: center;
+	}
 	form {
 		display: flex;
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
 		gap: 1rem;
+		width: 100%;
 	}
 
 	input{
 		font-size: 1.3em!important;
+		height: 2em;
+		width: 50%;
 	}
 
 	button {

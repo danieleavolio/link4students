@@ -68,5 +68,6 @@
 
 	.contenuto {
 		font-size: 1.1rem;
+		color: var(--alert);
 	}
 </style>

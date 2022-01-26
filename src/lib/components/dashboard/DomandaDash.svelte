@@ -157,12 +157,14 @@
 		padding: 0.5rem;
 		box-shadow: var(--neumorphism);
 		margin: 1rem;
+		width: 60vw;
 	}
 
 	.titolo-domanda {
 		font-weight: 600;
 		font-size: 1.4rem;
 		margin-bottom: 0;
+		white-space: pre-line;
 	}
 	.up-part {
 		display: flex;
@@ -180,13 +182,10 @@
 		font-weight: 600;
 		font-size: 1.3rem;
 		color: var(--alert);
-		height: 50px;
-		width: 50px;
+		width: 40px;
+		height: 40px;
 		cursor: pointer;
 		transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-		position: absolute;
-		margin-left: -2rem;
-		margin-top: -6rem;
 		box-shadow: var(--innerNeu);
 		background-color: var(--sfondo);
 	}
@@ -236,10 +235,34 @@
 		border-radius: 10px;
 		padding: 0.5rem;
 		overflow-wrap: break-word;
+		white-space: pre-line;
+		width: 80%;
 	}
 
 	.box-bottoni {
 		display: flex;
 		justify-content: space-between;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: center;
+	}
+
+	form{
+		display: flex;
+		gap: 0.5em;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: center;
+		margin: 0.5em;
+	}
+
+	
+	@media screen and (max-width:500px){
+		.up-part{
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			margin: 1em;
+		}
 	}
 </style>

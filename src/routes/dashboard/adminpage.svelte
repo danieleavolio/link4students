@@ -286,12 +286,18 @@
 		display: flex;
 		justify-content: center;
 		text-align: center;
+		width: 100%;
+	}
+
+	.prima-destra{
+		overflow-x: scroll;
+		width: 100%;
 	}
 	.lista-schermate {
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
-		width: 50%;
+		width: 100%;
 		justify-content: center;
 	}
 
@@ -347,5 +353,25 @@
 	}
 	.statistiche-sito > h1 {
 		text-align: center;
+	}
+
+	@media screen and (max-width: 850px) {
+		.prima-sezione {
+			grid-template-columns: 1fr;
+		}
+		.selezionato {
+			text-align: center;
+		}
+
+		.schermata-selezionata {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			flex-direction: column;
+		}
+
+		.lista-generica{
+			flex-direction: column;
+		}
 	}
 </style>

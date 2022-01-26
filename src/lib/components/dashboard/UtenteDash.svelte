@@ -89,6 +89,7 @@
 		flex-direction: column;
 		align-items: center;
 		justify-content: center;
+		width: 50vw;
 	}
 	.immagine-nome {
 		display: flex;
@@ -110,7 +111,13 @@
 		cursor: pointer;
 		border-radius: 100%;
 	}
-
+form{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 1em;
+}
 	.show-report {
 		outline: none;
 		padding: 0.5rem 0.2rem;
@@ -133,10 +140,17 @@
 		outline: none;
 		border: var(--bordo);
 		box-shadow: var(--neumorphism);
+		width: 50%;
 	}
 
 	.sospendi {
 		border-radius: 0.3rem;
 		cursor: pointer;
+	}
+
+	@media screen and (max-width:800px){
+		.immagine-nome{
+			flex-direction: column;
+		}
 	}
 </style>

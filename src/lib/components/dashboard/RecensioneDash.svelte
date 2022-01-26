@@ -230,10 +230,14 @@
 		padding: 0.5rem;
 		box-shadow: var(--neumorphism);
 		margin: 1rem;
+		width: 60vw;
 	}
+	
 	.up-part {
+
 		display: flex;
 		gap: 1rem;
+		justify-content: space-around;
 	}
 
 	.delete-review {
@@ -249,9 +253,6 @@
 		width: 50px;
 		cursor: pointer;
 		transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-		position: absolute;
-		margin-left: -2rem;
-		margin-top: -5rem;
 		box-shadow: var(--innerNeu);
 	}
 
@@ -288,7 +289,6 @@
 		border-radius: 10px;
 		padding: 0.5rem;
 		overflow-wrap: break-word;
-		max-width: 380px;
 		white-space: break-spaces;
 	}
 
@@ -311,8 +311,16 @@
 
 	.bottoni {
 		display: flex;
-		justify-content: space-between;
+		justify-content: center;
 		gap: 1rem;
+		flex-wrap: wrap;
+		
+	}
+
+	form{
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
 	}
 	.div-sospensione {
 		margin: 0.5rem 0;
@@ -324,6 +332,7 @@
 		outline: none;
 		border: none;
 		font-size: 1.2em;
+		width: 50%;
 	}
 	.sospendi {
 		padding: 0.2rem;

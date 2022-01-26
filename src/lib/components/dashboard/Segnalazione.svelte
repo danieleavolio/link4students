@@ -32,6 +32,9 @@
 	.bottoni {
 		display: flex;
 		gap: 1rem;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: center;
 	}
 	.segnalatore {
 		font-weight: 600;
@@ -75,5 +78,6 @@
 
 	.contenuto {
 		font-size: 1.1rem;
+		color: var(--alert);
 	}
 </style>

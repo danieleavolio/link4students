@@ -3,11 +3,16 @@
 
 	import { authStore } from '$lib/stores/authStore';
 	import { doc, setDoc } from 'firebase/firestore';
+	import { afterUpdate } from 'svelte';
 
 	let isOpen = false;
 	let urlNuovo = '';
 
-	let bottoneFile;
+	// Per non fare scroll alla pagina sotto
+	afterUpdate(() => {
+		if (isOpen) document.body.style.overflowY = 'hidden';
+		else document.body.style.overflowY = 'auto';
+	});
 
 	let caricamento = false;
 	let messaggio = '';
@@ -63,7 +68,9 @@
 	<div class="modal">
 		<div class="backdrop" on:click={close} />
 		<div class="content-wrapper">
-			<button class="close-button" on:click={close}> ❌ </button>
+			<button class="close-button" on:click={close}>
+				<span class="material-icons"> close </span>
+			</button>
 			<slot name="header">
 				<div class="titolo">
 					<p>Revisione per <span class="nome-appunto"> {appunto.data().titoloAppunti}</span></p>
@@ -112,7 +119,7 @@
 		outline: none;
 		cursor: pointer;
 	}
-	.nome-appunto{
+	.nome-appunto {
 		padding: 0.3em;
 		background-color: var(--testo);
 		color: var(--sfondo);
@@ -140,16 +147,18 @@
 
 	.content-wrapper {
 		z-index: 10;
-		max-width: 70vw;
-		width: 50%;
+		width: 80%;
+		height: 80%;
 		border-radius: 0.3rem;
 		overflow: hidden;
 		padding: 2rem;
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 	}
 
-	label{
+	label {
 		font-size: 1.3em;
 	}
 
@@ -160,21 +169,20 @@
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
-		position: absolute;
-		margin-left: -3rem;
-		margin-top: -3rem;
 		box-shadow: var(--innerNeu);
 	}
 	.titolo {
 		font-size: 1.5em;
 		font-weight: 600;
 		text-align: center;
+		white-space: pre-wrap;
+		line-height: 2em;
 	}
 
 	.titolo-container {
 		display: flex;
 		flex-direction: column;
-		justify-content: left;
+		justify-content: center;
 		gap: 0.5rem;
 	}
 
@@ -182,12 +190,10 @@
 		padding: 0.4rem;
 		font-size: 1rem;
 	}
-	.contenuto {
-		overflow: auto;
-	}
 
-	.oppure{
+	.oppure {
 		font-size: 1.2em;
+		white-space: pre-line;
 	}
 
 	form {
@@ -277,5 +283,16 @@
 		color: var(--sfondo);
 		box-shadow: var(--alertHover);
 		background-color: var(--alert);
+	}
+
+	@media screen and (max-width: 650px) {
+		.content-wrapper {
+			width: 100%;
+			height: 100%;
+		}
+
+		input {
+			width: 80vw;
+		}
 	}
 </style>

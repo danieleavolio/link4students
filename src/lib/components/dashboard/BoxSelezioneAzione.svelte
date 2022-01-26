@@ -39,7 +39,7 @@
 <style>
 	.container {
 		display: flex;
-		width: max-content;
+		width: 100%;
 		border-radius: 0.8rem;
 		gap: 1rem;
 		align-items: center;
@@ -57,9 +57,7 @@
 
 	.left {
 		border-radius: 0.8rem;
-		font-size: 3rem;
-		width: 100px;
-		height: 100px;
+		font-size: 2.5rem;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -67,6 +65,18 @@
 	}
 
 	.right {
-		font-size: 2rem;
+		font-size: 1.5rem;
+	}
+
+	@media screen and (max-width: 800px) {
+		.container {
+			justify-content: center;
+		}
+	}
+
+	@media screen and (max-width: 400px) {
+		.right {
+			font-size: 1.2rem;
+		}
 	}
 </style>

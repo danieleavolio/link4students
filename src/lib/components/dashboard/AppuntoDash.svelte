@@ -136,6 +136,13 @@
 		cursor: pointer;
 	}
 
+	.up-part{
+		display: flex;
+		gap: 1em;
+		justify-content: center;
+		align-items: center;
+	}
+
 	.download-button {
 		border-radius: 0.5rem;
 		outline: none;
@@ -170,8 +177,17 @@
 		width: 50px;
 		cursor: pointer;
 		transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
-		position: absolute;
-		margin-left: -3rem;
-		margin-top: -7rem;
+	}
+
+	@media screen and (max-width:650px){
+		.contenuto{
+			text-align: center;
+		}
+	}
+
+	@media screen and (max-width:450px){
+		.voti{
+			flex-direction: column;
+		}
 	}
 </style>

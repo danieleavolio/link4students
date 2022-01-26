@@ -33,7 +33,7 @@
 		box-shadow: var(--innerNeu);
 		padding: 0.2rem;
 		border-radius: 0.5rem;
-		width: 50%;
+		width: 80%;
 		margin: 0 0.5rem;
 		overflow-wrap: anywhere;
 	}

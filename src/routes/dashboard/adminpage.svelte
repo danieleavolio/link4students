@@ -260,7 +260,6 @@
 					<UltimeAttivita />
 				</div>
 			</div>
-			<p>Controla</p>
 			<CheckEverything />
 		{:else}
 			<Loading />
@@ -339,7 +338,7 @@
 	}
 
 	.pagina-azioni {
-		width: 80%;
+		width: 90%;
 		height: 80%;
 		display: grid;
 		place-items: center;
@@ -353,6 +352,14 @@
 	}
 	.statistiche-sito > h1 {
 		text-align: center;
+	}
+
+	@media screen and (max-width: 1000px) {
+		.box-statistiche{
+			grid-template-columns: 1fr;
+		}
+
+
 	}
 
 	@media screen and (max-width: 850px) {
@@ -373,5 +380,11 @@
 		.lista-generica{
 			flex-direction: column;
 		}
+
+		.pagina-azioni{
+			grid-template-columns: 1fr;
+		}
 	}
+
+
 </style>

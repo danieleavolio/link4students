@@ -20,7 +20,7 @@
 	}
 
 	.emoji {
-		font-size: 4rem;
+		font-size: 3.5rem;
 		margin: 0;
 		font-weight: 600;
 		display: flex;
@@ -29,7 +29,7 @@
 	}
 
 	.contenuto {
-		font-size: 2.2rem;
+		font-size: 1.5rem;
 		margin: 0;
 	}
 

@@ -82,4 +82,20 @@
 		align-items: center;
 		padding: 0.5em;
 	}
+
+	input{
+		width: 100%;
+	}
+
+	@media screen and (max-width: 1000px){
+		.lista-utenti{
+			width: 90%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			place-self: center;
+			margin: 1em;
+		}
+	}
 </style>

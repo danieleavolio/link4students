@@ -88,8 +88,10 @@
 	.lista-domande {
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
+		gap: 2rem;
 		margin: 1rem;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.utilities {
@@ -115,5 +117,22 @@
 		border: none;
 	}
 
+	@media screen and (max-width:450px){
+		.utilities{
+			display: grid;
+			grid-template-columns: 1fr;
+			place-items: center;
+		}
+
+		.filtering{
+			font-size: 0.8em;
+			width: 80%;
+		}
+
+		.filtro{
+			width: 100%;
+		}
+		
+	}
 	
 </style>

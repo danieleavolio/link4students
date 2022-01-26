@@ -3,6 +3,7 @@
 
 	import { authStore } from '$lib/stores/authStore';
 	import { addDoc, collection, doc, getDoc, serverTimestamp } from 'firebase/firestore';
+import { afterUpdate } from 'svelte';
 
 	let isOpen = false;
 	let contenuto = '';
@@ -17,6 +18,12 @@
 	const close = () => {
 		isOpen = false;
 	};
+
+	// Per non fare scroll alla pagina sotto
+	afterUpdate(() => {
+		if (isOpen) document.body.style.overflowY = 'hidden';
+		else document.body.style.overflowY = 'auto';
+	});
 
 	const mandaDomanda = () => {
 		// Quando si invia una recensione, viene mandata su firebase
@@ -57,7 +64,9 @@
 	<div class="modal">
 		<div class="backdrop" on:click={close} />
 		<div class="content-wrapper">
-			<button class="close-button" on:click={close}> ❌ </button>
+			<button class="close-button" on:click={close}> <span class="material-icons">
+				close
+				</span> </button>
 			<slot name="header">
 				<div class="titolo">
 					<p>Scrivi la tua domanda</p>
@@ -121,7 +130,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		z-index: 10;
+		z-index: 20;
 	}
 
 	.backdrop {
@@ -140,6 +149,8 @@
 		box-shadow: var(--innerNeu);
 		overflow: hidden;
 		padding: 2rem;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.close-button {
@@ -149,10 +160,8 @@
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
-		position: absolute;
-		margin-left: -3rem;
-		margin-top: -3rem;
 		box-shadow: var(--innerNeu);
+		place-self: center;
 	}
 	.titolo {
 		font-size: 1.3rem;
@@ -213,5 +222,37 @@
 		cursor: pointer;
 		padding: 5px 5px;
 		color: var(--submit);
+	}
+
+	@media screen and (max-width:650px){
+		.content-wrapper{
+			max-width: 100vw;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.contenuto{
+			display: grid;
+			grid-template-columns: 1fr;
+			place-items: center;
+			align-self: center;
+			justify-self: center;
+			text-align: center;
+		}
+
+
+		.titolo-container{
+			width: 80vw;
+			align-self: center;
+		}
+
+		.domanda{
+			width: 80vw;
+		}
+
 	}
 </style>

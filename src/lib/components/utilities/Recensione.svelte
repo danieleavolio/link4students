@@ -450,8 +450,8 @@
 	.recensione {
 		padding: 0.2rem 0;
 		border-radius: 20px;
-		max-width: 400px;
-		width: 400px;
+		max-width: 50vw;
+		width: 100%;
 		padding: 0.5rem;
 		box-shadow: var(--neumorphism);
 	}
@@ -520,8 +520,8 @@
 		padding: 0.5rem;
 		margin: 0.2rem;
 		overflow-wrap: break-word;
-		max-width: 380px;
-		width: 100%;
+		max-width: 100%;
+		text-align: center;
 	}
 
 	.voti {
@@ -586,5 +586,38 @@
 		display: flex;
 		align-items: center;
 		justify-content: center;
+	}
+
+	/* Responsive */
+	@media screen and (max-width:650px){
+		.recensione {
+			max-width: 60vw;
+
+		}
+
+		.up-part{
+			justify-content: center;
+			align-items: center;
+			margin-top: 1.5em;
+		}
+
+		.delete-review{
+			margin-top: -9em;
+			margin-left: 0;
+		}
+
+		.voti{
+			flex-direction: column;
+			gap: 1em;
+		}
+	}
+
+
+	@media screen and (max-width:650px){
+		.box-bottoni{
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
 	}
 </style>

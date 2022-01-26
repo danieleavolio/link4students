@@ -15,6 +15,7 @@
 		setDoc,
 		where
 	} from 'firebase/firestore';
+	import { afterUpdate } from 'svelte';
 
 	let isOpen;
 	let caricamento = false;
@@ -29,6 +30,12 @@
 	$: if (voto != 30) {
 		lode = false;
 	}
+
+	// Per non fare scroll alla pagina sotto
+	afterUpdate(() => {
+		if (isOpen) document.body.style.overflowY = 'hidden';
+		else document.body.style.overflowY = 'auto';
+	});
 
 	let listaEsamiPossibili = [];
 
@@ -233,7 +240,9 @@
 	<div class="modal">
 		<div class="backdrop" on:click={close} />
 		<div class="content-wrapper">
-			<button class="close-button" on:click={close}> ❌ </button>
+			<button class="close-button" on:click={close}> <span class="material-icons">
+				close
+				</span></button>
 			<slot name="header">
 				<div class="titolo">
 					<p>Modifica voto di <span>{esame.data().nomeCorso}</span></p>
@@ -251,15 +260,17 @@
 								<label for="lode">Lode</label>
 								<input bind:checked={lode} disabled={voto != 30} type="checkbox" id="lode" />
 							</div>
-						</form>
-						<div class="oppure">
-							<div class="submit-box">
-								<button class="save" type="submit"><span class="material-icons"> save </span></button>
+							<div class="oppure">
+								<div class="submit-box">
+									<button class="save" type="submit"
+										>Salva <span class="material-icons"> save </span></button
+									>
+								</div>
+								<button type="button" class="elimina" on:click={eliminaDalLibretto}
+									>Elimina <span class="material-icons"> delete_forever </span></button
+								>
 							</div>
-							<button class="elimina" on:click={eliminaDalLibretto}
-								><span class="material-icons"> delete_forever </span></button
-							>
-						</div>
+						</form>
 					</div>
 				</div>
 			{:else}
@@ -317,8 +328,8 @@
 
 	.content-wrapper {
 		z-index: 10;
-		max-width: 70vw;
-		width: 50%;
+		width: 80%;
+		height: 80%;
 		border-radius: 0.3rem;
 		background-color: var(--sfondo);
 		box-shadow: var(--innerNeu);
@@ -326,6 +337,9 @@
 		padding: 2rem;
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		text-align: center;
 	}
 
 	.close-button {
@@ -337,9 +351,6 @@
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
-		position: absolute;
-		margin-left: -3rem;
-		margin-top: -3rem;
 		transition: var(--velocita);
 	}
 
@@ -363,13 +374,19 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+		flex-direction: column;
+		gap: 2em;
 	}
 
 	.contenuto {
 		overflow: auto;
 	}
-	.oppure{
+	.oppure {
 		display: flex;
+	}
+
+	#lode {
+		box-shadow: none;
 	}
 
 	form {
@@ -397,7 +414,8 @@
 		color: var(--testo);
 	}
 
-	.elimina,.save {
+	.elimina,
+	.save {
 		border: var(--bordo);
 		background-color: var(--sfondo);
 		color: var(--testo);
@@ -411,20 +429,20 @@
 		align-items: center;
 	}
 
-	.elimina{
+	.elimina {
 		color: var(--alert);
 	}
 
-	.save{
+	.save {
 		color: var(--submit);
 	}
 
-	.elimina:hover{
+	.elimina:hover {
 		color: var(--sfondo);
 		box-shadow: var(--alertHover);
 		background-color: var(--alert);
 	}
-	.save:hover{
+	.save:hover {
 		color: var(--sfondo);
 		box-shadow: var(--submitHover);
 		background-color: var(--submit);
@@ -438,8 +456,6 @@
 		gap: 1rem;
 		margin: 0 1rem;
 	}
-
-
 
 	.loading-div {
 		border: white solid 10px;
@@ -470,11 +486,18 @@
 	.message-div > p {
 		font-family: 'Roboto', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 		text-align: center;
-		background-color: black;
+		background-color: var(--testo);
 		padding: 0;
 		border-radius: 4px;
 		font-weight: 700;
 		font-size: 2rem;
-		color: white;
+		color: var(--sfondo);
+	}
+
+	@media screen and (max-width: 500px) {
+		.content-wrapper {
+			width: 100%;
+			height: 100%;
+		}
 	}
 </style>

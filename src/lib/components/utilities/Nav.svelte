@@ -24,6 +24,7 @@
 	const logout = async () => {
 		await auth.signOut().then(() => {
 			goto('/');
+			handleOpen();
 		});
 	};
 	let datiUtente;
@@ -171,13 +172,13 @@
 		><span class="material-icons hamburger"> menu </span>
 	</button>
 {:else}
-	<nav on:scroll|stopPropagation transition:fly={{ x: -100 }}>
+	<nav transition:fly={{ x: -100 }}>
 		<div on:click={handleOpen} class="backdrop" />
 		<button class="close-button" on:click={handleOpen}><span class="material-icons">
 			close
 			</span></button>
 			
-		<BarraRicerca />
+		<BarraRicerca {handleOpen} />
 		<a on:click={handleOpen} href="/"> <span class="material-icons"> home </span> Home</a>
 		<a on:click={handleOpen} href="/corsi"> <span class="material-icons"> school </span> Corsi</a>
 		<a on:click={handleOpen} href="/info"> <span class="material-icons"> info </span> Info</a>
@@ -202,7 +203,7 @@
 					>
 				</div>
 				<div class="others">
-					<ModalRichiesteCollegamento />
+					<ModalRichiesteCollegamento {handleOpen} />
 
 					<button class="logout" on:click={logout}
 						>Logout <span class="material-icons"> logout </span></button

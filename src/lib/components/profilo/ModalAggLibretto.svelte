@@ -13,6 +13,7 @@
 		setDoc,
 		where
 	} from 'firebase/firestore';
+import { afterUpdate } from 'svelte';
 
 	let isOpen;
 	let caricamento = false;
@@ -25,6 +26,12 @@
 	$: if (voto != 30) {
 		lode = false;
 	}
+
+	// Per non fare scroll alla pagina sotto
+	afterUpdate(() => {
+		if (isOpen) document.body.style.overflowY = 'hidden';
+		else document.body.style.overflowY = 'auto';
+	});
 
 	export let profilo;
 	export let librettoEsami;
@@ -128,7 +135,9 @@
 	<div class="modal">
 		<div class="backdrop" on:click={close} />
 		<div class="content-wrapper">
-			<button class="close-button" on:click={close}> ❌ </button>
+			<button class="close-button" on:click={close}> <span class="material-icons">
+				close
+				</span> </button>
 			<slot name="header">
 				<div class="titolo">
 					<p>Aggiungi un Esame al tuo libretto</p>
@@ -237,8 +246,8 @@
 
 	.content-wrapper {
 		z-index: 10;
-		max-width: 70vw;
-		width: 50%;
+		width: 80%;
+		height: 80%;
 		border-radius: 0.3rem;
 		background-color: var(--sfondo);
 		box-shadow: var(--innerNeu);
@@ -246,6 +255,8 @@
 		padding: 2rem;
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.close-button {
@@ -257,9 +268,6 @@
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
-		position: absolute;
-		margin-left: -3rem;
-		margin-top: -3rem;
 		transition: var(--velocita);
 	}
 
@@ -294,7 +302,14 @@
 		align-items: center;
 	}
 
-	input,
+	input{
+		font-size: 1.3em;
+		width: fit-content;
+		background-color: var(--sfondo);
+		border-radius: 0.5rem;
+		outline: none;
+		border: var(--bordo);
+	}
 	select {
 		font-size: 1.3em;
 		width: fit-content;
@@ -303,6 +318,7 @@
 		outline: none;
 		border: var(--bordo);
 		box-shadow: var(--innerNeu);
+		width: 100%;
 	}
 
 	option{
@@ -373,11 +389,26 @@
 	.message-div > p {
 		font-family: 'Roboto', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 		text-align: center;
-		background-color: black;
+		background-color: var(--testo);
 		padding: 0;
 		border-radius: 4px;
 		font-weight: 700;
 		font-size: 2rem;
-		color: white;
+		color: var(--sfondo);
+	}
+
+	@media screen and (max-width:850px){
+		.inputs-container{
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+	}
+
+	@media screen and (max-width:550px){
+		.content-wrapper{
+			width: 100%;
+			height: 100%;
+		}
 	}
 </style>

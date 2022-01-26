@@ -433,7 +433,7 @@
 	.efficace {
 		width: 80%;
 		height: 5px;
-		background-color: green;
+		background-color: rgb(72, 248, 72);
 	}
 
 	.difficile {

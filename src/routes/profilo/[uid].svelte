@@ -703,9 +703,9 @@
 
 	.lista-appunti {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 1fr;
 		place-items: center;
-		gap: 1em;
+		gap: 2em;
 	}
 
 	

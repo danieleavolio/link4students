@@ -60,8 +60,8 @@
 
 	.lista-recensioni {
 		display: grid;
-		grid-template-columns: auto auto;
+		grid-template-columns: 1fr;
 		gap: 2rem;
-		justify-content: center;
+		place-items: center;
 	}
 </style>

@@ -188,33 +188,7 @@
 		<div class="contenuto">
 			<p>{domanda.data().contenuto}</p>
 		</div>
-		<div class="box-bottoni">
-			<button on:click={handleMostraRisposte}>Risposte</button>
-			{#if $authStore.isLoggedIn}
-				<button class="rispondi" on:click={() => (rispondendo = !rispondendo)}>Rispondi</button>
-				{#if $domandeSegnalate.find((elem) => elem.idDomanda == domanda.id)}
-					<SegnalazioneDomanda idDomanda={domanda.id} segnalato={true} />
-				{:else}
-					<SegnalazioneDomanda idDomanda={domanda.id} segnalato={false} />
-				{/if}
-			{/if}
-		</div>
-		{#if rispondendo}
-			<div class="area-risposta">
-				<form action="" on:submit|preventDefault={mandaRisposta}>
-					<textarea
-						name="commento"
-						id="commentodomanda"
-						cols="30"
-						rows="4"
-						required
-						placeholder="Rispondi alla domanda"
-						bind:value={risposta}
-					/>
-					<button type="submit" class="invia-risposta">Invia</button>
-				</form>
-			</div>
-		{/if}
+		
 	</div>
 	<div class="risposte">
 		{#if mostraRisposte && listaRisposte.length != 0}
@@ -236,6 +210,33 @@
 			{/each}
 		{/if}
 	</div>
+	{#if rispondendo}
+			<div class="area-risposta">
+				<form action="" on:submit|preventDefault={mandaRisposta}>
+					<textarea
+						name="commento"
+						id="commentodomanda"
+						cols="30"
+						rows="4"
+						required
+						placeholder="Rispondi alla domanda"
+						bind:value={risposta}
+					/>
+					<button type="submit" class="invia-risposta">Invia</button>
+				</form>
+			</div>
+		{/if}
+	<div class="box-bottoni">
+		<button on:click={handleMostraRisposte}>Risposte</button>
+		{#if $authStore.isLoggedIn}
+			<button class="rispondi" on:click={() => (rispondendo = !rispondendo)}>Rispondi</button>
+			{#if $domandeSegnalate.find((elem) => elem.idDomanda == domanda.id)}
+				<SegnalazioneDomanda idDomanda={domanda.id} segnalato={true} />
+			{:else}
+				<SegnalazioneDomanda idDomanda={domanda.id} segnalato={false} />
+			{/if}
+		{/if}
+	</div>
 </div>
 
 <style>
@@ -251,6 +252,7 @@
 		font-weight: 600;
 		font-size: 1.4rem;
 		margin-bottom: 0;
+		word-break: break-all;
 	}
 	.up-part {
 		display: flex;
@@ -366,5 +368,25 @@
 
 	.material-icons{
 		font-size: 1.5em;
+	}
+
+	@media screen and (max-width:450px){
+
+		.up-part{
+			justify-content: center;
+			align-items: center;
+			flex-direction: column;
+			text-align: center;
+		}
+
+		.delete-domanda{
+			position: relative;
+			margin: 1em;
+
+		}
+		.box-bottoni{
+			flex-direction: column;
+			gap: 1em;
+		}
 	}
 </style>

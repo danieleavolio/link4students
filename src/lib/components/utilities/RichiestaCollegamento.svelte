@@ -7,6 +7,7 @@
 	import {deleteDoc, doc, getDoc, setDoc } from 'firebase/firestore';
 
 	export let richiesta;
+	export let handleOpen;
 
 	const handleAccetta = async () => {
 		// Creo il collegamento tra i due
@@ -42,11 +43,18 @@
 		// cancello la richiesta
 		deleteDoc(doc(db, 'richiesteCollegamento', richiesta.id));
 	};
+
+
+	const gotoProfilo = () =>{
+		handleOpen();
+		goto(`/profilo/${richiesta.data().uidMittente}`);
+
+	}
 </script>
 
 <div class="richiesta">
 	<div class="dati">
-		<div class="avatar" on:click={() => goto(`/profilo/${richiesta.data().uidMittente}`)}>
+		<div class="avatar" on:click={gotoProfilo}>
 			<img src={richiesta.data().avatarMittente} alt="" />
 		</div>
 		<div class="nome-cognome">
@@ -136,5 +144,11 @@
 		color: var(--sfondo);
 		background-color: var(--alert);
 		box-shadow: var(--alertHover);
+	}
+
+	@media screen and (max-width:550px){
+		.richiesta{
+			flex-direction: column;
+		}
 	}
 </style>

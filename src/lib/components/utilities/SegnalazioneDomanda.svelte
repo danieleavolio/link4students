@@ -4,6 +4,7 @@
 	import { domandeSegnalate } from '$lib/stores/domandeStore';
 
 	import { addDoc, collection } from 'firebase/firestore';
+import { afterUpdate } from 'svelte';
 
 	// ID recensione da segnalare
 	export let idDomanda;
@@ -19,6 +20,11 @@
 	const close = () => {
 		isOpen = false;
 	};
+
+	afterUpdate(() => {
+		if (isOpen) document.body.style.overflowY = 'hidden';
+		else document.body.style.overflowY = 'auto';
+	});
 
 	const mandaSegnalazione = () => {
 		// Creo una segnalazione con i seguenti campi
@@ -131,7 +137,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		z-index: 10;
+		z-index: 20;
 	}
 
 	.backdrop {
@@ -143,12 +149,18 @@
 
 	.content-wrapper {
 		z-index: 10;
-		max-width: 70vw;
+		max-width: 100vw;
 		border-radius: 0.3rem;
 		background-color: var(--sfondo);
-		overflow: hidden;
 		box-shadow: var(--innerNeu);
+		overflow: hidden;
 		padding: 2rem;
+		width: 80%;
+		height: 80%;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.close-button {
@@ -158,21 +170,23 @@
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
-		position: absolute;
-		margin-left: -3rem;
-		margin-top: -3rem;
 		box-shadow: var(--innerNeu);
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
+
+	.material-icons{
+		font-size: 1.5em;
+	}
 	.titolo {
-		font-size: 1.3rem;
+		font-size: 2em;
 		font-weight: 600;
 		text-align: center;
 	}
 	.contenuto {
 		overflow: auto;
+		width: 100%;
 	}
 
 	form {
@@ -213,5 +227,12 @@
 		cursor: pointer;
 		padding: 5px 5px;
 		color: var(--submit);
+	}
+
+	@media screen and (max-width:800px){
+		.content-wrapper{
+			width: 100%;
+			height: 100%;
+		}
 	}
 </style>

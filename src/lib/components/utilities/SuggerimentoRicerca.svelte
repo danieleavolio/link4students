@@ -1,10 +1,12 @@
 <script>
 	export let ricerca;
 	export let gotoRicerca;
+	export let handleOpen;
 	import { fly } from 'svelte/transition';
 
 	const handleRicerca = (tipo) => {
 		gotoRicerca(tipo);
+		handleOpen();
 	};
 </script>
 

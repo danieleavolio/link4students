@@ -4,10 +4,12 @@
 	import SuggerimentoRicerca from './SuggerimentoRicerca.svelte';
 	let ricerca = '';
 
+	export let handleOpen;
 	const gotoRicerca = (tipo) => {
 		ricerca = ricerca.trim();
 		goto(`/ricerca?keyword=${ricerca}&tipo=${tipo}`);
 		ricerca = '';
+		handleOpen();
 	};
 </script>
 
@@ -21,7 +23,7 @@
 		/>
 	</form>
 	{#if ricerca.length >= 3}
-		<SuggerimentoRicerca bind:ricerca {gotoRicerca} />
+		<SuggerimentoRicerca {handleOpen} bind:ricerca {gotoRicerca} />
 	{/if}
 </div>
 

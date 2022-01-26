@@ -28,6 +28,8 @@
 	let contenuto;
 	let anonimo = false;
 
+
+	// Per non fare scroll alla pagina sotto
 	afterUpdate(() => {
 		if (isOpen) document.body.style.overflowY = 'hidden';
 		else document.body.style.overflowY = 'auto';
@@ -107,6 +109,7 @@
 								},
 								{ merge: true }
 							);
+							close();
 						})
 						.catch((error) => {
 							alert(error.message);
@@ -125,7 +128,9 @@
 	<div class="modal">
 		<div class="backdrop" on:click={close} />
 		<div class="content-wrapper">
-			<button class="close-button" on:click={close}> ❌ </button>
+			<button class="close-button" on:click={close}> <span class="material-icons">
+				close
+				</span> </button>
 			<slot name="header">
 				<div class="titolo">
 					<p>Recensione per: {nome}</p>
@@ -194,7 +199,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		z-index: 10;
+		z-index: 20;
 	}
 
 	.backdrop {

@@ -365,13 +365,13 @@
 
 <style>
 	.appunto {
-		width: 300px;
 		padding: 0.5rem;
 		border-radius: 0.8rem;
 		display: flex;
 		flex-direction: column;
 		justify-content: space-between;
 		box-shadow: var(--neumorphism);
+		width:90%
 	}
 	.nome-immagine {
 		display: flex;
@@ -510,12 +510,50 @@
 	}
 	.titolo-appunti {
 		font-weight: 600;
+		font-size: 1.3em;
 	}
 
 	@media screen and (max-width:800px){
 		.appunto{
-			width: 230px;
+			width: 65vw;
 			height: 100%;
+		}
+	}
+
+	
+	@media screen and (max-width:550px){
+		.up-part{
+			display: flex;
+			justify-content: space-around;
+		}
+
+		.delete-appunto{
+			margin: 0;
+			position: relative;
+		}
+	}
+
+	@media screen and (max-width:550px){
+		.up-part{
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			gap: 0.5em;
+		}
+
+		.contenuto{
+			text-align: center;
+
+		}
+
+		.delete-appunto{
+			margin: 0;
+			position: relative;
+		}
+
+		.voti{
+			flex-direction: column;
 		}
 	}
 </style>

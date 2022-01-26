@@ -52,7 +52,9 @@
 	<div class="modal">
 		<div class="backdrop" on:click={close} />
 		<div class="content-wrapper">
-			<button class="close-button" on:click={close}> ❌ </button>
+			<button class="close-button" on:click={close}> <span class="material-icons">
+				close
+				</span> </button>
 			<slot name="header">
 				<div class="titolo">
 					<p>Aggiungi un Corso di Laurea</p>
@@ -225,11 +227,11 @@
 	.message-div > p {
 		font-family: 'Roboto', 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 		text-align: center;
-		background-color: black;
+		background-color: var(--testo);
 		padding: 0;
 		border-radius: 4px;
 		font-weight: 700;
 		font-size: 2rem;
-		color: white;
+		color: var(--sfondo);
 	}
 </style>

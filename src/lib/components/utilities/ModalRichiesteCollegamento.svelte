@@ -6,6 +6,7 @@
 	let isOpen = false;
 	let caricamento = false;
 	let messaggio = '';
+	export let handleOpen;
 
 	const open = () => {
 		isOpen = true;
@@ -30,7 +31,9 @@
 	<div class="modal">
 		<div class="backdrop" on:click={close} />
 		<div class="content-wrapper">
-			<button class="close-button" on:click={close}> ❌ </button>
+			<button class="close-button" on:click={close}> <span class="material-icons">
+				close
+				</span> </button>
 			<slot name="header">
 				<div class="titolo">
 					<p>Lista richieste di collegamento</p>
@@ -44,12 +47,14 @@
 					{#if $richiesteUtente.length > 0}
 						<div class="scelte">
 							{#each $richiesteUtente as richiesta (richiesta.id)}
-								<RichiestaCollegamento {richiesta} />
+								<RichiestaCollegamento {handleOpen} {richiesta} />
 							{/each}
 						</div>
 					{:else}
 						<div class="vuoto">
-							<p>Non ci sono richieste 💭</p>
+							<p>Non ci sono richieste <span class="material-icons">
+								person_add
+								</span></p>
 						</div>
 					{/if}
 				</div>
@@ -107,13 +112,15 @@
 
 	.content-wrapper {
 		z-index: 10;
-		max-width: 70vw;
-		width: 50%;
+		width: 80%;
+		height: 80%;
 		border-radius: 0.3rem;
 		overflow: hidden;
 		padding: 2rem;
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 
 	}
 
@@ -124,9 +131,6 @@
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
-		position: absolute;
-		margin-left: -3rem;
-		margin-top: -3rem;
 		box-shadow: var(--innerNeu);
 	}
 	.titolo {
@@ -193,8 +197,21 @@
 		border-radius: 1rem;
 		font-weight: 600;
 	}
+	.vuoto > p{
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		gap: 1em;
+	}
 
 	.presenti{
 		color: var(--resolve);
+	}
+
+	@media screen and (max-width: 550px){
+		.content-wrapper{
+			width: 100%;
+			height: 100%;
+		}
 	}
 </style>

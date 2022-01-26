@@ -107,9 +107,13 @@
 	};
 
 	onAuthStateChanged(auth, async (usr) => {
-		user = await getDoc(doc(db, 'users', usr.uid));
-		preferenza = user.data().preferenzaLibretto;
-		contenutoBio = user.data().bio != null ? user.data().bio : 'Nessuna bio.';
+		if (usr) {
+			await getDoc(doc(db, 'users', usr.uid)).then((usr) => {
+				user = usr;
+			});
+			preferenza = user.data().preferenzaLibretto;
+			contenutoBio = user.data().bio != null ? user.data().bio : 'Nessuna bio.';
+		}
 	});
 </script>
 
@@ -134,8 +138,7 @@
 				</div>
 				<img bind:this={avatar} src={user.data().avatar} alt="" />
 			</div>
-			</div>
-
+		</div>
 
 		<div class="dati">
 			<label for="nome"
@@ -236,8 +239,7 @@
 {/if}
 
 <style>
-
-	p{
+	p {
 		text-align: center;
 	}
 	.container {
@@ -246,7 +248,7 @@
 		padding: 1em;
 		box-shadow: var(--neumorphism);
 		border-radius: 0.4em;
-		}
+	}
 	.avatar {
 		width: 200px;
 		height: 200px;
@@ -264,7 +266,7 @@
 
 	.avatar-nome {
 		display: grid;
-		grid-template-columns:1fr;
+		grid-template-columns: 1fr;
 		place-items: center;
 	}
 
@@ -410,36 +412,37 @@
 		padding: 0.5em;
 	}
 
-	@media screen and (max-width:850px){
-		.avatar-nome{
+	@media screen and (max-width: 850px) {
+		.dato-costante {
+			margin:1em
+		}
+		.avatar-nome {
 			grid-template-columns: 1fr;
 			margin: 1em;
 		}
 
-		label{
+		label {
 			text-align: center;
 		}
 
-		.dati{
+		.dati {
 			grid-template-columns: 1fr;
 		}
 
-		.psw-field{
+		.psw-field {
 			grid-template-columns: 1fr;
 		}
 	}
 
-	@media screen and (max-width:500px){
-		.dato-costante{
+	@media screen and (max-width: 500px) {
+		.dato-costante {
 			font-size: 0.8em;
 		}
 	}
 
-	@media screen and (max-width:600px){
-		.preferenze-field{
+	@media screen and (max-width: 600px) {
+		.preferenze-field {
 			flex-direction: column;
 		}
 	}
-
-
 </style>

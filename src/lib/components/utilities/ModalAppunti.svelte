@@ -4,6 +4,7 @@
 	import { authStore } from '$lib/stores/authStore';
 	import { collection, doc, getDoc, increment, serverTimestamp, setDoc } from 'firebase/firestore';
 	import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { afterUpdate } from 'svelte';
 
 	let isOpen = false;
 	let contenuto = '';
@@ -17,6 +18,14 @@
 
 	export let corso;
 
+
+	// Per non fare scroll alla pagina sotto
+	afterUpdate(() => {
+		if (isOpen) document.body.style.overflowY = 'hidden';
+		else document.body.style.overflowY = 'auto';
+	});
+
+	
 	const onChange = () => {
 		fileAppunti = bottoneFile.files[0];
 	};
@@ -61,8 +70,7 @@
 									}
 								);
 							})
-							.catch((error) => {
-							});
+							.catch((error) => {});
 					});
 				});
 			});
@@ -88,9 +96,9 @@
 	<div class="modal">
 		<div class="backdrop" on:click={close} />
 		<div class="content-wrapper">
-			<button class="close-button" on:click={close}> <span class="material-icons">
-				close
-				</span> </button>
+			<button class="close-button" on:click={close}>
+				<span class="material-icons"> close </span>
+			</button>
 			<slot name="header">
 				<div class="titolo">
 					<p>Invia i tuoi appunti</p>
@@ -105,7 +113,7 @@
 						<form action="" on:submit|preventDefault={mandaAppunti}>
 							<div class="titolo-container">
 								<label for="input-titolo">Titolo</label>
-								<input type="text" id="input-titolo" bind:value={titoloAppunti} required />
+								<input type="text" id="input-titolo" bind:value={titoloAppunti} maxlength="30" min="5" required />
 							</div>
 							<div class="domanda text-area">
 								<label for="area-appunti">Descrizione degli appunti</label>
@@ -122,9 +130,11 @@
 								/>
 							</div>
 							<div class="input-file">
-								<label for="input-rar"
-									>Carica solamente file PDF, ZIP o 7Zip <br /> Il resto verrà scartato.</label
-								>
+								<label class="click-appunti" for="input-rar"
+									><span class="material-icons"> file_present </span>Carica solamente file PDF, ZIP
+									o 7Zip <br /> Il resto verrà scartato.
+								</label>
+
 								<input
 									required
 									bind:this={bottoneFile}
@@ -133,6 +143,7 @@
 									name=""
 									id="input-rar"
 									accept=".zip, .rar, .pdf, .7zip"
+									style="display:none"
 								/>
 							</div>
 							<div class="submit-box">
@@ -171,7 +182,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		z-index: 10;
+		z-index: 20;
 	}
 
 	.backdrop {
@@ -202,15 +213,12 @@
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
-		position: absolute;
-		margin-left: -3rem;
-		margin-top: -3rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 	}
 
-	.material-icons{
+	.material-icons {
 		font-size: 1.5em;
 		color: var(--alert);
 	}
@@ -257,6 +265,27 @@
 		font-size: 1rem;
 	}
 
+	.click-appunti {
+		display: flex;
+		gap: 1em;
+		align-self: center;
+		width: 100%;
+		text-align: left;
+		justify-content: center;
+		align-items: center;
+	}
+
+	.click-appunti > span {
+		font-size: 3em;
+		justify-content: center;
+		align-items: center;
+		display: flex;
+		box-shadow: var(--neumorphism);
+		padding: 0.2em;
+		border-radius: 0.5em;
+		color: var(--testo);
+	}
+
 	.submit-box {
 		display: flex;
 		flex-direction: column;
@@ -281,7 +310,7 @@
 		font-size: 1rem;
 	}
 
-	input[type='file']{
+	input[type='file'] {
 		font-size: 1rem;
 		border: none;
 		outline: none;
@@ -323,5 +352,35 @@
 		box-shadow: var(--innerNeu);
 		padding: 1rem;
 		border-radius: 0.4rem;
+	}
+
+	@media screen and (max-width: 650px) {
+		.content-wrapper {
+			max-width: 100vw;
+			width: 100%;
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.contenuto {
+			display: grid;
+			grid-template-columns: 1fr;
+			place-items: center;
+			align-self: center;
+			justify-self: center;
+			text-align: center;
+		}
+
+		.titolo-container {
+			width: 80vw;
+			align-self: center;
+		}
+
+		.domanda {
+			width: 80vw;
+		}
 	}
 </style>

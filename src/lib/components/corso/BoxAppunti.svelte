@@ -43,8 +43,7 @@
 	}
 	.container {
 		margin-bottom: 2rem;
-		max-width: 100vw;
-		width: 100%;
+		width: 90vw;
 	}
 
 	.lista-appunti {
@@ -55,6 +54,11 @@
 		overflow-y: hidden;
 		white-space: nowrap;
 		padding: 1rem 0;
+		justify-content: center;
+		align-items: center;
+		flex-direction: column;
+		width: 80%;
+		margin: auto;
 	}
 
 	.utilities {

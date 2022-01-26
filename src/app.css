@@ -141,3 +141,15 @@ select {
     font-feature-settings: 'liga';
     font-size: 1.3em;
 }
+
+.close-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: var(--alert);
+}
+
+.close-button>span {
+    font-size: 2em;
+}

@@ -142,5 +142,16 @@
 	.ricerca{
 		display: flex;
 		gap: 0.5em;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: center;
 	}
+
+	
+	@media screen and (max-width:850px){
+		.lista-corsi{
+			grid-template-columns: 1fr;
+		}	
+	}
+	
 </style>

@@ -58,6 +58,10 @@
 </div>
 
 <style>
+
+	h3,h1{
+		text-align: center;
+	}
 	.container {
 		width: 90%;
 		display: flex;
@@ -82,6 +86,7 @@
 		padding: 0.5em;
 		width: 50%;
 		place-self: center;
+		margin: 1em;
 	}
 	.avatar {
 		width: 80px;
@@ -116,5 +121,11 @@
 
 	.material-icons{
 		font-size: 2em;
+	}
+
+	@media screen and (max-width:800px){
+		.utente-bannato{
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

@@ -3,13 +3,19 @@
 
 	import { authStore } from '$lib/stores/authStore';
 	import { addDoc, collection, setDoc } from 'firebase/firestore';
-	import { onMount } from 'svelte';
+	import { afterUpdate, onMount } from 'svelte';
 
 	let isOpen = false;
 	let nomeCorso = '';
 
 	let caricamento = false;
 	let messaggio = '';
+
+	// Per non fare scroll alla pagina sotto
+	afterUpdate(() => {
+		if (isOpen) document.body.style.overflowY = 'hidden';
+		else document.body.style.overflowY = 'auto';
+	});
 
 	export let listaCorsi;
 
@@ -126,13 +132,15 @@
 
 	.content-wrapper {
 		z-index: 10;
-		max-width: 70vw;
-		width: 50%;
+		width: 80%;
+		height: 80%;
 		border-radius: 0.3rem;
 		overflow: hidden;
 		padding: 2rem;
 		display: flex;
 		flex-direction: column;
+		align-items: center;
+		justify-content: center;
 	}
 
 	.close-button {
@@ -142,9 +150,6 @@
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
-		position: absolute;
-		margin-left: -3rem;
-		margin-top: -3rem;
 		box-shadow: var(--innerNeu);
 	}
 	.titolo {
@@ -233,5 +238,13 @@
 		font-weight: 700;
 		font-size: 2rem;
 		color: var(--sfondo);
+	}
+
+	
+	@media screen and (max-width:850px){
+		.content-wrapper{
+			width: 100%;
+			height: 100%	;
+		}	
 	}
 </style>

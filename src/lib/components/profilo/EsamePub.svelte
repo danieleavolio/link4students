@@ -102,7 +102,6 @@
 
 	@media screen and (max-width:450px){
 		.esame-libretto{
-			width: 60%;
 			grid-template-columns: 1fr;
 		}
 

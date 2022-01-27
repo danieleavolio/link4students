@@ -27,5 +27,17 @@
 		justify-content: space-between;
         font-weight: 500;
         font-size: 1.2rem;
+		height: 100%;
+		align-items: center;
+	}
+
+	
+	@media screen and (max-width:350px){
+		.corsodilaurea{
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			text-align: center;
+		}
 	}
 </style>

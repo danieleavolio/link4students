@@ -43,7 +43,7 @@
 
 <h3>Aggiungi un nuovo annuncio</h3>
 <div class="div-creazione">
-	<form action="" on:submit|preventDefault={pubblicaAnnuncio}>
+	<form action="">
 		<label for="titolo">Titolo</label>
 		<input bind:value={titolo} id="titolo" type="text" placeholder="Aggiungi un titolo.." />
 		<label for="contenuto">Contenuto Annuncio</label>
@@ -55,9 +55,6 @@
 			rows="10"
 			placeholder="Aggiungi un contenuto.."
 		/>
-		
-
-		<button class="pubblica">Pubblica</button>
 	</form>
 	<div class="div-tipo">
 		<button on:click={() => (tipo = 'alert')} class={tipo == 'alert' ? 'avvertenza' : ''}
@@ -67,6 +64,7 @@
 			><span class="material-icons"> email </span>Annuncio</button
 		>
 	</div>
+	<button on:click={pubblicaAnnuncio} class="pubblica">Pubblica</button>
 </div>
 
 <h3>Lista annunci</h3>
@@ -114,6 +112,7 @@
 		font-size: 1.1em;
 		width: fit-content;
 		margin: auto;
+		margin: 1em;
 	}
 
 	.pubblica:hover {
@@ -147,6 +146,7 @@
 		display: flex;
 		flex-direction: column;
 		gap: 2em;
+		margin: 1em;
 	}
 
 	.div-tipo > button {
@@ -172,5 +172,11 @@
 	.messaggio:hover {
 		box-shadow: var(--neumorphism);
 		transform: scale(1);
+	}
+
+	@media screen and (max-width: 750px) {
+		.div-creazione {
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

@@ -114,7 +114,7 @@
 	};
 
 	const ricercaByCorsi = async () => {
-		if (keyword != oldKeyword || oldTipo != 'corsi') {
+		if ((keyword != oldKeyword || oldTipo != 'corsi') && keyword.length >=3) {
 			// Limito il numero di risultati a 10
 			const queryCorsi = query(collection(db, 'corsidelcdl'), limit(limiteRicerca * 10));
 			await getDocs(queryCorsi).then((corsi) => {
@@ -129,7 +129,7 @@
 	};
 
 	const ricercaByUtenti = async () => {
-		if (keyword != oldKeyword || oldTipo != 'utenti') {
+		if ((keyword != oldKeyword || oldTipo != 'utenti')  && keyword.length >=3) {
 			const q = query(collection(db, 'users'), limit(limiteRicerca * 10));
 			await getDocs(q).then((results) => {
 				listaUtenti = results.docs.filter((utente) =>
@@ -142,7 +142,7 @@
 	};
 
 	const ricercaByAppunti = async () => {
-		if (keyword != oldKeyword || oldTipo != 'appunti') {
+		if ((keyword != oldKeyword || oldTipo != 'appunti') && keyword.length >=3) {
 			const queryCorsi = query(collection(db, 'appunti'), limit(limiteRicerca * 10));
 			await getDocs(queryCorsi).then((appunti) => {
 				listaAppunti = appunti.docs;
@@ -317,6 +317,11 @@
 		box-shadow: var(--innerNeu);
 		font-size: 1.3em;
 	}
+
+	input{
+		font-size: 1.5em!important;
+		width: 50%;
+	}
 	.selezione {
 		font-size: 1.5em;
 		border: none;
@@ -337,6 +342,9 @@
 		display: flex;
 		gap: 1rem;
 		padding: 1rem;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: center;
 	}
 
 	span {

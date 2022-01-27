@@ -12,31 +12,37 @@
 		// TO-DO --> Elimina tutte le domande, recensioni, risposte e tutto che ha a che fare col corso
 
 		deleteDoc(doc(db, 'corsidelcdl', corso.id))
-			.then(() => {
-			})
+			.then(() => {})
 			.catch((error) => {
 				alert(error.message);
 			});
 	};
 </script>
 
-<div class="carta-corso">
-	<div class="modifica" on:click={open}>
-		<div class="anno-element anno{corso.data().anno}">
-			<p>{corso.data().anno}</p>
-		</div>
+<div class="corso">
+	<div class="carta-corso">
+		<div class="modifica" on:click={open}>
+			<div class="anno-element anno{corso.data().anno}">
+				<p>{corso.data().anno}</p>
+			</div>
 
-		<div class="info">
-			<p class="nome">{corso.data().nome.toUpperCase()}</p>
-			<p>CFU - {corso.data().cfu}</p>
-			<p>Codice - {corso.data().codiceCorso}</p>
+			<div class="info">
+				<p class="nome">{corso.data().nome.toUpperCase()}</p>
+				<p>CFU - {corso.data().cfu}</p>
+				<p>Codice - {corso.data().codiceCorso}</p>
+			</div>
 		</div>
 	</div>
-
 	<ModalEliminaSingoloCorso {corso} />
 </div>
 
 <style>
+
+	.corso{
+		display: grid;
+		grid-template-columns: 2fr 0fr;
+		gap: 1em;
+	}
 	.carta-corso {
 		display: flex;
 		gap: 1rem;
@@ -49,7 +55,7 @@
 		transition: var(--velocita);
 	}
 
-	.carta-corso:hover{
+	.carta-corso:hover {
 		box-shadow: var(--innerNeu);
 		transform: var(--premuto);
 	}
@@ -85,5 +91,21 @@
 
 	.nome {
 		font-weight: 600;
+	}
+
+	@media screen and (max-width: 500px) {
+		.carta-corso {
+			flex-direction: column;
+		}
+
+		.modifica {
+			flex-direction: column;
+			text-align: center;
+		}
+
+		.corso{
+			grid-template-columns: 1fr;
+		}
+		
 	}
 </style>

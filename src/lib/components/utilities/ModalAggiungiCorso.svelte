@@ -3,7 +3,7 @@
 
 	import { authStore } from '$lib/stores/authStore';
 	import { addDoc, collection, getDocs, query, where } from 'firebase/firestore';
-	import { onMount } from 'svelte';
+	import { afterUpdate, onMount } from 'svelte';
 
 	let isOpen = false;
 	export let cdl;
@@ -19,6 +19,12 @@
 	let professore;
 	let oreInsegnamento = '';
 	let linkScheda = '';
+
+	// Per non fare scroll alla pagina sotto
+	afterUpdate(() => {
+		if (isOpen) document.body.style.overflowY = 'hidden';
+		else document.body.style.overflowY = 'auto';
+	});
 
 	/**
 	 * Aggiunge il corso al database firebase.
@@ -223,13 +229,21 @@
 
 	.content-wrapper {
 		z-index: 10;
-		max-width: 70vw;
-		width: 50%;
+		width: 100%;
+		height: 100%;
 		border-radius: 0.3rem;
 		overflow: hidden;
 		padding: 2rem;
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+	}
+	.material-icons{
+		box-shadow: var(--innerNeu);
+		background-color: var(--sfondo);
+		color: var(--alert);
+		border-radius: 100%;
 	}
 
 	.close-button {
@@ -239,9 +253,6 @@
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
-		position: absolute;
-		margin-left: -3rem;
-		margin-top: -3rem;
 		box-shadow: var(--innerNeu);
 	}
 	.titolo {

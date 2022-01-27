@@ -12,6 +12,7 @@
 		setDoc,
 		where
 	} from 'firebase/firestore';
+import { afterUpdate } from 'svelte';
 
 	let isOpen = false;
 	let caricamento = false;
@@ -19,6 +20,12 @@
 
 	export let corso;
 
+
+	// Per non fare scroll alla pagina sotto
+	afterUpdate(() => {
+		if (isOpen) document.body.style.overflowY = 'hidden';
+		else document.body.style.overflowY = 'auto';
+	});
 	/**
 	 * Si prendono i dati del singolo corso e si effettuano delle query per prendere i dati innestati nei vari documenti.
 	 * Si fanno 2 query:
@@ -206,7 +213,9 @@
 	<div class="modal">
 		<div class="backdrop" on:click={close} />
 		<div class="content-wrapper">
-			<button class="close-button" on:click={close}> ❌ </button>
+			<button class="close-button" on:click={close}> <span class="material-icons">
+				close
+				</span> </button>
 			<slot name="header">
 				<div class="titolo">
 					<p>Vuoi davvero eliminare {corso.data().nome}</p>
@@ -254,11 +263,10 @@
 		left: 0;
 		width: 100%;
 		height: 100vh;
-
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		z-index: 10;
+		z-index: 20;
 	}
 
 	.backdrop {
@@ -269,15 +277,17 @@
 	}
 
 	.content-wrapper {
-		z-index: 10;
-		max-width: 70vw;
-		width: 50%;
+		z-index: 20;
+		max-width: 100vw;
+		width: 100%;
+		height: 100%;
 		border-radius: 0.3rem;
-		background-color: white;
 		overflow: hidden;
 		padding: 2rem;
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.close-button {
@@ -287,9 +297,6 @@
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
-		position: absolute;
-		margin-left: -3rem;
-		margin-top: -3rem;
 		box-shadow: var(--innerNeu);
 	}
 	.titolo {
@@ -307,7 +314,7 @@
 	}
 
 	.contenuto {
-		overflow: auto;
+width: 80%;		
 	}
 
 	.loading-div {
@@ -353,7 +360,7 @@
 		cursor: pointer;
 		border: none;
 		outline: none;
-		width: 20%;
+		width: 100%;
 		margin: 1rem;
 	}
 	.si {
@@ -363,6 +370,14 @@
 
 	.si:hover{
 		box-shadow: var(--alertHover);
+	}
+
+	@media screen and (max-width: 500px) {
+		.domanda-button{
+			width: fit-content;
+			place-self: center;
+		}
+		
 	}
 
 	

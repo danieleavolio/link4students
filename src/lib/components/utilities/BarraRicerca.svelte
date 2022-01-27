@@ -23,7 +23,7 @@
 		/>
 	</form>
 	{#if ricerca.length >= 3}
-		<SuggerimentoRicerca {handleOpen} bind:ricerca {gotoRicerca} />
+		<SuggerimentoRicerca {handleOpen}  bind:ricerca {gotoRicerca} on:click{handleOpen} />
 	{/if}
 </div>
 

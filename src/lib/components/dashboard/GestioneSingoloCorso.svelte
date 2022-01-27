@@ -33,10 +33,17 @@
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 1rem;
-        margin: 1rem 0;
+        margin: 1rem;
 	}
 	.nome-corso{
 		text-align: center;
 		font-size: 2rem;
 	}
+	@media screen and (max-width:850px){
+		.lista-corsi{
+			grid-template-columns: 1fr;
+		}	
+	}
+
+	
 </style>

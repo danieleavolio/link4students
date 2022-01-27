@@ -113,7 +113,6 @@
 
 	a {
 		font-weight: 600;
-		text-decoration: none;
 		color: var(--testo);
 		transition: var(--velocita);
 		padding: 0.2rem;

@@ -46,8 +46,8 @@
 
 <style>
 	.appunto-lista {
-		width: 80%;
-		height: auto;
+        width: 50vw;
+		height: 100%;
 		border-radius: 0.5rem;
 		padding: 1rem;
 		display: grid;
@@ -153,5 +153,16 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
+	}
+
+
+	@media screen and (max-width:950px){
+		.appunto-lista{
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: center;
+			align-items: center;
+			text-align: center;
+		}
 	}
 </style>

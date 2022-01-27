@@ -11,7 +11,7 @@
 </script>
 
 <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-<div transition:fly={{ y: -200, duration: 400 }} class="suggerimento">
+<div transition:fly={{ y: -200, duration: 400 }} class="suggerimento" on:click={handleOpen}>
 	<p on:click={() => handleRicerca('utenti')}>
 		Cerca <span>{ricerca}</span> in Utenti <span class="material-icons">
 			account_circle

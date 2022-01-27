@@ -54,7 +54,7 @@
 		box-shadow: var(--neumorphism);
 		padding: 1rem;
 		margin: 1rem;
-		width: 50vw;
+		width: 80vw;
 	}
 
 	form {
@@ -94,7 +94,7 @@
 		justify-content: center;
 		align-items: center;
 		gap: 1rem;
-		width: 50%;
+		width: 80vw;
 		word-break: keep-all;
 		padding: 1rem;
 		box-shadow: var(--innerNeu);
@@ -123,5 +123,10 @@
 	}
 	.material-icons {
 		font-size: 1.5em;
+	}
+	@media screen and (max-width: 650px){
+		.mex{
+			flex-direction: column;
+		}
 	}
 </style>

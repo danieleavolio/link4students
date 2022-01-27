@@ -159,6 +159,7 @@
 
 	const handleOpen = () => {
 		navOpen = !navOpen;
+		console.log('ciao')
 	};
 
 	const gotoProfilo = () => {

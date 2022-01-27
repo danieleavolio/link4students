@@ -88,6 +88,8 @@
 	.sezione-bottoni {
 		display: flex;
 		justify-content: space-around;
+		flex-wrap: wrap;
+		gap: 1em;
 	}
 
 	.sezione-lista {
@@ -128,5 +130,12 @@
 
 	h1{
 		text-align: center;
+	}
+
+	@media screen and (max-width:850px){
+		.lista-corsi{
+			display: grid;
+			grid-template-columns: 1fr;
+		}
 	}
 </style>

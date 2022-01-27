@@ -18,8 +18,8 @@ import { goto } from "$app/navigation";
 
 <style>
     .utente-lista{
-        width: 500px;
-		height: 100px;
+        width: 35vw;
+		height: 100%;
 		border-radius: 0.5rem;
 		padding: 1rem;
 		font-size: 1.3em;
@@ -43,5 +43,12 @@ import { goto } from "$app/navigation";
         height: 100px;
         border-radius: 100%;
         object-fit: cover;
+    }
+
+    @media screen and (max-width: 800px){
+        .utente-lista{
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
     }
 </style>

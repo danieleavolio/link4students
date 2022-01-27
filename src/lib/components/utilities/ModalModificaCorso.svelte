@@ -2,6 +2,7 @@
 	import { db } from '$lib/firebaseConfig';
 
 	import { doc, setDoc } from 'firebase/firestore';
+import { afterUpdate } from 'svelte';
 	import ContentCartaCorso from '../dashboard/ContentCartaCorso.svelte';
 
 	export let corso;
@@ -21,6 +22,12 @@
 	let linkScheda = corso.data().linkScheda != undefined ? corso.data().linkScheda : '';
 	let cdl = corso.data().cdl;
 
+
+	// Per non fare scroll alla pagina sotto
+	afterUpdate(() => {
+		if (isOpen) document.body.style.overflowY = 'hidden';
+		else document.body.style.overflowY = 'auto';
+	});
 	
 	const modificaCorso = () => {
 		let dati = {
@@ -60,7 +67,9 @@
 	<div class="modal">
 		<div class="backdrop" on:click={close} />
 		<div class="content-wrapper">
-			<button class="close-button" on:click={close}> ❌ </button>
+			<button class="close-button" on:click={close}> <span class="material-icons">
+				close
+				</span> </button>
 			<slot name="header">
 				<div class="titolo">
 					<p>Modifica informazioni <span>{corso.data().nome}</span></p>
@@ -162,7 +171,7 @@
 		display: flex;
 		justify-content: center;
 		align-items: center;
-		z-index: 10;
+		z-index: 20;
 	}
 
 	.backdrop {
@@ -173,26 +182,35 @@
 	}
 
 	.content-wrapper {
-		z-index: 10;
-		max-width: 70vw;
-		width: 50%;
+		z-index: 20;
+		max-width: 100vw;
+		width: 100%;
+		height: 100%;
 		border-radius: 0.3rem;
 		overflow: hidden;
 		padding: 2rem;
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		text-align:center;
 	}
 
 	.close-button {
 		outline: none;
 		font-size: 1.2rem;
-		border-radius: 50%;
+		border-radius: 100%!important;
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
-		position: absolute;
-		margin-left: -3rem;
-		margin-top: -3rem;
+		box-shadow: var(--innerNeu);
+	}
+
+	.material-icons{
+		border-radius: 100%;
+		background-color: var(--sfondo);
+		color: var(--alert);
+		border: var(--bordo);
 		box-shadow: var(--innerNeu);
 	}
 	.titolo {
@@ -221,6 +239,7 @@
 		flex-direction: column;
 		flex-wrap: wrap;
 		gap: 1rem;
+		font-size: 1.2em;
 	}
 
 	.submit-box {
@@ -233,13 +252,13 @@
 	}
 
 	.submit-box > button {
-		background-color: var(--submit);
+		box-shadow: var(--submitHover);
 		font-size: 1rem;
 		border-radius: 8px;
 		border: none;
 		cursor: pointer;
 		padding: 5px 5px;
-		color: white;
+		color: var(--testo);
 	}
 
 	.loading-div {
@@ -286,4 +305,5 @@
 		border-radius: 0.2rem;
 		padding: 0.2rem;
 	}
+
 </style>

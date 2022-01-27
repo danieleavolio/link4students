@@ -166,10 +166,8 @@
 					cols="30"
 					rows="5"
 					minlength="10"
-					maxlength="125"
+					maxlength="125">{contenutoBio}</textarea
 				>
-					{contenutoBio}
-				</textarea>
 
 				<div class="psw-field">
 					<label for="oldPsw">
@@ -414,7 +412,7 @@
 
 	@media screen and (max-width: 850px) {
 		.dato-costante {
-			margin:1em
+			margin: 1em;
 		}
 		.avatar-nome {
 			grid-template-columns: 1fr;

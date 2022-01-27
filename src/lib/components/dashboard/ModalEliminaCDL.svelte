@@ -12,10 +12,17 @@
 		setDoc,
 		where
 	} from 'firebase/firestore';
+	import { afterUpdate } from 'svelte';
 
 	let isOpen = false;
 	let caricamento = false;
 	let messaggio = '';
+
+	// Per non fare scroll alla pagina sotto
+	afterUpdate(() => {
+		if (isOpen) document.body.style.overflowY = 'hidden';
+		else document.body.style.overflowY = 'auto';
+	});
 
 	export let corso;
 
@@ -37,8 +44,7 @@
 				);
 				getDocs(queryReazioni).then((reazioni) => {
 					reazioni.docs.forEach((reazione) => {
-						deleteDoc(reazione.ref).then(() => {
-						});
+						deleteDoc(reazione.ref).then(() => {});
 					});
 				});
 				// Per ogni reazione, mi prendo le segnalazioni e le cancello
@@ -48,8 +54,7 @@
 				);
 				getDocs(querySegnalazioni).then((segnalazioni) => {
 					segnalazioni.docs.forEach((segnalazione) => {
-						deleteDoc(segnalazione.ref).then(() => {
-						});
+						deleteDoc(segnalazione.ref).then(() => {});
 					});
 				});
 				// Elimino la singola recensione
@@ -80,8 +85,7 @@
 				getDocs(queryRisposte).then((risposte) => {
 					// Per ogni risposta elimino la docRef
 					risposte.docs.forEach((risposta) => {
-						deleteDoc(risposta.ref).then(() => {
-						});
+						deleteDoc(risposta.ref).then(() => {});
 					});
 				});
 				// Per ogni domanda, faccio la query sulle segnalazioni
@@ -92,8 +96,7 @@
 				getDocs(querySegnalazioni).then((segnalazioni) => {
 					// Per ogni segnalazione, elimino la docRef
 					segnalazioni.docs.forEach((segnalazione) => {
-						deleteDoc(segnalazione.ref).then(() => {
-						});
+						deleteDoc(segnalazione.ref).then(() => {});
 					});
 				});
 				// Elimino la singola domanda
@@ -117,8 +120,7 @@
 				// Elimino ogni reazione agli appunti
 				getDocs(queryReazioni).then((reazioniAppunti) => {
 					reazioniAppunti.docs.forEach((reazione) => {
-						deleteDoc(reazione.ref).then(() => {
-						});
+						deleteDoc(reazione.ref).then(() => {});
 					});
 				});
 				// Elimino il singolo appunto
@@ -158,13 +160,15 @@
 				});
 			})
 			.then(() => {
-                // Quando viene eliminato, si chiude perchè non esiste più il documento nella lista
-                // Svelte aggiorna la lista quindi elimina dal DOM l'elemento e la finestra scompare
-				deleteDoc(corso.ref).then(() => {
-					caricamento = false;
-				}).catch((error)=>{
-                    messaggio = error.message;
-                });
+				// Quando viene eliminato, si chiude perchè non esiste più il documento nella lista
+				// Svelte aggiorna la lista quindi elimina dal DOM l'elemento e la finestra scompare
+				deleteDoc(corso.ref)
+					.then(() => {
+						caricamento = false;
+					})
+					.catch((error) => {
+						messaggio = error.message;
+					});
 			});
 	};
 
@@ -188,7 +192,9 @@
 	<div class="modal">
 		<div class="backdrop" on:click={close} />
 		<div class="content-wrapper">
-			<button class="close-button" on:click={close}> ❌ </button>
+			<button class="close-button" on:click={close}>
+				<span class="material-icons"> close </span>
+			</button>
 			<slot name="header">
 				<div class="titolo">
 					<p>Vuoi davvero eliminare {corso.data().nome}</p>
@@ -223,7 +229,7 @@
 		cursor: pointer;
 	}
 
-	.domanda-button:hover{
+	.domanda-button:hover {
 		color: var(--sfondo);
 		box-shadow: var(--alertHover);
 		background-color: var(--alert);
@@ -251,14 +257,16 @@
 
 	.content-wrapper {
 		z-index: 10;
-		max-width: 70vw;
-		width: 50%;
+		width: 80%;
+		height: 80%;
 		border-radius: 0.3rem;
 		background-color: white;
 		overflow: hidden;
 		padding: 2rem;
 		display: flex;
 		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.close-button {
@@ -268,9 +276,6 @@
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
-		position: absolute;
-		margin-left: -3rem;
-		margin-top: -3rem;
 		box-shadow: var(--innerNeu);
 	}
 	.titolo {
@@ -288,7 +293,7 @@
 	}
 
 	.contenuto {
-		overflow: auto;
+		width: 100%;
 	}
 
 	.loading-div {
@@ -333,14 +338,14 @@
 		border-radius: 0.5rem;
 		cursor: pointer;
 		outline: none;
-		width: 20%;
+		width: 100%;
 	}
 	.si {
 		background-color: var(--alert);
 		color: white;
 	}
 
-	.si:hover{
+	.si:hover {
 		color: var(--sfondo);
 		box-shadow: var(--alertHover);
 		background-color: var(--alert);

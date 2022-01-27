@@ -1,6 +1,5 @@
 <script>
 	export let corso;
-
 	export let cambiaCdlSelezionato;
 </script>
 
@@ -17,10 +16,20 @@
 		justify-content: space-between;
 		cursor: pointer;
 		transition: var(--velocita);
+		font-size: 1.3em;
+		height: 100%;
 	}
 
 	.corsodilaurea:hover {
 		box-shadow: var(--innerNeu);
 		
+	}
+
+	@media screen and (max-width:850px){
+		.corsodilaurea{
+			text-align: center;
+			justify-content: center;
+			align-items: center;
+		}	
 	}
 </style>

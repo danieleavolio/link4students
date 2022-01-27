@@ -124,6 +124,7 @@
 		background-color: var(--testo);
 		color: var(--sfondo);
 		border-radius: 0.2em;
+		word-break: break-all;
 	}
 	.modal {
 		position: fixed;

@@ -1,5 +1,5 @@
 # Link 4 Student
-![image](https://i.imgur.com/oZdQBkL.png)
+![image](https://i.imgur.com/b5e6NtD.png)
 
 Link 4 Student is a project based on [Svelte-Kit]('https://kit.svelte.dev/') and [Firebase]('https://firebase.google.com/') for my Computer Science Thesis
 

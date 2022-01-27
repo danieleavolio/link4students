@@ -1,38 +1,21 @@
-# create-svelte
+# Link 4 Student
+![image](https://i.imgur.com/oZdQBkL.png)
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte);
+Link 4 Student is a project based on [Svelte-Kit]('https://kit.svelte.dev/') and [Firebase]('https://firebase.google.com/') for my Computer Science Thesis
 
-## Creating a project
+## How to use
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm init svelte@next
-
-# create a new project in my-app
-npm init svelte@next my-app
-```
-
-> Note: the `@next` is temporary
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+To run the project, you can run this command:
 
 ```bash
 npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
 ```
 
-## Building
+> Note: the you need `firebase` installed in your machine to use that.
 
-Before creating a production version of your app, install an [adapter](https://kit.svelte.dev/docs#adapters) for your target environment. Then:
 
-```bash
-npm run build
-```
+## Used Technologies
+For this project I used plain `CSS` to style the entire project.
+The `back-end` is entirely in `Firebase` to handle data and real-time updates on certain objects. The `front-end` is made with `Svelte-kit`; it is a framework for building extremely high-performance web apps.
 
-> You can preview the built app with `npm run preview`, regardless of whether you installed an adapter. This should _not_ be used to serve your app in production.
+

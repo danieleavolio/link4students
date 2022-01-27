@@ -11,6 +11,8 @@ import { afterUpdate } from 'svelte';
 	let anonimo = false;
 	export let idCorso;
 
+	let sending = false;
+
 	const open = () => {
 		isOpen = true;
 	};
@@ -26,6 +28,11 @@ import { afterUpdate } from 'svelte';
 	});
 
 	const mandaDomanda = () => {
+
+		if (sending)
+			return;
+
+		sending = true;
 		// Quando si invia una recensione, viene mandata su firebase
 		getDoc(doc(db, 'users', $authStore.user.uid)).then((ref) => {
 			let nome = ref.data().nome;
@@ -46,6 +53,7 @@ import { afterUpdate } from 'svelte';
 			addDoc(collection(db, 'domande'), data)
 				.then(() => {
                     close();
+					sending = false;
 				})
 				.catch((error) => {
 					alert(error.message);

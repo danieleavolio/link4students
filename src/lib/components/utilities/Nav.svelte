@@ -396,6 +396,9 @@
 		height: 75px;
 		object-fit: cover;
 		border-radius: 100%;
+	}
+
+	img{
 		border: var(--bordo);
 	}
 

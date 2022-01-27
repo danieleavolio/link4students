@@ -51,7 +51,6 @@
 			--velocita: 0.2s ease;
 			--premuto: scale(0.98);
 			--bordo: rgb(27, 27, 27) solid 2px;
-			--collegati: rgb(167, 63, 216);
 			--submit: rgb(58, 97, 255);
 			--resolve: rgb(248, 252, 32);
 			--discreto: rgb(255, 241, 50);
@@ -77,15 +76,17 @@
 			--velocita: 0.2s ease;
 			--premuto: scale(0.98);
 			--bordo: rgb(204, 204, 204) solid 2px;
-			--collegati: rgb(111, 4, 161);
-			--submit: rgb(45, 76, 200);
-			--resolve: rgb(72, 204, 36);
+			--submit: rgb(58, 97, 255);
+			--resolve: rgb(204, 33, 176);
+			--discreto: rgb(255, 228, 75);
+			--buono: rgb(76, 114, 238);
+			--ottimo: rgb(106, 204, 131);
 			--submitHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
 				inset 15px 15px 10px #2641aa, inset -15px -15px 10px #7792ff;
 			--alertHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
 				inset 15px 15px 15px #c44b4b, inset -15px -15px 15px #f07272;
 			--resolveHover: 0 0 0 rgba(0, 0, 0, 0.2), 0 0 0 rgba(219, 255, 255, 0.5),
-				inset 15px 15px 15px #3dad1f, inset -15px -15px 15px #91f775;
+				inset 15px 15px 15px rgb(204, 33, 176), inset -15px -15px 15px rgb(95, 14, 82);
 		}
 	}
 </style>

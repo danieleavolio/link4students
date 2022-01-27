@@ -220,54 +220,23 @@
 
 	import SegnalazioneUtente from '$lib/components/utilities/SegnalazioneUtente.svelte';
 	import { authStore } from '$lib/stores/authStore';
-	import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
-	import { fade } from 'svelte/transition';
 	import { utentiSegnalati } from '$lib/stores/utentiStores';
 	import ModalAggLibretto from '$lib/components/profilo/ModalAggLibretto.svelte';
 	import { afterUpdate, onMount } from 'svelte';
 	import Libretto from '$lib/components/profilo/Libretto.svelte';
 	import LibrettoNascosto from '$lib/components/profilo/LibrettoNascosto.svelte';
 	import { fly } from 'svelte/transition';
-	import Appunto from '$lib/components/utilities/Appunto.svelte';
 	import { getAuth } from 'firebase/auth';
 	import { richiesteMandate, richiesteUtente } from '$lib/stores/richiesteStore';
 	import { collegamentiUtente } from '$lib/stores/collegamentiStore';
 	import { goto } from '$app/navigation';
+	import AppuntoProfilo from './AppuntoProfilo.svelte';
+	import SocialLink from '$lib/components/profilo/SocialLink.svelte';
 
 	let profilePicture;
-	let file;
-	const onChange = () => {
-		// Quando scelgo l'immagine viene assegnato a questo file
-		file = profilePicture.files[0];
-	};
 
 	// CHECK PREFERENZA PROFILO SE NON SETTATA
 	let loading = true;
-
-	const cambiaFoto = () => {
-		if (file) {
-			let picturesRef = ref(storage, `profilePictures/avatar${profilo.uid}`);
-			// Carico l'immagine del profilo nel database
-			uploadBytes(picturesRef, file).then(() => {
-				// Prendo l'url dell'immagine appena caricata
-				getDownloadURL(picturesRef).then((url) => {
-					// Aggiorno l'immagine del profilo dell'utente con il link di quello caricato
-					setDoc(
-						doc(db, 'users', $authStore.user.uid),
-						{
-							avatar: url
-						},
-						{ merge: true }
-					).then(() => {
-						// Ricarica la pagina per le modifiche
-						location.reload();
-					});
-				});
-			});
-		} else {
-			alert('Errore caricamento immagine');
-		}
-	};
 
 	export let collegati;
 	$: if (esamiSuperati.length > 0) {
@@ -364,26 +333,6 @@
 		<div class="image-div">
 			<img src={profilo.avatar} alt="" />
 		</div>
-		<!-- {#if $authStore.isLoggedIn}
-			{#if profilo.uid == $authStore.user.uid && modificaPreferenze}
-				<div class="cambia-immagine">
-					<form on:submit|preventDefault={cambiaFoto} action="">
-						<label class="bottone-file" for="file">Cambia immagine del profilo</label>
-						<input
-							class="da-nascondere"
-							type="file"
-							bind:this={profilePicture}
-							on:change={onChange}
-							accept="images/pmg, images/jpg "
-							id="file"
-						/>
-						{#if file}
-							<button transition:fade class="conferma">Conferma</button>
-						{/if}
-					</form>
-				</div>
-			{/if}
-		{/if} -->
 	</div>
 	<div class="info">
 		<p class="nomecognome">{profilo.nome} {profilo.cognome}</p>
@@ -433,6 +382,17 @@
 		</div>
 	</div>
 </div>
+{#if profilo.socials != null}
+	<p>Collegamenti</p>
+	<!-- Se l'user ha i social aggiunti -->
+	<div class="links">
+		{#each profilo.socials as social}
+			{#if social.username != ''}
+				<SocialLink {social} />
+			{/if}
+		{/each}
+	</div>
+{/if}
 <div class="sezione-titolo-libretto">
 	<p class="titolo-libretto">Libretto</p>
 	{#if $authStore.isLoggedIn}
@@ -491,7 +451,7 @@
 	<div class="lista-appunti">
 		{#if appunti.length > 0}
 			{#each appunti as appunto}
-				<Appunto {appunto} />
+				<AppuntoProfilo {appunto} />
 			{/each}
 		{:else}
 			<p class="nessuno">Nessun appunto caricato</p>
@@ -541,8 +501,8 @@
 	}
 
 	.image-div {
-		width: 200px;
-		height: 200px;
+		width: 300px;
+		height: 300px;
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -577,10 +537,9 @@
 		font-size: 1.5rem;
 	}
 
-	.info{
+	.info {
 		display: flex;
 		flex-direction: column;
-
 	}
 	.bio {
 		display: flex;
@@ -597,8 +556,8 @@
 	}
 
 	.container-bio {
-		width: 100%;
-			font-style: italic;
+		width: 80%;
+		font-style: italic;
 		box-shadow: var(--neumorphism);
 		border-radius: 10px;
 		align-self: center;
@@ -607,6 +566,7 @@
 		justify-content: center;
 		align-items: center;
 		overflow-wrap: anywhere;
+		text-align: center;
 	}
 
 	.modifica-preferenza {
@@ -621,6 +581,15 @@
 		gap: 1rem;
 		justify-content: center;
 		align-items: center;
+	}
+
+	.links {
+		display: flex;
+		gap: 1em;
+		margin: 1em;
+		box-shadow: var(--innerNeu);
+		padding: 1em;
+		border-radius: 1em;
 	}
 
 	.bottone {
@@ -657,7 +626,7 @@
 	}
 
 	.collegati {
-		color: var(--collegati);
+		color: var(--resolve);
 	}
 
 	.titolo-appunti {
@@ -708,24 +677,32 @@
 		gap: 2em;
 	}
 
-	
-
 	/* Responsive */
-	@media screen and (max-width:1000px){
-		.container-libretto{
+	@media screen and (max-width: 1000px) {
+		.container-libretto {
 			grid-template-columns: 1fr;
+		}
+
+		.image-div{
+			width: 250px;
+			height: 250px;
 		}
 	}
 
-	@media screen and (max-width:450px){
-		.container-libretto{
+	@media screen and (max-width: 450px) {
+		.container-libretto {
 			width: 60%;
 			justify-content: center;
 		}
+
+		.links {
+			display: grid;
+			grid-template-columns: 1fr 1fr;
+		}
 	}
 
-	@media screen and (max-width:600px){
-		.lista-appunti{
+	@media screen and (max-width: 600px) {
+		.lista-appunti {
 			grid-template-columns: 1fr;
 		}
 	}

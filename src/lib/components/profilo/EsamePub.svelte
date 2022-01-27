@@ -76,7 +76,8 @@
 
 	.voto{
 		font-weight: 800;
-		font-size: 1.4rem;
+		font-size: 2rem;
+		text-shadow: 0 3px 3px rgba(0,0,0,0.3);
 	}
 	
 	.nome-corso{

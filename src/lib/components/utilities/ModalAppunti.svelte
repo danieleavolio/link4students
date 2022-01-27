@@ -15,6 +15,7 @@ import { afterUpdate } from 'svelte';
 
 	let caricamento = false;
 	let messaggio = '';
+	let sending = false;
 
 	export let corso;
 
@@ -32,6 +33,11 @@ import { afterUpdate } from 'svelte';
 
 	const mandaAppunti = () => {
 		if (fileAppunti) {
+
+			if (sending)
+				return;
+
+			sending = true;
 			caricamento = true;
 			// Faccio un file con il nome e l'id dello studente per non avere sovrascritture
 			let appuntiRef = ref(storage, `appunti/${fileAppunti.name}${$authStore.user.uid}`);
@@ -69,6 +75,7 @@ import { afterUpdate } from 'svelte';
 										merge: true
 									}
 								);
+								sending = false;
 							})
 							.catch((error) => {});
 					});
@@ -284,6 +291,12 @@ import { afterUpdate } from 'svelte';
 		padding: 0.2em;
 		border-radius: 0.5em;
 		color: var(--testo);
+		transition: all 0.5s ease;
+		cursor:pointer;
+	}
+
+	.click-appunti > span:hover{
+		box-shadow: var(--innerNeu);
 	}
 
 	.submit-box {
@@ -309,6 +322,8 @@ import { afterUpdate } from 'svelte';
 		flex-direction: column;
 		font-size: 1rem;
 	}
+
+	
 
 	input[type='file'] {
 		font-size: 1rem;

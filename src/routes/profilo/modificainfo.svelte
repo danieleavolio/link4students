@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import ContainerSocial from '$lib/components/profilo/ContainerSocial.svelte';
 	import Loading from '$lib/components/utilities/Loading.svelte';
 
 	import { auth, db, storage } from '$lib/firebaseConfig';
@@ -26,6 +27,8 @@
 	let loading = false;
 	let contenutoBio;
 	let file;
+	let annocorso;
+
 
 	let avatar;
 
@@ -41,7 +44,9 @@
 		await pulisciBio();
 		let data = {
 			bio: bio,
-			preferenzaLibretto: preferenza
+			preferenzaLibretto: preferenza,
+			annoDiCorso: annocorso,
+			socials
 		};
 
 		if (file != null) {
@@ -50,6 +55,7 @@
 		await setDoc(doc(db, 'users', $authStore.user.uid), data, { merge: true });
 		await aggiornaPassword();
 		loading = false;
+		location.reload();
 	};
 
 	const aggiornaPassword = async () => {
@@ -106,6 +112,13 @@
 		}
 	};
 
+	let socials = [
+		{ social: 'twitter', url: 'https://twitter.com/', username:'' },
+		{ social: 'linkedin', url: 'https://www.linkedin.com/in/', username:'' },
+		{ social: 'instagram', url: 'https://www.instagram.com/', username:'' },
+		{ social: 'github', url: 'https://github.com/', username:'' }
+	];
+
 	onAuthStateChanged(auth, async (usr) => {
 		if (usr) {
 			await getDoc(doc(db, 'users', usr.uid)).then((usr) => {
@@ -115,6 +128,9 @@
 			contenutoBio = user.data().bio != null ? user.data().bio : 'Nessuna bio.';
 		}
 	});
+
+	
+	
 </script>
 
 <h1>Modifica dati</h1>
@@ -158,16 +174,35 @@
 		</div>
 		<div class="inputs-container">
 			<form action="" on:submit|preventDefault={aggiornaDati}>
-				<label for="bio">La tua bio</label>
-				<textarea
-					bind:this={area}
-					name="bio"
-					id="bio"
-					cols="30"
-					rows="5"
-					minlength="10"
-					maxlength="125">{contenutoBio}</textarea
-				>
+				<div class="inputs">
+					<label class="griglia" for="anno-corso"
+						>Anno di corso
+
+						<select bind:value={annocorso} class="anno-corso" name="anno" id="anno-corso">
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							<option value="4">4</option>
+							<option value="5">5</option>
+							<option value="6">6</option>
+							<option value="Fuori Corso">Fuori Corso</option>
+						</select>
+					</label>
+
+					<label class="griglia" for="bio"
+						>La tua bio
+
+						<textarea
+							bind:this={area}
+							name="bio"
+							id="bio"
+							cols="30"
+							rows="5"
+							minlength="10"
+							maxlength="125">{contenutoBio}</textarea
+						>
+					</label>
+				</div>
 
 				<div class="psw-field">
 					<label for="oldPsw">
@@ -220,6 +255,12 @@
 					>
 				</div>
 
+				<div class="social-fields">
+					{#each socials as social}
+						<ContainerSocial social={social.social} {user} bind:url={social.url} bind:username={social.username} />
+					{/each}
+				</div>
+
 				<div class="bottoni">
 					<button class="save">Salva</button>
 					{#if user != null}
@@ -246,6 +287,7 @@
 		padding: 1em;
 		box-shadow: var(--neumorphism);
 		border-radius: 0.4em;
+		margin: 1em;
 	}
 	.avatar {
 		width: 200px;
@@ -288,6 +330,17 @@
 		align-items: center;
 		justify-content: center;
 		cursor: pointer;
+	}
+
+	.social-fields {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		gap: 1em;
+		box-shadow: var(--neumorphism);
+		padding: 1em;
+		border-radius: 0.8em;
 	}
 
 	.material-icons {
@@ -364,6 +417,24 @@
 		text-align: center;
 	}
 
+	.griglia {
+		display: flex;
+		flex-direction: column;
+		gap: 1em;
+	}
+
+	.inputs {
+		display: grid;
+		grid-template-columns: 1fr 2fr;
+	}
+	.anno-corso {
+		width: fit-content;
+		padding: 1rem;
+		outline: none;
+		border: var(--bordo);
+		border-radius: 0.8em;
+	}
+
 	textarea {
 		word-break: break-all;
 	}
@@ -417,6 +488,11 @@
 		.avatar-nome {
 			grid-template-columns: 1fr;
 			margin: 1em;
+		}
+
+		.inputs {
+			grid-template-columns: 1fr;
+			place-items: center;
 		}
 
 		label {

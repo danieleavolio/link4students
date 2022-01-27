@@ -28,6 +28,8 @@
 	let contenuto;
 	let anonimo = false;
 
+	let sending = false;
+
 
 	// Per non fare scroll alla pagina sotto
 	afterUpdate(() => {
@@ -71,6 +73,11 @@
 	};
 
 	const mandaRecensione = () => {
+
+		if (sending)
+			return;
+
+		sending = true;
 		// Quando si invia una recensione, viene mandata su firebase
 		getDoc(doc(db, 'users', $authStore.user.uid)).then((ref) => {
 			let nome = ref.data().nome;
@@ -109,6 +116,7 @@
 								},
 								{ merge: true }
 							);
+							sending = false;
 							close();
 						})
 						.catch((error) => {

@@ -4,6 +4,7 @@
 	import { utentiSegnalati } from '$lib/stores/utentiStores';
 
 	import { addDoc, collection } from 'firebase/firestore';
+	import { afterUpdate } from 'svelte';
 
 	// ID recensione da segnalare
 	export let idUtente;
@@ -19,6 +20,12 @@
 	const close = () => {
 		isOpen = false;
 	};
+
+	// Per non fare scroll alla pagina sotto
+	afterUpdate(() => {
+		if (isOpen) document.body.style.overflowY = 'hidden';
+		else document.body.style.overflowY = 'auto';
+	});
 
 	const mandaSegnalazione = () => {
 		// Creo una segnalazione con i seguenti campi
@@ -61,7 +68,9 @@
 	<div class="modal">
 		<div class="backdrop" on:click={close} />
 		<div class="content-wrapper">
-			<button class="close-button" on:click={close}> ❌ </button>
+			<button class="close-button" on:click={close}>
+				<span class="material-icons"> close </span>
+			</button>
 			<slot name="header">
 				<div class="titolo">
 					<p>Segnala utente</p>
@@ -143,11 +152,16 @@
 
 	.content-wrapper {
 		z-index: 10;
-		max-width: 70vw;
+		width: 80%;
+		height: 80%;
 		border-radius: 0.3rem;
 		background-color: white;
 		overflow: hidden;
 		padding: 2rem;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
 	}
 
 	.close-button {
@@ -157,9 +171,6 @@
 		width: 50px;
 		height: 50px;
 		cursor: pointer;
-		position: absolute;
-		margin-left: -3rem;
-		margin-top: -3rem;
 		box-shadow: var(--innerNeu);
 	}
 	.titolo {
@@ -216,5 +227,12 @@
 		background-color: var(--submit);
 		box-shadow: var(--submitHover);
 		color: var(--sfondo);
+	}
+
+	@media screen and (max-width: 800px) {
+		.content-wrapper {
+			width: 100%;
+			height: 100%;
+		}
 	}
 </style>

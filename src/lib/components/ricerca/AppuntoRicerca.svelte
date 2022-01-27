@@ -90,6 +90,7 @@
 		font-size: 1.2em;
 		font-weight: 900;
 		text-transform: uppercase;
+		word-break: break-all;
 	}
 
 	.info {

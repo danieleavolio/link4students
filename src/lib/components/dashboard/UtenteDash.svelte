@@ -3,7 +3,7 @@
 	import { db } from '$lib/firebaseConfig';
 	import { deleteDoc, doc, setDoc, Timestamp } from 'firebase/firestore';
 	import SegnalazioneUtente from '$lib/components/dashboard/SegnalazioneUtente.svelte';
-
+	import { fly } from 'svelte/transition';
 	export let oggettoSegnalazione;
 	export let cambiaUtentiSegnalati;
 	export let risolviSegnalazioneUtente;
@@ -37,7 +37,7 @@
 	};
 </script>
 
-<div class="utente-dash">
+<div in:fly={{ y: 100, duration: 1000 }} class="utente-dash">
 	<div class="immagine-nome">
 		<div class="immagine">
 			<img
@@ -111,13 +111,13 @@
 		cursor: pointer;
 		border-radius: 100%;
 	}
-form{
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	align-items: center;
-	gap: 1em;
-}
+	form {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: center;
+		align-items: center;
+		gap: 1em;
+	}
 	.show-report {
 		outline: none;
 		padding: 0.5rem 0.2rem;
@@ -148,8 +148,8 @@ form{
 		cursor: pointer;
 	}
 
-	@media screen and (max-width:800px){
-		.immagine-nome{
+	@media screen and (max-width: 800px) {
+		.immagine-nome {
 			flex-direction: column;
 		}
 	}

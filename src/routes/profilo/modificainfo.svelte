@@ -29,7 +29,6 @@
 	let file;
 	let annocorso;
 
-
 	let avatar;
 
 	let profilePicture;
@@ -113,10 +112,10 @@
 	};
 
 	let socials = [
-		{ social: 'twitter', url: 'https://twitter.com/', username:'' },
-		{ social: 'linkedin', url: 'https://www.linkedin.com/in/', username:'' },
-		{ social: 'instagram', url: 'https://www.instagram.com/', username:'' },
-		{ social: 'github', url: 'https://github.com/', username:'' }
+		{ social: 'twitter', url: 'https://twitter.com/', username: '' },
+		{ social: 'linkedin', url: 'https://www.linkedin.com/in/', username: '' },
+		{ social: 'instagram', url: 'https://www.instagram.com/', username: '' },
+		{ social: 'github', url: 'https://github.com/', username: '' }
 	];
 
 	onAuthStateChanged(auth, async (usr) => {
@@ -126,11 +125,9 @@
 			});
 			preferenza = user.data().preferenzaLibretto;
 			contenutoBio = user.data().bio != null ? user.data().bio : 'Nessuna bio.';
+			annocorso = user.data().annoDiCorso != null ? user.data().annoDiCorso : '1';
 		}
 	});
-
-	
-	
 </script>
 
 <h1>Modifica dati</h1>
@@ -257,14 +254,21 @@
 
 				<div class="social-fields">
 					{#each socials as social}
-						<ContainerSocial social={social.social} {user} bind:url={social.url} bind:username={social.username} />
+						<ContainerSocial
+							social={social.social}
+							{user}
+							bind:url={social.url}
+							bind:username={social.username}
+						/>
 					{/each}
 				</div>
 
 				<div class="bottoni">
 					<button class="save">Salva</button>
 					{#if user != null}
-						<button on:click={() => goto(`/profilo/${user.id}`)} class="annulla">Chiudi</button>
+						<button type="button" on:click={() => goto(`/profilo/${user.id}`)} class="annulla"
+							>Chiudi</button
+						>
 					{/if}
 				</div>
 			</form>

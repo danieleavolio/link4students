@@ -22,7 +22,7 @@
 	import RecensioneDash from '$lib/components/dashboard/RecensioneDash.svelte';
 	import UtenteDash from '$lib/components/dashboard/UtenteDash.svelte';
 	import VuotoDash from '$lib/components/dashboard/VuotoDash.svelte';
-	import { onMount } from 'svelte';
+	import { beforeUpdate, onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/stores/authStore';
 	import { db } from '$lib/firebaseConfig';
@@ -154,6 +154,10 @@
 	const risolviSegnalazioneDomanda = (idSegnalazione) => {
 		listaDomande = listaDomande.filter((elem) => elem.segnalazione.id != idSegnalazione);
 	};
+
+	onMount(()=>{
+		clickUtenti();
+	})
 </script>
 
 <svelte:head>

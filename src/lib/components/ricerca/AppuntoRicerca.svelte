@@ -14,7 +14,7 @@
 	<div class="nome">
 		<p class="titolo">{appunto.data().titoloAppunti}</p>
 		<div class="info">
-			<p class="autore" on:click={() => goto(`profilo/${appunto.data().idUtente}`)}>
+			<p class="autore" on:click={() => goto(`/profilo/${appunto.data().idUtente}`)}>
 				{appunto.data().nome}
 			</p>
 			<!-- svelte-ignore a11y-mouse-events-have-key-events -->

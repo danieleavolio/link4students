@@ -98,7 +98,7 @@
 	<div class="up-part">
 		<div
 			class="avatar"
-			on:click={() => redirectProfilo(oggettoSegnalazione.domanda.data().idAutore)}
+			on:click={() => redirectProfilo(oggettoSegnalazione.domanda.data().autore.idAutore)}
 		>
 			<img src={oggettoSegnalazione.domanda.data().autore.avatar} alt="" />
 		</div>
@@ -157,7 +157,7 @@
 		padding: 0.5rem;
 		box-shadow: var(--neumorphism);
 		margin: 1rem;
-		width: 60vw;
+		width: 50vw;
 	}
 
 	.titolo-domanda {
@@ -165,6 +165,7 @@
 		font-size: 1.4rem;
 		margin-bottom: 0;
 		white-space: pre-line;
+		word-break: break-all;
 	}
 	.up-part {
 		display: flex;

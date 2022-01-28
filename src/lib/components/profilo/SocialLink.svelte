@@ -12,7 +12,7 @@
 
 <div class="social">
     <img src="/images/logos/{social.social}.svg" on:click={redirect} alt="">
-    <a bind:this={link} href="{social.url}"> </a>
+    <a target="_blank" bind:this={link} href="{social.url}"> </a>
 </div>
 
 <style>

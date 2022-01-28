@@ -127,7 +127,7 @@
 	{#if !$authStore.isLoggedIn}
 		<div class="signin-todo">
 			<p class="annuncio">
-				Per interagire con la comunity, <a href="/reg/joinus" class="action">
+				Per interagire con la community, <a href="/reg/joinus" class="action">
 					unisciti a noi
 					<span class="material-icons"> logout </span>
 				</a>

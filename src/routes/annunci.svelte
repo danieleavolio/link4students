@@ -2,13 +2,13 @@
 	import ListaAnnunci from '$lib/components/utilities/ListaAnnunci.svelte';
 	import { db } from '$lib/firebaseConfig';
 
-	import { collection, getDocs, limit, onSnapshot, query } from 'firebase/firestore';
+	import { collection, getDocs, limit, onSnapshot, orderBy, query } from 'firebase/firestore';
 	import { onMount } from 'svelte';
 
 	let limite = 2;
 	let annunci = [];
 	let isMoreThanLimit = false;
-	let queryAnnunci = query(collection(db, 'annunci'), limit(limite));
+	let queryAnnunci = query(collection(db, 'annunci'), limit(limite), orderBy('data', 'desc'));
 	let loaded = false;
 	let loadMore = false;
 
@@ -49,9 +49,10 @@
 			on:mouseenter={() => (loadMore = true)}
 			class="aumenta"
 			on:click={aumentaLimite}
-			>Altri {#if loadMore}
-				<span class="loading2" />
-			{/if}
+			>Altri
+			<span class="material-icons">
+				expand_more
+				</span>
 		</button>
 	{/if}
 {/if}
@@ -66,22 +67,16 @@
 		border-radius: 100%;
 	}
 
-	.loading2 {
-		border: var(--testo) solid 5px;
-		width: 5px;
-		height: 5px;
-		border-top: var(--sfondo) solid 5px;
-		animation: loading 1s linear infinite;
-		border-radius: 100%;
-	}
-
 	@keyframes loading {
 		0% {
-			transform: rotate(0deg);
+			transform: scale(1);
 		}
 		100% {
-			transform: rotate(360deg);
+			transform: scale(1.3);
 		}
+	}
+	.material-icons:hover{
+		animation: loading 0.5s alternate infinite;
 	}
 	.aumenta {
 		margin: 2rem;

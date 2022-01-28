@@ -158,12 +158,12 @@
 	};
 </script>
 
-<div transition:fly class="recensione">
+<div in:fly={{y:100, duration: 1000}} class="recensione">
 	<div class="up-part">
 		<!-- Se non sei loggato, allora vedi la recensione -->
 		<div
 			class="avatar"
-			on:click={() => redirectProfilo(oggettoSegnalazione.recensione.data().idAutore)}
+			on:click={() => redirectProfilo(oggettoSegnalazione.recensione.data().autore.idAutore)}
 		>
 			<img src={oggettoSegnalazione.recensione.data().autore.avatar} alt="" />
 		</div>

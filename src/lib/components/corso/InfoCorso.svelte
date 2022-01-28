@@ -13,7 +13,7 @@
 	<p>Anno del corso: {corso.data().anno}</p>
 	<p>Professore: {corso.data().professore}</p>
 	{#if linkScheda == 'Non disponibile'}
-		<p class="scheda non-disponibile">Scheda Insegnamento<br /> Non disponbile</p>
+		<p class="scheda non-disponibile">Scheda Insegnamento<br /> Non disponibile</p>
 	{:else}
 		<a class="scheda disponibile" target="_blank" href={linkScheda}>
 			<span class="material-icons"> description </span> {nomeLinkScheda}</a

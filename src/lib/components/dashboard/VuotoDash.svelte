@@ -3,7 +3,7 @@
 	import { fly, fade } from 'svelte/transition';
 </script>
 
-<div in:fly={{ y: 100, duration: 1000 }} out:fade class="box">
+<div in:fly={{ y: 100, duration: 1000 }} class="box">
 	<p class="emoji"><span class="material-icons"> inbox </span></p>
 	<p class="contenuto">Non ci sono <span>{oggetti}</span> da controllare</p>
 </div>

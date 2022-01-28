@@ -26,7 +26,7 @@
 	import { authStore } from '$lib/stores/authStore';
 	import { db, storage } from '$lib/firebaseConfig';
 	import BoxStatistiche from '$lib/components/index/BoxStatistiche.svelte';
-	import { collection, doc, getDoc, limit, onSnapshot, query } from 'firebase/firestore';
+	import { collection, doc, getDoc, limit, onSnapshot, orderBy, query } from 'firebase/firestore';
 	import { onMount } from 'svelte';
 	import ListaAnnunci from '$lib/components/utilities/ListaAnnunci.svelte';
 
@@ -36,7 +36,7 @@
 	let moreThan3 = false;
 
 	onMount(() => {
-		let queryAnnunci = query(collection(db, 'annunci'), limit(4));
+		let queryAnnunci = query(collection(db, 'annunci'),orderBy('data', 'desc'), limit(4));
 		onSnapshot(queryAnnunci, (lista) => {
 			annunci = lista.docs;
 			if (annunci.length > 3) {
@@ -55,13 +55,13 @@
 
 <div class="main-links">
 	{#if !$authStore.isLoggedIn}
-		<BoxLink nome="Unisciti a noi!" emoji="login" linkto="reg/joinus" />
+		<BoxLink nome="Unisciti a noi!" emoji="login" linkto="/reg/joinus" />
 	{:else}
-		<BoxLink nome="Profilo" emoji="account_circle" linkto="profilo/{$authStore.user.uid}" />
+		<BoxLink nome="Profilo" emoji="account_circle" linkto="/profilo/{$authStore.user.uid}" />
 	{/if}
 
-	<BoxLink nome="Corsi" emoji="school" linkto="corsi" />
-	<BoxLink nome="Ricerca" emoji="search" linkto="ricerca"/>
+	<BoxLink nome="Corsi" emoji="school" linkto="/corsi" />
+	<BoxLink nome="Ricerca" emoji="search" linkto="/ricerca"/>
 </div>
 
 <BoxStatistiche {statistiche} />

@@ -59,7 +59,6 @@
 	{:else}
 		<BoxLink nome="Profilo" emoji="account_circle" linkto="/profilo/{$authStore.user.uid}" />
 	{/if}
-
 	<BoxLink nome="Corsi" emoji="school" linkto="/corsi" />
 	<BoxLink nome="Ricerca" emoji="search" linkto="/ricerca"/>
 </div>

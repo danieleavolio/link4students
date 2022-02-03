@@ -8,12 +8,8 @@
 	import { onMount } from 'svelte';
 
 	onMount(async () => {
-		let user;
 		if ($authStore.isLoggedIn) {
-			await getDoc(doc(db, 'users', $authStore.user.uid)).then((doc) => {
-				user = doc;
-			});
-			if (!user.data().superuser) goto('/');
+			if (!$authStore.isAdmin) goto('/');
 		} else {
 			goto('/');
 		}

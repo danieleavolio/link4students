@@ -12,7 +12,7 @@
 	} from 'firebase/firestore';
 	export async function load({ page }) {
 		// Prendere da Firebase le informazioni dell'utente come singolo documento
-		// per utilizzarlo all'interno della pagina per scegliere cosa mostrare.
+		// per utilizzarlo all'interno della pagina per scegliere cosa most	rare.
 
 		const uid = page.params.uid;
 		const collectionRef = collection(db, 'users');

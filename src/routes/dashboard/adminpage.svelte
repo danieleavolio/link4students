@@ -22,7 +22,7 @@
 	import RecensioneDash from '$lib/components/dashboard/RecensioneDash.svelte';
 	import UtenteDash from '$lib/components/dashboard/UtenteDash.svelte';
 	import VuotoDash from '$lib/components/dashboard/VuotoDash.svelte';
-	import { beforeUpdate, onMount } from 'svelte';
+	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/stores/authStore';
 	import { db } from '$lib/firebaseConfig';
@@ -42,12 +42,12 @@
 	let listaRecensioni = [];
 	let listaAppunti = [];
 
+
 	onMount(async () => {
 		if ($authStore.isLoggedIn) {
 			await getDoc(doc(db, 'users', $authStore.user.uid)).then((doc) => {
 				user = doc;
 			});
-			if (!user.data().superuser) goto('/');
 		} else {
 			goto('/');
 		}
@@ -155,9 +155,9 @@
 		listaDomande = listaDomande.filter((elem) => elem.segnalazione.id != idSegnalazione);
 	};
 
-	onMount(()=>{
+	onMount(() => {
 		clickUtenti();
-	})
+	});
 </script>
 
 <svelte:head>
@@ -165,7 +165,7 @@
 </svelte:head>
 <div class="dashboard">
 	{#if $authStore.isLoggedIn}
-		{#if user != null && user.data().superuser}
+		{#if user != null && $authStore.isAdmin}
 			<h2>Benvenuto amministratore</h2>
 			<div class="prima-sezione">
 				<div class="prima-sinistra">
@@ -292,7 +292,7 @@
 		width: 100%;
 	}
 
-	.prima-destra{
+	.prima-destra {
 		overflow-x: scroll;
 		width: 100%;
 	}
@@ -359,11 +359,9 @@
 	}
 
 	@media screen and (max-width: 1000px) {
-		.box-statistiche{
+		.box-statistiche {
 			grid-template-columns: 1fr;
 		}
-
-
 	}
 
 	@media screen and (max-width: 850px) {
@@ -381,14 +379,12 @@
 			flex-direction: column;
 		}
 
-		.lista-generica{
+		.lista-generica {
 			flex-direction: column;
 		}
 
-		.pagina-azioni{
+		.pagina-azioni {
 			grid-template-columns: 1fr;
 		}
 	}
-
-
 </style>

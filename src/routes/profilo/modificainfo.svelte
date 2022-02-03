@@ -48,9 +48,8 @@
 			socials
 		};
 
-		if (file != null) {
-			await cambiaFoto();
-		}
+		if (file != null) await cambiaFoto();
+
 		await setDoc(doc(db, 'users', $authStore.user.uid), data, { merge: true });
 		await aggiornaPassword();
 		loading = false;
@@ -93,11 +92,13 @@
 		if (file) {
 			let picturesRef = ref(storage, `profilePictures/avatar${user.data().uid}`);
 			// Carico l'immagine del profilo nel database
-			uploadBytes(picturesRef, file).then(() => {
+			await uploadBytes(picturesRef, file).then(async () => {
 				// Prendo l'url dell'immagine appena caricata
-				getDownloadURL(picturesRef).then((url) => {
+				await getDownloadURL(picturesRef).then(async (url) => {
 					// Aggiorno l'immagine del profilo dell'utente con il link di quello caricato
-					setDoc(
+					console.log('dioca');
+
+					await setDoc(
 						doc(db, 'users', $authStore.user.uid),
 						{
 							avatar: url

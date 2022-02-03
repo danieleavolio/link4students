@@ -28,17 +28,24 @@
 		});
 	};
 	let datiUtente;
+	let isAdmin = false;
 	export let navOpen;
 
 	navOpen = false;
 
 	onAuthStateChanged(auth, async (fbUser) => {
 		if (fbUser) {
+			await getDoc(doc(db, 'amministratori', fbUser.uid)).then((usr) => {
+				if (usr.exists()) {
+					isAdmin = true;
+				}
+			});
+
 			let data = {
 				isLoggedIn: true,
-				user: fbUser
+				user: fbUser,
+				isAdmin
 			};
-
 			// Se per qualche motivo tu fossi bannato
 			await getDoc(doc(db, 'users', fbUser.uid)).then(async (user) => {
 				datiUtente = user;
@@ -135,7 +142,6 @@
 			onSnapshot(queryRicMandate, (mandateSnap) => {
 				mandateList = mandateSnap.docs;
 				richiesteMandate.update((oldRichieste) => mandateList);
-				
 			});
 
 			//Collegamenti utente che sono in tempo reale
@@ -159,7 +165,7 @@
 
 	const handleOpen = () => {
 		navOpen = !navOpen;
-		console.log('ciao')
+		console.log('ciao');
 	};
 
 	const gotoProfilo = () => {
@@ -175,10 +181,10 @@
 {:else}
 	<nav transition:fly={{ x: -100 }}>
 		<div on:click={handleOpen} class="backdrop" />
-		<button class="close-button" on:click={handleOpen}><span class="material-icons">
-			close
-			</span></button>
-			
+		<button class="close-button" on:click={handleOpen}
+			><span class="material-icons"> close </span></button
+		>
+
 		<BarraRicerca {handleOpen} />
 		<a on:click={handleOpen} href="/"> <span class="material-icons"> home </span> Home</a>
 		<a on:click={handleOpen} href="/corsi"> <span class="material-icons"> school </span> Corsi</a>
@@ -187,7 +193,7 @@
 			<span class="material-icons"> email </span> Contattaci</a
 		>
 		{#if datiUtente != null}
-			{#if datiUtente.data().superuser}
+			{#if isAdmin}
 				<a on:click={handleOpen} href="/dashboard/adminpage">
 					<span class="material-icons"> gpp_maybe </span> Admin</a
 				>
@@ -220,7 +226,6 @@
 {/if}
 
 <style>
-	
 	.open-button {
 		position: fixed;
 		top: 10px;
@@ -238,7 +243,6 @@
 		align-items: center;
 		padding: 0.2em;
 		z-index: 20;
-
 	}
 
 	.hamburger {
@@ -267,10 +271,9 @@
 		align-content: center;
 		margin: 1em;
 	}
-	.close-button > span{
+	.close-button > span {
 		color: var(--alert);
 		align-self: center;
-
 	}
 	.close-button:hover {
 		box-shadow: var(--innerNeu);
@@ -342,7 +345,7 @@
 		gap: 1em;
 	}
 
-	.logout > span{
+	.logout > span {
 		color: var(--alert);
 		font-weight: 600;
 	}
@@ -353,7 +356,6 @@
 		background-color: var(--alert);
 	}
 	.logout:hover > span {
-
 		box-shadow: var(--alertHover);
 		transform: var(--premuto);
 		color: var(--sfondo);
@@ -398,7 +400,7 @@
 		border-radius: 100%;
 	}
 
-	img{
+	img {
 		border: var(--bordo);
 	}
 
@@ -419,16 +421,15 @@
 	}
 	/* Responsive */
 
-	@media screen and (max-width:500px){
-		nav{
+	@media screen and (max-width: 500px) {
+		nav {
 			width: 100%;
 			overflow-y: scroll;
 			overflow-x: hidden;
 		}
 
-		.backdrop{
+		.backdrop {
 			display: none;
 		}
-
 	}
 </style>

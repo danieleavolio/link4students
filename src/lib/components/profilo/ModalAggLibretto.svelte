@@ -13,7 +13,7 @@
 		setDoc,
 		where
 	} from 'firebase/firestore';
-import { afterUpdate } from 'svelte';
+	import { afterUpdate } from 'svelte';
 
 	let isOpen;
 	let caricamento = false;
@@ -135,9 +135,9 @@ import { afterUpdate } from 'svelte';
 	<div class="modal">
 		<div class="backdrop" on:click={close} />
 		<div class="content-wrapper">
-			<button class="close-button" on:click={close}> <span class="material-icons">
-				close
-				</span> </button>
+			<button class="close-button" on:click={close}>
+				<span class="material-icons"> close </span>
+			</button>
 			<slot name="header">
 				<div class="titolo">
 					<p>Aggiungi un Esame al tuo libretto</p>
@@ -158,7 +158,7 @@ import { afterUpdate } from 'svelte';
 										{/each}
 									</select>
 									<div class="voto">
-										<div >
+										<div>
 											<input
 												required
 												bind:value={voto}
@@ -220,7 +220,7 @@ import { afterUpdate } from 'svelte';
 		margin: 1rem;
 	}
 
-	.domanda-button:hover{
+	.domanda-button:hover {
 		box-shadow: var(--innerNeu);
 		transform: var(--premuto);
 	}
@@ -271,7 +271,7 @@ import { afterUpdate } from 'svelte';
 		transition: var(--velocita);
 	}
 
-	.close-button:hover{
+	.close-button:hover {
 		transform: var(--premuto);
 	}
 	.titolo {
@@ -302,7 +302,7 @@ import { afterUpdate } from 'svelte';
 		align-items: center;
 	}
 
-	input{
+	input {
 		font-size: 1.3em;
 		width: fit-content;
 		background-color: var(--sfondo);
@@ -321,14 +321,13 @@ import { afterUpdate } from 'svelte';
 		width: 100%;
 	}
 
-	option{
+	option {
 		background-color: var(--sfondo);
 	}
 
-	.input-voto{
-		width: 100px;;
+	.input-voto {
+		width: 100px;
 	}
-	
 
 	.voto {
 		display: flex;
@@ -356,7 +355,7 @@ import { afterUpdate } from 'svelte';
 		transition: var(--velocita);
 	}
 
-	.submit-box > button:hover{
+	.submit-box > button:hover {
 		box-shadow: var(--innerNeu);
 	}
 
@@ -397,16 +396,16 @@ import { afterUpdate } from 'svelte';
 		color: var(--sfondo);
 	}
 
-	@media screen and (max-width:850px){
-		.inputs-container{
+	@media screen and (max-width: 850px) {
+		.inputs-container {
 			flex-direction: column;
 			align-items: center;
 			justify-content: center;
 		}
 	}
 
-	@media screen and (max-width:550px){
-		.content-wrapper{
+	@media screen and (max-width: 550px) {
+		.content-wrapper {
 			width: 100%;
 			height: 100%;
 		}

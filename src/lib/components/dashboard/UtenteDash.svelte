@@ -22,6 +22,7 @@
 		// 86400 è il numero di secondi in un giorni
 		let giorniInSecondi = giorniSospensione * 86400;
 		let tempo = Timestamp.now().seconds + giorniInSecondi;
+		
 		setDoc(
 			doc(db, 'banTimes', uid),
 			{

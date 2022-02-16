@@ -169,12 +169,6 @@ import { afterUpdate } from 'svelte';
      * @var corso
      */
 	const eliminaCorso = async () => {
-		// eliminare TUTTE le interazioni di quel corso con
-		// - APPUNTI
-		// - DOMANDE
-		// - RECENSIONI
-		// Successivamente, eliminare il singolo corso
-		//---
 		caricamento = true;
 		await eliminaRecensioni(corso).then(() => {
 			eliminaDomande(corso).then(() => {

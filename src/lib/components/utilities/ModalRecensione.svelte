@@ -30,7 +30,6 @@
 
 	let sending = false;
 
-
 	// Per non fare scroll alla pagina sotto
 	afterUpdate(() => {
 		if (isOpen) document.body.style.overflowY = 'hidden';
@@ -73,10 +72,7 @@
 	};
 
 	const mandaRecensione = () => {
-
-		if (sending)
-			return;
-
+		if (sending) return;
 		sending = true;
 		// Quando si invia una recensione, viene mandata su firebase
 		getDoc(doc(db, 'users', $authStore.user.uid)).then((ref) => {
@@ -136,9 +132,9 @@
 	<div class="modal">
 		<div class="backdrop" on:click={close} />
 		<div class="content-wrapper">
-			<button class="close-button" on:click={close}> <span class="material-icons">
-				close
-				</span> </button>
+			<button class="close-button" on:click={close}>
+				<span class="material-icons"> close </span>
+			</button>
 			<slot name="header">
 				<div class="titolo">
 					<p>Recensione per: {nome}</p>
@@ -218,8 +214,9 @@
 	}
 
 	.content-wrapper {
-		z-index: 10;
-		max-width: 70vw;
+		z-index: 20;
+		width: 100%;
+		height: 100%;
 		border-radius: 0.3rem;
 		background-color: var(--sfondo);
 		overflow-x: hidden;
@@ -227,7 +224,6 @@
 		box-shadow: var(--innerNeu);
 		display: flex;
 		flex-direction: column;
-		margin: auto;
 	}
 
 	.close-button {
@@ -300,8 +296,8 @@
 		text-align: center;
 	}
 
-	@media screen and (max-width:500px){
-		.content-wrapper{
+	@media screen and (max-width: 500px) {
+		.content-wrapper {
 			max-width: 100vw;
 			height: 100vh;
 			width: 100%;

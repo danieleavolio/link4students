@@ -16,7 +16,10 @@
 </script>
 
 <script>
+	import { goto } from '$app/navigation';
+
 	import { db } from '$lib/firebaseConfig';
+	import { authStore } from '$lib/stores/authStore';
 
 	import {
 		collection,
@@ -27,13 +30,21 @@
 		onSnapshot,
 		query
 	} from 'firebase/firestore';
+	import { onMount } from 'svelte';
 	export let listaBannati;
 	export let idBannati;
+
+	onMount(async () => {
+		if ($authStore.isLoggedIn) {
+			if (!$authStore.isAdmin) goto('/');
+		} else {
+			goto('/');
+		}
+	});
 
 	const deleteBan = (uid) => {
 		deleteDoc(idBannati.docs[idBannati.docs.map((e) => e.id).indexOf(uid)].ref);
 		listaBannati = listaBannati.filter((elem) => elem.id != uid);
-		// TODO
 	};
 </script>
 
@@ -58,8 +69,8 @@
 </div>
 
 <style>
-
-	h3,h1{
+	h3,
+	h1 {
 		text-align: center;
 	}
 	.container {
@@ -109,7 +120,7 @@
 		cursor: pointer;
 	}
 
-	.nessuno{
+	.nessuno {
 		display: flex;
 		justify-content: center;
 		align-items: center;
@@ -119,12 +130,12 @@
 		padding: 0.5em;
 	}
 
-	.material-icons{
+	.material-icons {
 		font-size: 2em;
 	}
 
-	@media screen and (max-width:800px){
-		.utente-bannato{
+	@media screen and (max-width: 800px) {
+		.utente-bannato {
 			grid-template-columns: 1fr;
 		}
 	}

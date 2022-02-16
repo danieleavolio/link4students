@@ -46,30 +46,20 @@
 	const checkVoti = async () => {
 		const queryEsami = query(collection(db, 'corsidelcdl'));
 		let esami = await getDocs(queryEsami);
-
-		// Per ogni esame, controlla che la media dei voti difficolta e utilita sia corretta
-		// Altrimenti sostituiscila
 		for (const esame of esami.docs) {
 			let utilitaCorrente = esame.data().mediaUtilita;
 			let difficoltaCorrente = esame.data().mediaDifficolta;
-
-			//Quoziente
 			let mediaUtilita = 0;
 			let mediaDifficolta = 0;
-			//Dividendo
 			let sommaUtilita = 0;
 			let sommaDifficolta = 0;
-			// Divisore
 			let numeroRecensioni = 0;
-			// Inizio
-			// Per ogni esame, prendo le recensioni di quell'esame;
 			let queryRecensioni = query(
 				collection(db, 'recensioni'),
 				where('idCorso', '==', esame.data().codiceCorso)
 			);
 			let recensioniEsame = await getDocs(queryRecensioni);
 			numeroRecensioni = recensioniEsame.docs.length;
-			// Se non ci sono voti, sicuramente sarà 0
 			if (numeroRecensioni == 0) {
 				await setDoc(
 					doc(db, 'corsidelcdl', esame.id),
@@ -80,18 +70,12 @@
 					{ merge: true }
 				);
 			} else {
-				// Se ha voti, calcola.
-
 				for (const recensione of recensioniEsame.docs) {
 					sommaUtilita += recensione.data().votoUtilita;
 					sommaDifficolta += recensione.data().votoDifficolta;
 				}
-				// Dopo aver preso le somme, faccio la media;
 				mediaUtilita = Math.floor(sommaUtilita / numeroRecensioni);
 				mediaDifficolta = Math.floor(sommaDifficolta / numeroRecensioni);
-
-				// Controllo che sia uguale, altrimenti cambio.
-
 				if (mediaUtilita == utilitaCorrente && mediaDifficolta == difficoltaCorrente) {
 				} else {
 					await setDoc(
@@ -140,9 +124,11 @@
 	{/if}
 
 	{#if verificato}
-		<p transition:fly class="verify-done">Verifica e modifica effettuata con successo <span class="material-icons">
-			check_circle_outline
-			</span></p>
+		<p transition:fly class="verify-done">
+			Verifica e modifica effettuata con successo <span class="material-icons">
+				check_circle_outline
+			</span>
+		</p>
 	{/if}
 </div>
 
@@ -198,7 +184,7 @@
 		margin: 1em;
 	}
 
-	.verify-done{
+	.verify-done {
 		display: flex;
 		justify-content: center;
 		align-items: center;

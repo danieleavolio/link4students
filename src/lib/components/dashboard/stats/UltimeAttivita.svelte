@@ -63,7 +63,7 @@
 				class="elemento"
 			>
 				{#if elemento.ref.parent.id == 'domande'}
-					<ElementoAct {elemento} tipo={'domanda'}  emoji={'quiz'}  />
+					<ElementoAct {elemento} tipo={'domanda'} emoji={'quiz'} />
 				{:else if elemento.ref.parent.id == 'risposte'}
 					<ElementoAct {elemento} tipo={'risposta'} emoji={'question_answer'} />
 				{:else if elemento.ref.parent.id == 'appunti'}

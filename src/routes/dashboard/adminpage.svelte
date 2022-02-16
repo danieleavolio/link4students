@@ -25,7 +25,7 @@
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import { authStore } from '$lib/stores/authStore';
-	import { db } from '$lib/firebaseConfig';
+	import { auth, db } from '$lib/firebaseConfig';
 	import { collection, doc, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore';
 	import ListaUtentiDash from '$lib/components/dashboard/stats/ListaUtentiDash.svelte';
 	import UltimeAttivita from '$lib/components/dashboard/stats/UltimeAttivita.svelte';
@@ -42,12 +42,12 @@
 	let listaRecensioni = [];
 	let listaAppunti = [];
 
-
 	onMount(async () => {
 		if ($authStore.isLoggedIn) {
-			await getDoc(doc(db, 'users', $authStore.user.uid)).then((doc) => {
-				user = doc;
-			});
+			if ($authStore.isAdmin)
+				await getDoc(doc(db, 'users', $authStore.user.uid)).then((doc) => {
+					user = doc;
+				});
 		} else {
 			goto('/');
 		}

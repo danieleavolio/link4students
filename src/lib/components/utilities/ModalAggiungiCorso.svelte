@@ -32,7 +32,6 @@
 	 */
 
 	const aggiungiCorso = () => {
-		// Questo è un check solamente sull singolo CDL
 		if (listaCorsi.find((elem) => elem.data().codiceCorso == codiceCorso)) {
 			messaggio = 'Corso già esistente! ⛔';
 		} else {
@@ -47,8 +46,6 @@
 				linkScheda: linkScheda
 			};
 
-			// Controllo che il codice del corso sia univoco
-			// A differenza di quello sopra, questo è globale su tutti i CDL
 			const queryCheck = query(
 				collection(db, 'corsidelcdl'),
 				where('codiceCorso', '==', codiceCorso)

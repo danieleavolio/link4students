@@ -5,12 +5,12 @@ import { getAuth } from 'firebase/auth'
 import { getStorage } from 'firebase/storage'
 
 const firebaseConfig = {
-    apiKey: "AIzaSyC8u-sfFW1V7udTNmGEzwwFJImbgorCAWo",
+    apiKey: "poggers",
     authDomain: "link-4-students.firebaseapp.com",
     projectId: "link-4-students",
     storageBucket: "link-4-students.appspot.com",
     messagingSenderId: "711579181955",
-    appId: "1:711579181955:web:70a692b7434e070bd70cb6",
+    appId: "1:711579181955:web:pog",
     measurementId: "G-RBBTT5MKHH"
 };
 
